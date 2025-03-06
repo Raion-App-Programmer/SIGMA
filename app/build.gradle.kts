@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.androidx.storage)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

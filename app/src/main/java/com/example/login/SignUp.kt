@@ -1,6 +1,7 @@
 package com.example.login
 
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -48,6 +49,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
@@ -56,7 +60,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 
 @Composable
-fun SignUp(navController: NavController) {
+fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
 
     var nama by remember { mutableStateOf("") }
@@ -65,6 +69,18 @@ fun SignUp(navController: NavController) {
     var kataSandiVisibility by remember { mutableStateOf(false) }
     var konfirmKataSandi by remember { mutableStateOf("") }
     var konfirmKataSandiVisibility by remember { mutableStateOf(false) }
+
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(authState.value) {
+        when(authState.value) {
+            is AuthState.Authenticated -> navController.navigate(Routes.Login)
+            is AuthState.Error -> Toast.makeText(context,
+                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
+            else -> Unit
+        }
+    }
 
     val dark_grey = colorResource(id = R.color.dark_grey)
     val dark0_grey = colorResource(id = R.color.dark0_grey)
@@ -253,7 +269,9 @@ fun SignUp(navController: NavController) {
                     Spacer(modifier = Modifier.height(25.dp))
 
                     Button(
-                        onClick = { navController.navigate(Routes.Verification)},
+                        onClick = {
+                            authViewModel.signup(email, kataSandi)
+                            navController.navigate(Routes.Verification)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)

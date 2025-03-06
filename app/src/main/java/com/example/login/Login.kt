@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
@@ -55,7 +56,7 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun Login(navController: NavController) {
+fun Login(navController: NavController, authViewModel: AuthViewModel) {
 
     var email by remember { mutableStateOf("") }
     var kataSandi by remember { mutableStateOf("") }
@@ -192,7 +193,9 @@ fun Login(navController: NavController) {
 
 
                     Button(
-                        onClick = { navController.navigate(Routes.LoginBerhasil) },
+                        onClick = {
+                            authViewModel.login(email, kataSandi)
+                            navController.navigate(Routes.LoginBerhasil) },
                         modifier = Modifier
                             .padding(top = 50.dp)
                             .fillMaxWidth()
@@ -308,5 +311,5 @@ fun Login(navController: NavController) {
 @Composable
 fun LoginPreview() {
     val navController = rememberNavController()
-    Login(navController = navController)
+    Login(navController = navController, authViewModel = viewModel())
 }

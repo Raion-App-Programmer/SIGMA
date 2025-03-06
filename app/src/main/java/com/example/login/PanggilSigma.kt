@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.util.TableInfo
+import kotlin.math.round
 
 @Composable
 fun PanggilSigma() {
@@ -39,7 +40,8 @@ fun PanggilSigma() {
         ) {
             // box start for text
             Box(modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .shadow(0.dp),
                 contentAlignment = Alignment.Center) {
                 Text(
                     "Hanya Untuk Darurat",
