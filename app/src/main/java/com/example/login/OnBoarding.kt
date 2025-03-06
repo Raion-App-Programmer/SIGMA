@@ -1,12 +1,12 @@
 package com.example.login
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,11 +25,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 
 
 
@@ -57,7 +55,7 @@ fun OnBoarding(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.height(280.dp))
+            Spacer(modifier = Modifier.height(340.dp))
             Text(
                 text = "Selamat Datang, Rek!",
                 textAlign = TextAlign.Center,
@@ -69,7 +67,7 @@ fun OnBoarding(navController: NavController) {
                 text = "Aplikasi darurat yang menyediakan akses cepat ke layanan darurat, panduan pertolongan pertama, dan notifikasi bencana untuk warga Malang.",
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Thin,
+                fontWeight = FontWeight.Light,
                 modifier = Modifier.padding(horizontal = 43.dp)
             )
             Spacer(modifier = Modifier.height(25.dp))
@@ -78,10 +76,13 @@ fun OnBoarding(navController: NavController) {
                 contentDescription = "",
                 modifier = Modifier.height(5.dp).width(141.dp)
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(170.dp))
             Button(
                 onClick = { navController.navigate(Routes.SignUp)},
-                modifier = Modifier.fillMaxWidth().height(48.dp).background(color = Color.Transparent),
+                modifier = Modifier
+                    .height(48.dp)
+                    .width(295.dp)
+                    .background(color = Color.Transparent),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues()
             ) {
@@ -97,17 +98,25 @@ fun OnBoarding(navController: NavController) {
                     ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Daftar", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "Daftar", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 }
             }
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {navController.navigate(Routes.Login)},
-                modifier = Modifier.padding(top = 50.dp).fillMaxWidth().height(48.dp).background(color = Color.Transparent),
+                modifier = Modifier
+
+                    .height(48.dp)
+                    .width(295.dp)
+                    .background(color = Color.Transparent),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues()
             ) {
                 Box(
-                    modifier = Modifier.fillMaxSize().background(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .border(2.dp, Color.DarkGray, RoundedCornerShape(16.dp))
+                        .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
                     ),
