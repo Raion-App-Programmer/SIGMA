@@ -3,6 +3,7 @@ package com.example.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 
@@ -21,7 +22,7 @@ class AuthViewModel : ViewModel()  {
         }
     }
 
-    fun login(email : String, password : String) {
+    fun login(email : String, password : String, navController: NavController) {
 
         if (email.isEmpty() || password.isEmpty()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
@@ -31,7 +32,7 @@ class AuthViewModel : ViewModel()  {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
+                    _authState.value = AuthState.LoginSuccess
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
                 }
@@ -63,6 +64,7 @@ class AuthViewModel : ViewModel()  {
 }
 
 sealed class AuthState {
+    object LoginSuccess : AuthState()
     object Authenticated : AuthState()
     object Unauthenticated : AuthState()
     object Loading : AuthState()
