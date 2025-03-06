@@ -6,5 +6,6 @@ object Routes {
     var Verification = "verification"
     var LoginBerhasil = "loginBerhasil"
     var OnBoarding = "onBoarding"
+    var Dashboard = "Dashboard"
 
 }

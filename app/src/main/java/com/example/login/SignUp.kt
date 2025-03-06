@@ -48,6 +48,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,6 +192,7 @@ fun SignUp(navController: NavController) {
                         colors = outlinedTextFieldColors(
                             containerColor = dark0_grey),
                         shape = RoundedCornerShape(18.dp),
+                        visualTransformation = if (kataSandiVisibility) VisualTransformation.None  else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
                                 Icon(
@@ -205,6 +208,7 @@ fun SignUp(navController: NavController) {
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top =3.dp)
                             .height(25.dp)
                             .width(265.dp)
                     )
@@ -216,7 +220,7 @@ fun SignUp(navController: NavController) {
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Lock,
-                                contentDescription = "Email",
+                                contentDescription = "Password",
                                 tint = dark_grey
                             )
                         },
@@ -232,6 +236,7 @@ fun SignUp(navController: NavController) {
                         colors = outlinedTextFieldColors(
                             containerColor = dark0_grey),
                         shape = RoundedCornerShape(18.dp),
+                        visualTransformation = if (konfirmKataSandiVisibility) VisualTransformation.None  else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { konfirmKataSandiVisibility = !konfirmKataSandiVisibility }) {
                                 Icon(
@@ -240,7 +245,7 @@ fun SignUp(navController: NavController) {
                                     tint = dark_grey
                                 )
                             }
-                        }
+                        },
                     )
 
 

@@ -31,8 +31,6 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.OnBoarding) {
                     OnBoarding(navController)
                 }
-
-
             }
 
         }

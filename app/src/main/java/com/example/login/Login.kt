@@ -44,8 +44,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -163,7 +167,7 @@ fun Login(navController: NavController) {
                             containerColor = dark0_grey
                         ),
                         shape = RoundedCornerShape(18.dp),
-
+                        visualTransformation = if (kataSandiVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
                                 Icon(
@@ -298,4 +302,11 @@ fun Login(navController: NavController) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun LoginPreview() {
+    val navController = rememberNavController()
+    Login(navController = navController)
 }
