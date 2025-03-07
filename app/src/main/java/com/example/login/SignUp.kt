@@ -270,8 +270,19 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
                     Button(
                         onClick = {
-                            authViewModel.signup(email, kataSandi)
-                            navController.navigate(Routes.Verification)},
+                            if (kataSandi != konfirmKataSandi) {
+                                Toast.makeText(context, "Kedua kata sandi harus cocok", Toast.LENGTH_SHORT).show()
+                            } else if (!isValidPassword(kataSandi)) {
+                                Toast.makeText(
+                                    context,
+                                    "Kata sandi harus minimal 8 karakter, mengandung setidaknya 1 huruf besar, 1 huruf kecil, dan 1 angka.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                authViewModel.signup(email, kataSandi)
+                                navController.navigate(Routes.Verification)
+                            }
+                            },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -378,3 +389,10 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
             }
         }
     }
+
+// function passwordValid
+fun isValidPassword(password: String): Boolean {
+    val passwordPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$".toRegex()
+    return passwordPattern.matches(password)
+
+}
