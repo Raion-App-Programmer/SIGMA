@@ -6,10 +6,26 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class AuthViewModel : ViewModel()  {
 
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+
+    private val _otp = MutableStateFlow("")
+    val otp: StateFlow<String> = _otp
+
+    fun generateOTP(): String {
+        val generatedOTP = (100000..999999).random().toString()
+        _otp.value = generatedOTP
+        return generatedOTP
+    }
+
+    fun sendOTP(email: String, otp: String) {
+        println("Sending $otp to $email")
+    }
+
 
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState

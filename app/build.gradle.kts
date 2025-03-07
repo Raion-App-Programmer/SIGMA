@@ -92,6 +92,12 @@ dependencies {
     // implementation("androidx.compose.material3:material3:<version>")
     // implementation("androidx.compose.material3:material3:1.0.0")
 
+    // Firebase Storage
+    implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+
+    // firebase messaging
+    implementation("com.google.firebase:firebase-messaging-ktx")
+
     // Compose Foundation - use consistent versions
     implementation("androidx.compose.foundation:foundation:1.4.3")
 
@@ -108,4 +114,11 @@ dependencies {
     // Navigation Compose
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // material
+    implementation( "androidx.compose.material:material-icons-extended:1.5.0")
+
+    // media compose
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
 }

@@ -518,7 +518,7 @@ fun MyLazyRow(boxList: List<Color>) {
 }
 
 // Infinite Carousel
-//@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
 //fun CarouselScreen() {
 //
