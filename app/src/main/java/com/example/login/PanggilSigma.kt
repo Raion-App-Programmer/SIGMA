@@ -36,6 +36,7 @@ fun PanggilSigma() {
               .height(135.dp)
               .align(Alignment.TopCenter)
               .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+              .shadow(elevation = 4.dp, shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
               .background(Color.White)
         ) {
             // box start for text
@@ -59,7 +60,7 @@ fun PanggilSigma() {
     }
 }
 
-@Preview
+@Preview (showBackground = true)
 @Composable
 fun PanggilSigmaPreview() {
     PanggilSigma()

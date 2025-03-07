@@ -49,7 +49,7 @@ class AuthViewModel : ViewModel()  {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
+                    _authState.value = AuthState.SignUpSuccess
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
                 }
@@ -64,6 +64,7 @@ class AuthViewModel : ViewModel()  {
 }
 
 sealed class AuthState {
+    object SignUpSuccess : AuthState()
     object LoginSuccess : AuthState()
     object Authenticated : AuthState()
     object Unauthenticated : AuthState()

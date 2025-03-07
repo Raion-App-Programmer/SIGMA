@@ -51,7 +51,10 @@ class MainActivity : ComponentActivity() {
                     OnBoarding(navController)
                 }
                 composable(Routes.Dashboard) {
-                    Dashboard(navController, authViewModel = AuthViewModel())
+                    Dashboard(navController)
+                }
+                composable(Routes.SignUpBerhasil) {
+                    SignUpBerhasil(navController)
                 }
             }
         }

@@ -1,11 +1,13 @@
 package com.example.mytestsigma.ui.theme
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,13 +17,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+//import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,17 +37,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.login.AuthViewModel
+//import coil.compose.HorizontalUncontainedCarousel
 import com.example.login.R
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
+fun Dashboard(navController: NavController) {
     Box(
         Modifier
             .fillMaxSize()
@@ -54,24 +56,31 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
         // NavBar Rectangle at the Top
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 20.dp, bottomEnd = 20.dp))
-                .fillMaxWidth()
-                .height(120.dp)
-                .background(Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomStart = 20.dp,
+                        bottomEnd = 20.dp
                     )
                 )
-            ),
+                .fillMaxWidth()
+                .height(120.dp)
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFFC41532),
+                            Color(0xFF431B3B)
+                        )
+                    )
+                ),
         ) {
             // To control profile - notification on top and weather - location on bottom
             Column(modifier = Modifier.fillMaxWidth()
             ) {
                 // profile - notification on top
-                Row (
+                Row(
                     modifier = Modifier
-                        .offset(y = (-10).dp)
                 ) {
 
                     Text(text = "Halo, Diandra!", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier
@@ -87,9 +96,8 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                 }
 
                 // weather - location
-                Row (
-                    modifier = Modifier.
-                    offset()
+                Row(
+                    modifier = Modifier
                 ) {
 
                     Image(
@@ -101,7 +109,7 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                             .offset(x = 35.dp, y = 12.dp)
                     )
 
-                    Column (
+                    Column(
                         modifier = Modifier
                             .offset(x = (-10.dp))
                     ) {
@@ -121,7 +129,9 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.offset(x = 73.dp, y = 40.dp).fillMaxWidth()
+                        modifier = Modifier
+                            .offset(x = 73.dp, y = 40.dp)
+                            .fillMaxWidth()
                     ) {
                         Text(
                             "Jalan Kebangsaan Timur No. 10",
@@ -134,87 +144,50 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                         Image(
                             painter = painterResource(id = R.drawable.location_on),
                             contentDescription = "Location",
-                            modifier = Modifier.size(30.dp).offset(x = 30.dp)
+                            modifier = Modifier
+                                .size(30.dp)
+                                .offset(x = 30.dp)
                         )
                     }
-
                 }
             }
-            }
+        }
 
-        // Pager
-        Box(
+        // pager
+//        CarouselScreen()
+
+        // Panduan Darurat
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 80.dp)
-                .align(Alignment.TopCenter),
-            contentAlignment = Alignment.Center
+                .align(Alignment.CenterStart)
+                .offset(x = 40.dp, y = 200.dp)
         ) {
-            val pagerState = rememberPagerState(pageCount = { 3 })
+            Text("Panduan Darurat", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier
+                .padding(bottom = 15.dp)
+                .offset(y = (-225).dp)
+            )
 
-            HorizontalPager(
-                state = pagerState,
+            // Panduan darurat container
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .offset(y = 40.dp)
-            ) { page ->
-
-                Box(
-                    modifier = Modifier.fillMaxWidth().offset(y = (-30).dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .width(348.dp)
-                            .height(162.dp),
-                        painter = painterResource(
-                            id = when (page) {
-                                0 -> R.drawable.lapor_segala_insiden_warna
-                                1 -> R.drawable.lapor_segala_insiden_warna
-                                else -> R.drawable.lapor_segala_insiden_warna
-                            }
-                        ),
-                        contentDescription = "Carousel image $page",
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                // this would be where the carousel slider goes
-            }
-
-            // Panduan Darurat
-            Column (
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset(x = 40.dp, y = 200.dp)
+                    .offset(y = (-230).dp)
             ) {
-                Text("Panduan Darurat", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier
-                    .padding(bottom = 15.dp)
-                    )
-
-                // Panduan darurat container
-                Box (
+                // Icons for Panduan Darurat
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(y = (-5).dp)
+                        .padding(horizontal = 24.dp)
+                        .offset(x = (-40).dp, y = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    // Icons for Panduan Darurat
-
-                    Row(
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                            .offset(x = (-40).dp, y = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
+                            .offset(y = (-10).dp)
                     ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .offset(y = (-10).dp)
-                        ) {
                         Image(
                             painter = painterResource(id = R.drawable.banjir_darurat),
                             contentDescription = "Banjir darurat",
@@ -223,57 +196,56 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                                 .height(80.dp))
 
                         Text("Banjir", fontSize = 13.sp,  fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
-                            )
-                        }
+                        )
+                    }
 
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .offset(y = (-10).dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.kebakaran_darurat),
+                            contentDescription = "Kebakaran darurat",
                             modifier = Modifier
-                                .offset(y = (-10).dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.kebakaran_darurat),
-                                contentDescription = "Kebakaran darurat",
-                                modifier = Modifier
-                                    .width(70.dp)
-                                    .height(80.dp))
+                                .width(70.dp)
+                                .height(80.dp))
 
-                            Text("Kebakaran", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
-                                )
-                        }
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                        Text("Kebakaran", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .offset(y = (-10).dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.gempa_darurat),
+                            contentDescription = "Gempa darurat",
                             modifier = Modifier
-                                .offset(y = (-10).dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.gempa_darurat),
-                                contentDescription = "Gempa darurat",
-                                modifier = Modifier
-                                    .width(70.dp)
-                                    .height(80.dp))
+                                .width(70.dp)
+                                .height(80.dp))
 
-                            Text("Gempa", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
-                                )
-                        }
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                        Text("Gempa", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .offset(y = (-10).dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.p3k_darurat),
+                            contentDescription = "P3K darurat",
                             modifier = Modifier
-                                .offset(y = (-10).dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.p3k_darurat),
-                                contentDescription = "P3K darurat",
-                                modifier = Modifier
-                                    .width(70.dp)
-                                    .height(80.dp))
+                                .width(70.dp)
+                                .height(80.dp))
 
-                            Text("P3K", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
-                                )
-                        }
+                        Text("P3K", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        )
                     }
                 }
             }
@@ -286,7 +258,7 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Berita Terkini", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier
-                .offset(y = 185.dp, x = ((-95).dp))
+                .offset(y = 195.dp, x = ((-95).dp))
             )
 
             Spacer(modifier = Modifier.height((-2).dp))
@@ -307,9 +279,7 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
                     .width(412.dp)
-                    .height(97.dp)
-                    .height(82.dp)
-                    .align(Alignment.BottomCenter)
+                    .height(100.dp)
                     .offset(y = 10.dp)
             )
 
@@ -419,10 +389,11 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
                     .offset(y = (-10).dp)
             ) {
                 Column {
-                Image(painter = painterResource(id = R.drawable.circle_call),
-                    contentDescription = "Circle call",
-                    modifier = Modifier
-                        .width(80.dp).height(78.dp))
+                    Image(painter = painterResource(id = R.drawable.circle_call),
+                        contentDescription = "Circle call",
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(78.dp))
 
                     Text(text = "Darurat", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF616161), modifier = Modifier
                         .offset(y = (-4).dp, x = 21.dp))
@@ -445,22 +416,25 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel) {
 fun MyLazyRow(boxList: List<Color>) {
     Color.Gray
     LazyRow (
-      modifier = Modifier.fillMaxWidth()
-          .padding(horizontal = 16.dp)
-          .offset(y = 200.dp, x = 20.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .offset(y = 200.dp, x = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(boxList) {
-            color ->
+                color ->
             Box(
                 modifier = Modifier
                     .width(152.dp)
                     .height(227.dp)
                     .background(
                         brush = Brush.linearGradient(
-                            colors = listOf(Color(0xFFC41532),Color(0XFF5E0A18)
-                        )
-                    ), shape = RoundedCornerShape(16.dp)),
+                            colors = listOf(
+                                Color(0xFFC41532), Color(0XFF5E0A18)
+                            )
+                        ), shape = RoundedCornerShape(16.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = "Box", color = Color.White)
@@ -469,9 +443,61 @@ fun MyLazyRow(boxList: List<Color>) {
     }
 }
 
+// Infinite Carousel
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun CarouselScreen() {
+//
+//    val item = remember {
+//        listOf(
+//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
+//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
+//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
+//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA")
+//        )
+//    }
+
+//    HorizontalUncontainedCarousel(
+//        state = rememberCarouselState {
+//        item.count()
+//    },
+//        itemWidth = 370.dp,
+//        itemSpacing = 12.dp,
+//        contentPadding = PaddingValues(start = 12.dp),
+//        modifier = Modifier
+//            .width(379.dp)
+//            .height(189.dp)
+//            .wrapContentHeight()
+//            .padding(top = 16.dp, bottom = 12.dp)
+//            .offset(y = 120.dp)
+//    ) { index ->
+//
+//        val value = item[index]
+//
+//        Image(
+//            painter = painterResource(id = R.drawable.lapor_segala_insiden_warna),
+//            contentDescription = value.contentDescription,
+//            contentScale = ContentScale.Fit,
+//            modifier = Modifier
+//                .offset(y = 0.dp)
+//                .width(379.dp)
+//                .height(189.dp)
+//        )
+//
+//    }
+//}
+
+
+data class CarouselItem(
+    val id: Int,
+    @DrawableRes val imageResource: Int,
+    val contentDescription: String
+)
+
 @Preview
 @Composable
 fun DashboardPreview() {
     val navController = rememberNavController()
-    Dashboard(navController = navController, authViewModel = viewModel())
+    Dashboard(navController)
 }
+

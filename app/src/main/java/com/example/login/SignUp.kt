@@ -75,7 +75,7 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
-            is AuthState.Authenticated -> navController.navigate(Routes.Login)
+            is AuthState.SignUpSuccess -> navController.navigate(Routes.SignUpBerhasil)
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
             else -> Unit

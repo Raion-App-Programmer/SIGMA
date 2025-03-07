@@ -41,15 +41,20 @@ android {
 }
 
 dependencies {
-
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose BOM (Bill of Materials) to manage Compose versions
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+
+    // Material 3 - use the latest stable version consistently
+    implementation("androidx.compose.material3:material3:1.1.2")
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -61,6 +66,10 @@ dependencies {
     implementation(libs.androidx.storage)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.paging.common.android)
+    implementation(libs.generativeai)
+
+    // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,21 +77,35 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Firebase Authentication
     implementation("com.google.firebase:firebase-auth:23.2.0")
     implementation("androidx.credentials:credentials:1.5.0-rc01")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-    implementation("androidx.compose.material3:material3:1.1.2")
+
+    // Compose Material - use consistent versions
     implementation("androidx.compose.material:material:1.3.0")
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
-    implementation("androidx.compose.material3:material3:<version>")
-    implementation("androidx.compose.material3:material3:1.0.0")
-    implementation ("androidx.compose.foundation:foundation:1.4.3")
-    implementation ("androidx.compose.ui:ui-text:1.4.3")
-    implementation ("androidx.compose.ui:ui:1.5.4" )
-    implementation ("androidx.compose.foundation:foundation:1.5.4")
 
+    // Remove duplicate or conflicting Material 3 dependencies
+    // implementation("androidx.compose.material3:material3:<version>")
+    // implementation("androidx.compose.material3:material3:1.0.0")
+
+    // Compose Foundation - use consistent versions
+    implementation("androidx.compose.foundation:foundation:1.4.3")
+
+    // Compose UI - use consistent versions
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("androidx.compose.ui:ui-text:1.4.3")
+
+    // Accompanist Pager
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+
+    // Coil Image Loading
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+
+    // Navigation Compose
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
 }
