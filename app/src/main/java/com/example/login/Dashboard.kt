@@ -536,15 +536,15 @@ fun MyPagerWithDots() {
                 .height(170.dp)
         ) { page ->
             Box(
-                modifier = Modifier.fillMaxSize(), // Add modifier to Box
-                contentAlignment = Alignment.Center // Add content alignment
-            ) { // Add content lambda
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 Image(
                     painter = painterResource(
                         id = when (page) {
-                            0 -> R.drawable.lapor_segala_insiden_warna // Replace with your image resources
-                            1 -> R.drawable.banjir_darurat
-                            else -> R.drawable.gempa_darurat
+                            0 -> R.drawable.lapor_segala_insiden_warna
+                            1 -> R.drawable.lapor_segala_insiden_warna
+                            else -> R.drawable.lapor_segala_insiden_warna
                         }
                     ),
                     contentDescription = "Page $page", // Add contentDescription
