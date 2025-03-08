@@ -78,11 +78,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Pager
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+
     // Firebase Authentication
     implementation("com.google.firebase:firebase-auth:23.2.0")
     implementation("androidx.credentials:credentials:1.5.0-rc01")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    
 
     // Compose Material - use consistent versions
     implementation("androidx.compose.material:material:1.3.0")

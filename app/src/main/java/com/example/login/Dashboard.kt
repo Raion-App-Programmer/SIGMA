@@ -1,10 +1,12 @@
 package com.example.mytestsigma.ui.theme
 
-import androidx.annotation.DrawableRes
+//import androidx.compose.material3.carousel.rememberCarouselState
+//import coil.compose.HorizontalUncontainedCarousel
+
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,24 +20,19 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-//import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,9 +40,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-//import coil.compose.HorizontalUncontainedCarousel
 import com.example.login.R
-
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.layout.ContentScale
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -167,7 +167,7 @@ fun Dashboard(navController: NavController) {
         }
 
         // pager
-//        CarouselScreen()
+        MyPagerWithDots()
 
         // Panduan Darurat
         Column(
@@ -517,56 +517,63 @@ fun MyLazyRow(boxList: List<Color>) {
     }
 }
 
-// Infinite Carousel
-@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun CarouselScreen() {
-//
-//    val item = remember {
-//        listOf(
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA")
-//        )
-//    }
 
-//    HorizontalUncontainedCarousel(
-//        state = rememberCarouselState {
-//        item.count()
-//    },
-//        itemWidth = 370.dp,
-//        itemSpacing = 12.dp,
-//        contentPadding = PaddingValues(start = 12.dp),
-//        modifier = Modifier
-//            .width(379.dp)
-//            .height(189.dp)
-//            .wrapContentHeight()
-//            .padding(top = 16.dp, bottom = 12.dp)
-//            .offset(y = 120.dp)
-//    ) { index ->
-//
-//        val value = item[index]
-//
-//        Image(
-//            painter = painterResource(id = R.drawable.lapor_segala_insiden_warna),
-//            contentDescription = value.contentDescription,
-//            contentScale = ContentScale.Fit,
-//            modifier = Modifier
-//                .offset(y = 0.dp)
-//                .width(379.dp)
-//                .height(189.dp)
-//        )
-//
-//    }
-//}
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MyPagerWithDots() {
+    val pageCount = 3 // Set number of pages
+    val pagerState = rememberPagerState(pageCount = { pageCount })
 
+    Column(
+        modifier = Modifier.fillMaxWidth().offset(y = 125.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Pager (Scrollable)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .width(350.dp)
+                .height(170.dp)
+        ) { page ->
+            Box(
+                modifier = Modifier.fillMaxSize(), // Add modifier to Box
+                contentAlignment = Alignment.Center // Add content alignment
+            ) { // Add content lambda
+                Image(
+                    painter = painterResource(
+                        id = when (page) {
+                            0 -> R.drawable.lapor_segala_insiden_warna // Replace with your image resources
+                            1 -> R.drawable.banjir_darurat
+                            else -> R.drawable.gempa_darurat
+                        }
+                    ),
+                    contentDescription = "Page $page", // Add contentDescription
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop // Add contentScale
+                )
+            }
+        }
 
-data class CarouselItem(
-    val id: Int,
-    @DrawableRes val imageResource: Int,
-    val contentDescription: String
-)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Dot Indicator
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            repeat(pageCount) { index ->
+                Box(
+                    modifier = Modifier
+                        .size(if (pagerState.currentPage == index) 12.dp else 8.dp)
+                        .clip(CircleShape)
+                        .background(if (pagerState.currentPage == index) Color.Black else Color.Gray)
+                        .padding(5.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+        }
+    }
+}
 
 @Preview
 @Composable
