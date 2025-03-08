@@ -36,19 +36,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-
 @Composable
-fun panggilSigma1(navController: NavController){
+fun panggilSigma2(navController: NavController){
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
     Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 30.dp)
-                .background(
-                    color = backgroundColor
-                )
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 30.dp)
+            .background(
+                color = backgroundColor
+            )
 
-        )
+    )
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -91,7 +90,7 @@ fun panggilSigma1(navController: NavController){
         )
 
         Text(
-            text = "Malang Kota",
+            text = "Malang Kabupaten",
             fontWeight = FontWeight.Bold,
             fontSize = 26.sp,
             textAlign = TextAlign.Center

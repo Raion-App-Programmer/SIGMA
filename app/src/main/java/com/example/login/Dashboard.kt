@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 //import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 //import coil.compose.HorizontalUncontainedCarousel
 import com.example.login.R
+import com.example.login.Routes
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -398,15 +400,21 @@ fun Dashboard(navController: NavController) {
                     Text(text = "Darurat", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF616161), modifier = Modifier
                         .offset(y = (-4).dp, x = 21.dp))
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.phone_call_white),
-                    contentDescription = "Call SIGMA",
-                    modifier = Modifier
-                        .width(34.dp)
-                        .height(33.dp)
-                        .align(Alignment.Center)
-                        .offset(y = (-10).dp)
-                )
+                IconButton(
+                    onClick = {
+                        navController.navigate(Routes.panggilSigma1)
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.phone_call_white),
+                        contentDescription = "Call SIGMA",
+                        modifier = Modifier
+                            .width(34.dp)
+                            .height(33.dp)
+                            .align(Alignment.Center)
+                            .offset(y = (-10).dp)
+                    )
+                }
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.login.Routes.signUp
 import com.example.login.Routes.verification
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.FirebaseApp
@@ -57,7 +58,16 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.signUpBerhasil) {
                     signUpBerhasil(navController)
                 }
+
+                composable(Routes.panggilSigma1) {
+                    panggilSigma1(navController)
+                }
+
+                composable(Routes.panggilSigma2) {
+                    panggilSigma2(navController)
+                }
             }
+
         }
     }
 
