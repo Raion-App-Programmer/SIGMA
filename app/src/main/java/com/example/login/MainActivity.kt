@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.login.Routes.verification
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -27,34 +28,34 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
-                composable(Routes.LandingPage1) {
-                    LandingPage1(navController)
+            NavHost(navController = navController, startDestination = Routes.landingPage1) {
+                composable(Routes.landingPage1) {
+                    landingPage1(navController)
                 }
-                composable(Routes.LandingPage2) {
-                    LandingPage2(navController)
+                composable(Routes.landingPage2) {
+                    landingPage2(navController)
                 }
-                composable(Routes.Login) {
-                    Login(navController, authViewModel = viewModel())
+                composable(Routes.login) {
+                    login(navController, authViewModel = viewModel())
                 }
-                composable(Routes.SignUp) {
+                composable(Routes.signUp) {
                     val authViewModel: AuthViewModel = viewModel()
-                    SignUp(navController, authViewModel)
+                    signUp(navController, authViewModel)
                 }
-                composable(Routes.Verification) {
-                    Verification(navController, authViewModel = AuthViewModel())
+                composable(Routes.verification) {
+                    verification(navController)
                 }
-                composable(Routes.LoginBerhasil) {
-                    LoginBerhasil(navController)
+                composable(Routes.loginBerhasil) {
+                    loginBerhasil(navController)
                 }
-                composable(Routes.OnBoarding) {
-                    OnBoarding(navController)
+                composable(Routes.onBoarding) {
+                    onBoarding(navController)
                 }
                 composable(Routes.Dashboard) {
                     Dashboard(navController)
                 }
-                composable(Routes.SignUpBerhasil) {
-                    SignUpBerhasil(navController)
+                composable(Routes.signUpBerhasil) {
+                    signUpBerhasil(navController)
                 }
             }
         }

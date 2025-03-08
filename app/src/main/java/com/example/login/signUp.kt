@@ -46,9 +46,7 @@ import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +58,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 
 @Composable
-fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
+fun signUp(navController: NavController, authViewModel: AuthViewModel) {
 
 
     var nama by remember { mutableStateOf("") }
@@ -75,7 +73,7 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
-            is AuthState.SignUpSuccess -> navController.navigate(Routes.SignUpBerhasil)
+            is AuthState.SignUpSuccess -> navController.navigate(Routes.signUpBerhasil)
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
             else -> Unit
@@ -271,7 +269,7 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                     Button(
                         onClick = {
                             authViewModel.signup(email, kataSandi)
-                            navController.navigate(Routes.Verification)},
+                            navController.navigate(Routes.verification)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -312,7 +310,7 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                         )
                         ClickableText(
                             text = AnnotatedString(" Masuk"),
-                            onClick = { navController.navigate(Routes.Login) },
+                            onClick = { navController.navigate(Routes.login) },
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Normal,

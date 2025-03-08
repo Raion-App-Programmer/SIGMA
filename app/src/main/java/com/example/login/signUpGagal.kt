@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 
 @Preview
 @Composable
-fun SignUpGagal() {
+fun signUpGagal() {
     Box(
         modifier = Modifier
             .fillMaxSize()

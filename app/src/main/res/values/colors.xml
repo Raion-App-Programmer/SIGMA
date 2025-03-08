@@ -10,4 +10,7 @@
     <color name="dark0_grey">#DADADA</color>
     <color name="dark_grey">#9A9A9A</color>
     <color name="font_grey">#B3B3B3</color>
+    <color name="bg_panggilsigma">#f8eaeb</color>
+    <color name="font_hanyaUntuDarurat">#C41532</color>
+    <color name="bg_buttonPanggil">#90232d</color>
 </resources>

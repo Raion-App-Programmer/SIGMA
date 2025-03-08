@@ -24,18 +24,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
 @Composable
-fun SignUpBerhasil(navController: NavController) {
+fun signUpBerhasil(navController: NavController) {
 
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(Routes.Login)
+        navController.navigate(Routes.login)
     }
     Box(
         modifier = Modifier

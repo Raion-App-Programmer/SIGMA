@@ -40,16 +40,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import android.content.Context
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun Login(navController: NavController, authViewModel: AuthViewModel) {
+fun login(navController: NavController, authViewModel: AuthViewModel) {
 
     var email by remember { mutableStateOf("") }
     var kataSandi by remember { mutableStateOf("") }
@@ -58,12 +58,12 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(authState.value) {
-        when (authState.value) {
-            is AuthState.LoginSuccess -> navController.navigate(Routes.LoginBerhasil)
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.LoginSuccess -> navController.navigate(Routes.loginBerhasil)
             is AuthState.Error -> Toast.makeText(
                 context, // Use initialized context
-                (authState.value as AuthState.Error).message,
+                (authState as AuthState.Error).message,
                 Toast.LENGTH_SHORT
             ).show()
             else -> Unit
@@ -94,16 +94,22 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
-            Spacer(modifier = Modifier.height(70.dp))
+
+            Spacer(modifier = Modifier
+                .height(70.dp))
+
             Image(
                 painter = painterResource(id = R.drawable.logo_sign_up),
-                contentDescription = null,
+                contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
                     .width(63.dp)
-                    .height(80.dp),
+                    .height(80.dp)
             )
-            Spacer(modifier = Modifier.height(40.dp))
+
+            Spacer(modifier = Modifier
+                .height(40.dp))
+
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier
@@ -124,7 +130,9 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                         fontSize = 20.sp,
                         modifier = Modifier.padding(top = 20.dp).padding(bottom = 15.dp)
                     )
-                    Spacer(modifier = Modifier.height(30.dp))
+
+                    Spacer(modifier = Modifier
+                        .height(30.dp))
 
                     OutlinedTextField(
                         value = email,
@@ -197,8 +205,9 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                             .padding(horizontal = 8.dp)
                             .fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
 
+                    Spacer(modifier = Modifier
+                        .height(20.dp))
 
                     Button(
                         onClick = {
@@ -230,8 +239,9 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                             Text(text = "Masuk", fontSize = 14.sp, fontWeight = FontWeight.Bold)
                         }
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
 
+                    Spacer(modifier = Modifier
+                        .height(5.dp))
 
                     Row(
                         modifier = Modifier
@@ -247,13 +257,13 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                         )
 
                         ClickableText(
-                            text = AnnotatedString(" Daftar"), // Pastikan ada spasi sebelum "Masuk"
-                            onClick = { navController.navigate(Routes.SignUp) },
+                            text = AnnotatedString(" Daftar"),
+                            onClick = { navController.navigate(Routes.signUp) },
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Normal,
                                 textDecoration = TextDecoration.Underline,
-                                color = Color.Black // Atur warna teks sesuai tema
+                                color = Color.Black
                             )
                         )
 
@@ -315,9 +325,11 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
     }
 }
 
+
+
 @Preview
 @Composable
-fun LoginPreview() {
+fun loginPreview() {
     val navController = rememberNavController()
-    Login(navController = navController, authViewModel = viewModel())
+    login(navController = navController, authViewModel = viewModel())
 }

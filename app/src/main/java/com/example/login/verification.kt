@@ -1,6 +1,5 @@
 package com.example.login
 
-import android.text.Layout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,17 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun Verification(navController: NavController, authViewModel: AuthViewModel) {
+fun verification(navController: NavController) {
 
     val font_grey= colorResource(id = R.color.font_grey)
 
@@ -66,7 +61,9 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
                     .fillMaxWidth()
                     .padding(start = 30.dp)
                 )
-            Spacer(modifier = Modifier.height(15.dp))
+
+            Spacer(modifier = Modifier
+                .height(15.dp))
 
                 Text(text = "Masukkan angka 4-digit yang dikirim melalui email",
                     fontSize = 12.sp,
@@ -91,7 +88,9 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
                     modifier = Modifier
                         .padding(start = 30.dp)
                 )
-                    Spacer(modifier = Modifier.width(5.dp))
+
+                    Spacer(modifier = Modifier
+                        .width(5.dp))
 
                 Text(text = "untuk verifikasi",
                     fontSize = 12.sp,
@@ -101,7 +100,9 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
 
                 )
             }
-            Spacer(modifier = Modifier.height(40.dp))
+
+            Spacer(modifier = Modifier
+                .height(40.dp))
 
             Row (
                 modifier = Modifier
@@ -149,10 +150,12 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(100.dp)
                 ){
-
                 }
             }
-            Spacer(modifier = Modifier.height(40.dp))
+
+            Spacer(modifier = Modifier
+                .height(40.dp))
+
                 Text(text = "Tidak menerima pesan apa pun? Kirim ulang",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
@@ -161,7 +164,9 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-            Spacer(modifier = Modifier.height(5.dp))
+
+            Spacer(modifier = Modifier.
+            height(5.dp))
 
             Text(text = "Kirim ulang kode 00:30",
                 fontSize = 12.sp,
@@ -176,10 +181,7 @@ fun Verification(navController: NavController, authViewModel: AuthViewModel) {
     }
     }
 
-@Preview(showBackground = true)
-@Composable
-fun VerificationPreview() {
-    val navController = rememberNavController()
-    val fakeAuthViewModel = AuthViewModel() // Create a fake ViewModel if needed
-    Verification(navController = navController, authViewModel = fakeAuthViewModel)
-}
+
+
+
+

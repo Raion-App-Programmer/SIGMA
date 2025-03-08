@@ -32,7 +32,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun OnBoarding(navController: NavController) {
+fun onBoarding(navController: NavController) {
 
 
     Box(
@@ -78,7 +78,7 @@ fun OnBoarding(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(170.dp))
             Button(
-                onClick = { navController.navigate(Routes.SignUp)},
+                onClick = { navController.navigate(Routes.signUp)},
                 modifier = Modifier
                     .height(48.dp)
                     .width(295.dp)
@@ -103,7 +103,7 @@ fun OnBoarding(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = {navController.navigate(Routes.Login)},
+                onClick = {navController.navigate(Routes.login)},
                 modifier = Modifier
 
                     .height(48.dp)

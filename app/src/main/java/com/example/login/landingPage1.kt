@@ -17,13 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 
 @Composable
-fun LandingPage1(navController: NavController){
+fun landingPage1(navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +35,7 @@ fun LandingPage1(navController: NavController){
                     )
                 )
             )
-            .clickable { navController.navigate(Routes.LandingPage2) }
+            .clickable { navController.navigate(Routes.landingPage2) }
     )
 
     Column(

@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.paging.common.android)
     implementation(libs.generativeai)
 
+
     // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -87,10 +88,8 @@ dependencies {
     // Compose Material - use consistent versions
     implementation("androidx.compose.material:material:1.3.0")
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
 
-    // Remove duplicate or conflicting Material 3 dependencies
-    // implementation("androidx.compose.material3:material3:<version>")
-    // implementation("androidx.compose.material3:material3:1.0.0")
 
     // Compose Foundation - use consistent versions
     implementation("androidx.compose.foundation:foundation:1.4.3")
