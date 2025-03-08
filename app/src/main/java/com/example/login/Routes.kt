@@ -6,5 +6,8 @@ object Routes {
     var Verification = "verification"
     var LoginBerhasil = "loginBerhasil"
     var OnBoarding = "onBoarding"
-
+    var LandingPage1 = "landingPage1"
+    var LandingPage2 = "landingPage2"
+    var Dashboard = "Dashboard"
+    var SignUpBerhasil = "SignUpBerhasil"
 }

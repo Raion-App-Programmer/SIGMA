@@ -1,6 +1,7 @@
 package com.example.login
 
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -48,13 +49,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 
 @Composable
-fun SignUp(navController: NavController) {
+fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
 
     var nama by remember { mutableStateOf("") }
@@ -63,6 +69,18 @@ fun SignUp(navController: NavController) {
     var kataSandiVisibility by remember { mutableStateOf(false) }
     var konfirmKataSandi by remember { mutableStateOf("") }
     var konfirmKataSandiVisibility by remember { mutableStateOf(false) }
+
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(authState.value) {
+        when(authState.value) {
+            is AuthState.SignUpSuccess -> navController.navigate(Routes.SignUpBerhasil)
+            is AuthState.Error -> Toast.makeText(context,
+                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
+            else -> Unit
+        }
+    }
 
     val dark_grey = colorResource(id = R.color.dark_grey)
     val dark0_grey = colorResource(id = R.color.dark0_grey)
@@ -190,6 +208,7 @@ fun SignUp(navController: NavController) {
                         colors = outlinedTextFieldColors(
                             containerColor = dark0_grey),
                         shape = RoundedCornerShape(18.dp),
+                        visualTransformation = if (kataSandiVisibility) VisualTransformation.None  else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
                                 Icon(
@@ -205,6 +224,7 @@ fun SignUp(navController: NavController) {
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top =3.dp)
                             .height(25.dp)
                             .width(265.dp)
                     )
@@ -216,7 +236,7 @@ fun SignUp(navController: NavController) {
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Lock,
-                                contentDescription = "Email",
+                                contentDescription = "Password",
                                 tint = dark_grey
                             )
                         },
@@ -232,6 +252,7 @@ fun SignUp(navController: NavController) {
                         colors = outlinedTextFieldColors(
                             containerColor = dark0_grey),
                         shape = RoundedCornerShape(18.dp),
+                        visualTransformation = if (konfirmKataSandiVisibility) VisualTransformation.None  else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { konfirmKataSandiVisibility = !konfirmKataSandiVisibility }) {
                                 Icon(
@@ -240,7 +261,7 @@ fun SignUp(navController: NavController) {
                                     tint = dark_grey
                                 )
                             }
-                        }
+                        },
                     )
 
 
@@ -248,7 +269,20 @@ fun SignUp(navController: NavController) {
                     Spacer(modifier = Modifier.height(25.dp))
 
                     Button(
-                        onClick = { navController.navigate(Routes.Verification)},
+                        onClick = {
+                            if (kataSandi != konfirmKataSandi) {
+                                Toast.makeText(context, "Kedua kata sandi harus cocok", Toast.LENGTH_SHORT).show()
+                            } else if (!isValidPassword(kataSandi)) {
+                                Toast.makeText(
+                                    context,
+                                    "Kata sandi harus minimal 8 karakter, mengandung setidaknya 1 huruf besar, 1 huruf kecil, dan 1 angka.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                authViewModel.signup(email, kataSandi)
+                                navController.navigate(Routes.Verification)
+                            }
+                            },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -355,3 +389,10 @@ fun SignUp(navController: NavController) {
             }
         }
     }
+
+// function passwordValid
+fun isValidPassword(password: String): Boolean {
+    val passwordPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$".toRegex()
+    return passwordPattern.matches(password)
+
+}
