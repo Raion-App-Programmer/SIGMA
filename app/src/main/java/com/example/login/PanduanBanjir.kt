@@ -1,6 +1,7 @@
 package com.example.login
 
 import android.content.Context
+import android.hardware.lights.Light
 import android.net.Uri
 import android.widget.VideoView
 import androidx.compose.foundation.Image
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -101,18 +103,30 @@ fun PanduanBanjir(navController: NavController) {
 
         // Video Container
             Column  {
-            Spacer(modifier = Modifier.height(175.dp))
+            Spacer(modifier = Modifier.height(165.dp).padding(start = 10.dp, end = 10.dp))
 
             Box( Modifier
+                .offset(x = 10.dp)
                 .width(372.dp)
                 .height(190.dp)
                 .background(Color.Red)
             ) {
-
+                //VideoPlayer() goes here
             }
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("Tips Saat Terjadi Banjir", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier
+                    .padding(start = 10.dp, end = 10.dp))
+                Text("One Care ৹ 18 Maret 2017", modifier = Modifier.padding(start = 12.dp, end = 10.dp, top = 3.dp), fontWeight = FontWeight.Light, fontSize = 12.sp)
 
-            }
+                // Box container for text
+                Box(modifier = Modifier
+                    .width(372.dp)
+                    .height(368.dp)
+                    .background(Color.Blue)
+                    .offset(x = 10.dp)){
 
+                }
+        }
     }
 }
 
