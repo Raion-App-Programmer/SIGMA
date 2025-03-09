@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +34,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,12 +45,17 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil3.request.Disposable
 import com.google.ai.client.generativeai.type.content
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import kotlin.math.exp
 
 @Composable
-fun PanduanBanjir(modifier: Modifier = Modifier) {
+fun PanduanBanjir(navController: NavController) {
+    val navController = rememberNavController()
+
 
     // Main Background
     Box(modifier = Modifier
@@ -89,13 +97,27 @@ fun PanduanBanjir(modifier: Modifier = Modifier) {
                 Spacer(modifier= Modifier.width(16.dp))
                 Text("Panduan Menghadapi \nBanjir", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
-
-            // Video
-            VideoPlayer()
         }
+
+        // Video Container
+            Column  {
+            Spacer(modifier = Modifier.height(175.dp))
+
+            Box( Modifier
+                .width(372.dp)
+                .height(190.dp)
+                .background(Color.Red)
+            ) {
+
+            }
+
+            }
+
     }
 }
 
+
+// video player
 @Composable
 fun VideoPlayer() {
     val context = LocalContext.current
@@ -129,13 +151,9 @@ fun VideoPlayer() {
 }
 
 
-
 @Preview
 @Composable
-fun PanduanBanjirPreview() {
-    androidx.compose.material.Surface {
-        PanduanBanjir()
-    }
-
+fun PanduanBanjirReview() {
+    val navController = rememberNavController()
+    PanduanBanjir(navController)
 }
-

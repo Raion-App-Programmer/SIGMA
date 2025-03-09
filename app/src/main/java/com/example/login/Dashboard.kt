@@ -43,8 +43,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.login.R
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.ContentScale
+import com.example.login.Routes
+import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -190,7 +193,10 @@ fun Dashboard(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = (-230).dp)
-            ) {
+            ) {val handleClick: (String) -> Unit = {route ->
+                navController.navigate(route)
+            }
+
                 // Icons for Panduan Darurat
                 Row(
                     modifier = Modifier
@@ -206,13 +212,15 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.banjir_darurat),
-                            contentDescription = "Banjir darurat",
-                            modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp)
-                        )
+                        IconButton(onClick = { handleClick(Routes.PanduanBanjir) }, modifier = Modifier
+                            .width(70.dp)
+                            .height(80.dp)
+                        ) {
+                            Image(painter = painterResource(R.drawable.banjir_darurat),
+                                contentDescription = "Banjir darurat button", modifier = Modifier
+                                    .width(70.dp)
+                                    .height(80.dp))
+                        }
 
                         Text(
                             "Banjir",
@@ -229,13 +237,15 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.kebakaran_darurat),
-                            contentDescription = "Kebakaran darurat",
-                            modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp)
-                        )
+                        IconButton(onClick = { handleClick(Routes.PanduanKebakaran) }, modifier = Modifier
+                            .width(70.dp)
+                            .height(80.dp)
+                        ) {
+                            Image(painter = painterResource(R.drawable.kebakaran_darurat),
+                                contentDescription = "Kebakaran darurat button", modifier = Modifier
+                                    .width(70.dp)
+                                    .height(80.dp))
+                        }
 
                         Text(
                             "Kebakaran",
@@ -251,13 +261,7 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.gempa_darurat),
-                            contentDescription = "Gempa darurat",
-                            modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp)
-                        )
+//                        IconButton(onClick = handleClick(Routes)) { }
 
                         Text(
                             "Gempa",
@@ -393,8 +397,6 @@ fun Dashboard(navController: NavController) {
                 }
 
                 // Floating button for calls
-
-
                     Column(
                         modifier = Modifier
                             .offset(y = (-5).dp),
@@ -407,7 +409,7 @@ fun Dashboard(navController: NavController) {
                             contentPadding = PaddingValues(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
                             onClick = {
-//                            TODO
+                                TODO()
                             }
                         ) {
 
@@ -525,7 +527,9 @@ fun MyPagerWithDots() {
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
     Column(
-        modifier = Modifier.fillMaxWidth().offset(y = 125.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .offset(y = 125.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Pager (Scrollable)

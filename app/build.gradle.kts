@@ -101,5 +101,10 @@ dependencies {
     // Media Compose
     implementation("androidx.media3:media3-exoplayer:1.2.0")
     implementation("androidx.media3:media3-ui:1.2.0")
+
+    // Exoplayer
+    implementation("androidx.media3:media3-exoplayer:1.X.X")
+    implementation("androidx.media3:media3-exoplayer-dash:1.X.X")
+    implementation("androidx.media3:media3-ui:1.X.X")
 }
 

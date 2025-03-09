@@ -10,4 +10,6 @@ object Routes {
     var LandingPage2 = "landingPage2"
     var Dashboard = "Dashboard"
     var SignUpBerhasil = "SignUpBerhasil"
+    var PanduanBanjir = "PanduanBanjir"
+    var PanduanKebakaran = "PanduanKebakaran"
 }

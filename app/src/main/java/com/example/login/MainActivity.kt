@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.login.Routes.PanduanKebakaran
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -55,6 +56,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.SignUpBerhasil) {
                     SignUpBerhasil(navController)
+                }
+                composable(Routes.PanduanBanjir) {
+                    PanduanBanjir(navController)
+                }
+                composable(Routes.PanduanKebakaran) {
+                    PanduanKebakaran(navController)
                 }
             }
         }
