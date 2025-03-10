@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class NewsViewModel : ViewModel() {
     private val repository = FireStoreRepository
 
-    private val  _newsList = MutableStateFlow<List<newsItem>>(emptyList())
+    private val  _newsList = MutableStateFlow<List<NewsItem>>(emptyList())
     val newsList = _newsList.asStateFlow()
 
     init {
@@ -24,7 +24,8 @@ class NewsViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { documents ->
                 val news = documents.map { doc ->
-                    newsItem(
+                    NewsItem(
+                        id = doc.id,
                         title = doc.getString("title") ?: "",
                         date = doc.getString("date") ?: "",
                         imageUrl = doc.getString("imageUrl") ?: "",
@@ -37,7 +38,7 @@ class NewsViewModel : ViewModel() {
             }
     }
 }
-data class newsItem(
+data class NewsItem(
     val id: String = "",
     val title: String = "",
     val date: String = "",

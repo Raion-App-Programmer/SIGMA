@@ -19,11 +19,11 @@ object FireStoreRepository {
             .addOnFailureListener {onComplete(false)}
     }
     @SuppressLint("SuspiciousIndentation")
-    suspend fun getNews(): List<newsItem> {
+    suspend fun getNews(): List<NewsItem> {
         return try {
         val snapshot = newsCollection.get().await()
             snapshot.documents.map { doc ->
-                newsItem (
+                NewsItem (
                     id = doc.id,
                     title = doc.getString("title") ?: "",
                     date = doc.getString("date") ?: "",

@@ -76,7 +76,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
 }
 
 @Composable
-fun NewsCard(newsItem: newsItem, navController: NavController) {
+fun NewsCard(newsItem: NewsItem, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
