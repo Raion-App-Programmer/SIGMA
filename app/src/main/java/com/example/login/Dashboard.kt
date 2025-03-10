@@ -261,7 +261,12 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-//                        IconButton(onClick = handleClick(Routes)) { }
+                        Image(painter = painterResource(id = R.drawable.gempa_darurat),
+                            contentDescription = "Gempa darurat png", modifier = Modifier
+                                .width(70.dp)
+                                .height(80.dp))
+
+                            // bikin route
 
                         Text(
                             "Gempa",
