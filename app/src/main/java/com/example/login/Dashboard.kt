@@ -326,7 +326,7 @@ fun Dashboard(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .offset(y = 770.dp)
         ) {
             // Bottom navigation bar background
             Image(

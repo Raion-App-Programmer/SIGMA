@@ -47,7 +47,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun PanduanBanjir(navController: NavController) {
+fun PanduanGempa(navController: NavController) {
     val navController = rememberNavController()
 
 
@@ -85,20 +85,20 @@ fun PanduanBanjir(navController: NavController) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Image(
                     modifier = Modifier.width(55.dp).height(55.dp),
-                    painter = painterResource(id = R.drawable.banjir_darurat),
+                    painter = painterResource(id = R.drawable.gempa_darurat),
                     contentDescription = "Banjir icon"
                 )
                 Spacer(modifier= Modifier.width(16.dp))
-                Text("Panduan Menghadapi \nBanjir", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("Panduan Menghadapi \nGempa", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
         }
 
         // Video Container
-            Column (
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = (-40).dp)
-            ) {
+        Column (
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(y = (-40).dp)
+        ) {
             Spacer(modifier = Modifier.height(165.dp))
 
             Box( Modifier
@@ -108,39 +108,40 @@ fun PanduanBanjir(navController: NavController) {
             ) {
                 //VideoPlayer() goes here
             }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text("Tips Saat Terjadi Banjir", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier
-                    .padding(start = 5.dp, end = 5.dp))
-                Text("One Care ৹ 18 Maret 2017", modifier = Modifier.padding(start = 5.dp, end = 5.dp), fontWeight = FontWeight.Light, fontSize = 12.sp)
+            Spacer(modifier = Modifier.height(10.dp))
+            Text("Tips Aman Menghadap Bencana \nGempa", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier
+                .padding(start = 5.dp, end = 5.dp))
+            Spacer(Modifier.height(5.dp))
+            Text("One Care ৹ 18 Maret 2017", modifier = Modifier.padding(start = 5.dp, end = 5.dp), fontWeight = FontWeight.Light, fontSize = 12.sp)
 
+            Spacer(modifier = Modifier.height(10.dp))
+            Column(
+                Modifier
+                    .width(372.dp)
+                    .height(368.dp)
+                    .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                    .border(width = 1.dp, color = Color(0xFFD7D7D7), shape = RoundedCornerShape(size = 20.dp))
+                    .background(color = Color(0xFFF5F5F5), shape = RoundedCornerShape(size = 20.dp)))
+            // Box container for text
+            {
+                Text("Banjir dapat menyebabkan kerugian besar, sehingga penting untuk mempersiapkan diri dan mengambil langkah pencegahan.",
+                    Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp), fontWeight = FontWeight(400), fontSize = 11.sp)
                 Spacer(modifier = Modifier.height(10.dp))
-                Column(
-                    Modifier
-                        .width(372.dp)
-                        .height(368.dp)
-                        .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
-                        .border(width = 1.dp, color = Color(0xFFD7D7D7), shape = RoundedCornerShape(size = 20.dp))
-                        .background(color = Color(0xFFF5F5F5), shape = RoundedCornerShape(size = 20.dp)))
-                // Box container for text
-                {
-                    Text("Banjir dapat menyebabkan kerugian besar, sehingga penting untuk mempersiapkan diri dan mengambil langkah pencegahan.",
-                         Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp), fontWeight = FontWeight(400), fontSize = 11.sp)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text("Persiapan Menghadapi Banjir", Modifier
-                        .padding(start = 10.dp, end = 10.dp),
-                        fontWeight = FontWeight.Bold, fontSize = 12.sp )
-                    Spacer(modifier = Modifier.height (10.dp))
-                    Text("""
+                Text("Persiapan Menghadapi Banjir", Modifier
+                    .padding(start = 10.dp, end = 10.dp),
+                    fontWeight = FontWeight.Bold, fontSize = 12.sp )
+                Spacer(modifier = Modifier.height (10.dp))
+                Text("""
                         1. Pantau Informasi: Ikuti berita terkini tentang cuaca dan potensi banjir.
                         2. Perlengkapan Darurat: Siapkan makanan, air obat-obatan dan senter.
                         3. Dokumen Penting: Simpan dokumen di tempat yang mana dan tinggi.
                         4. Matikan Listrik: Matikan sumber listrik untuk mencegah resiko kebakaran.
                         5. Jalur Evakuasi: Kenali dan ingat jalur evakuasi di daerah Anda. 
                     """.trimIndent(), Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 11.sp, textAlign = TextAlign.Justify)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text("Pencegahan Banjir", Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text("""
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("Pencegahan Banjir", Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("""
                         1. Bersihkan Saluran Air: Rutin bersihkan saluran dan sungai dari sampah.
                         2. Tanam Pohon: Tanam pohon untuk meningkatkan resapan air.
                         3. Buang Sampah dengan Benar: Edukasi masyarakat tentang pentingnya membuang sampah pada tempatnya.
@@ -149,9 +150,9 @@ fun PanduanBanjir(navController: NavController) {
                         Dengan langkah-langkah ini, kita dapat mengurangi dampak banjir dan melindungi diri serta komunitas.
                     """.trimIndent(), Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 11.sp, textAlign = TextAlign.Justify)
 
-                }
             }
         }
+    }
     // Bottom dashboard
     Box(
         modifier = Modifier
@@ -320,7 +321,7 @@ fun PanduanBanjir(navController: NavController) {
 
 // video player
 @Composable
-fun VideoPlayerBanjir() {
+fun VideoPlayerGempa() {
     val context = LocalContext.current
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -354,7 +355,7 @@ fun VideoPlayerBanjir() {
 
 @Preview
 @Composable
-fun PanduanBanjirReview() {
+fun PanduanGempaPreview() {
     val navController = rememberNavController()
-    PanduanBanjir(navController)
+    PanduanGempa(navController)
 }
