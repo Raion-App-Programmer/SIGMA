@@ -12,4 +12,5 @@ object Routes {
     var SignUpBerhasil = "SignUpBerhasil"
     var PanduanBanjir = "PanduanBanjir"
     var PanduanKebakaran = "PanduanKebakaran"
+    var BeritaTerkini = "BeritaTerkini"
 }

@@ -11,8 +11,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.login.Routes.PanduanKebakaran
 import com.example.mytestsigma.ui.theme.Dashboard
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -24,6 +26,9 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase BEFORE using auth
         FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
+
+        // Firebase Storage
+        val db = Firebase.firestore
 
         enableEdgeToEdge()
         setContent {
@@ -63,6 +68,7 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.PanduanKebakaran) {
                     PanduanKebakaran(navController)
                 }
+
             }
         }
     }
