@@ -1,6 +1,9 @@
 package com.example.login
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +31,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel()) {
@@ -67,7 +78,13 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
 
             LazyColumn {
                 items(newsList) { newsItem ->
-                    NewsCard(newsItem, navController)
+                    NewsCard(
+                        imageUrl = newsItem.imageUrl,
+                        date = newsItem.date,
+                        title = newsItem.title,
+                        author = newsItem.author,
+                        onClick = { }
+                    )
 
                 }
             }
@@ -76,26 +93,84 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
 }
 
 @Composable
-fun NewsCard(newsItem: NewsItem, navController: NavController) {
-    Card(
+fun NewsCard(
+    imageUrl: String,
+    date: String,
+    title: String,
+    author: String,
+    onClick: () -> Unit
+) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .height(180.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() } // Makes it clickable
     ) {
-        Column(modifier = Modifier.padding(16.dp)
-        ){
-            Text(text = newsItem.title, style = MaterialTheme.typography.titleMedium)
-            Text(text = newsItem.date, style = MaterialTheme.typography.bodyMedium)
+        // Background Image
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "News Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Semi-transparent Overlay
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0x80000000)) // Semi-transparent black overlay
+        )
+
+        // Text & Button Overlay
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Date Label
+            Text(
+                text = date,
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .background(Color(0x88FFFFFF), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
+
+            // Title & Author
+            Column {
+                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = author, color = Color.White, fontSize = 12.sp)
+            }
+
+            // Read More Button
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(text = "Selengkapnya", color = Color.White)
+            }
         }
     }
 }
 
+
+// Fake Preview Data (Avoid using viewModel in Previews)
 @Preview
 @Composable
 fun BeritaTerkiniPreview() {
-    BeritaTerkini(
-        navController = rememberNavController(),
-        viewModel = viewModel()
+    val fakeNewsList = listOf(
+        NewsItem("1", "Breaking News: Market Crash!", "March 12, 2025", "Some description"),
+        NewsItem("2", "Weather Alert: Heavy Rain Expected", "March 11, 2025", "Another description")
     )
+    val fakeViewModel = object : NewsViewModel() {
+        @SuppressLint("UnrememberedMutableState")
+        override val newsList: StateFlow<List<NewsItem>> = MutableStateFlow(fakeNewsList)
+    }
+
+    BeritaTerkini(navController = rememberNavController(), viewModel = fakeViewModel)
 }

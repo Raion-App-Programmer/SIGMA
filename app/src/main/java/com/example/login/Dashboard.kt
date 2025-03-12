@@ -7,6 +7,7 @@ package com.example.mytestsigma.ui.theme
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -390,16 +391,21 @@ fun Dashboard(navController: NavController) {
                             .width(30.dp)
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
-                    )
-                    Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
-                        modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                    )
-                }
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                    launchSingleTop = true
+                                }
+                                }
+                                )
+                                Text(
+                                    "Lapor",
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF616161),
+                                    fontSize = 13.sp,
+                                    modifier = Modifier
+                                        .offset(x = (-40).dp, y = 35.dp)
+                                )
+                            }
 
                 // Floating button for calls
                     Column(
@@ -414,7 +420,7 @@ fun Dashboard(navController: NavController) {
                             contentPadding = PaddingValues(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
                             onClick = {
-                                TODO()
+
                             }
                         ) {
 

@@ -1,34 +1,34 @@
-package com.example.login // Change this to match your package name
+package com.example.login // Adjust based on your package
 
-import android.annotation.SuppressLint
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 object FireStoreRepository {
-    @SuppressLint("StaticFieldLeak")
     private val db = FirebaseFirestore.getInstance()
     private val newsCollection = db.collection("news")
 
-    fun addNews(title: String, date: String, imageUrl: String, onComplete: (Boolean) -> Unit) {
+    fun addNews(title: String, date: String, imageUrl: String, description: String, onComplete: (Boolean) -> Unit) {
         val newsData = hashMapOf(
             "title" to title,
             "date" to date,
-            "imageUrl" to imageUrl
+            "imageUrl" to imageUrl,
+            "description" to description // Store description
         )
         newsCollection.add(newsData)
             .addOnSuccessListener { onComplete(true) }
-            .addOnFailureListener {onComplete(false)}
+            .addOnFailureListener { onComplete(false) }
     }
-    @SuppressLint("SuspiciousIndentation")
+
     suspend fun getNews(): List<NewsItem> {
         return try {
-        val snapshot = newsCollection.get().await()
+            val snapshot = newsCollection.get().await()
             snapshot.documents.map { doc ->
-                NewsItem (
+                NewsItem(
                     id = doc.id,
                     title = doc.getString("title") ?: "",
                     date = doc.getString("date") ?: "",
-                    imageUrl = doc.getString("imageUrl") ?: ""
+                    imageUrl = doc.getString("imageUrl") ?: "",
+                    description = doc.getString("description") ?: "" // Fetch description
                 )
             }
         } catch (e: Exception) {

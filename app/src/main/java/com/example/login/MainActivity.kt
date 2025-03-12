@@ -68,7 +68,9 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.PanduanKebakaran) {
                     PanduanKebakaran(navController)
                 }
-
+                composable(Routes.BeritaTerkini) {
+                    BeritaTerkini(navController)
+                }
             }
         }
     }
