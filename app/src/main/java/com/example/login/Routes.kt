@@ -13,4 +13,5 @@ object Routes {
     var PanduanBanjir = "PanduanBanjir"
     var PanduanKebakaran = "PanduanKebakaran"
     var BeritaTerkini = "BeritaTerkini"
+    var BeritaDetail = "berita_detail/{id}"
 }

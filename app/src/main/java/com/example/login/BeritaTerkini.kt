@@ -83,7 +83,9 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                         date = newsItem.date,
                         title = newsItem.title,
                         author = newsItem.author,
-                        onClick = { }
+                        onClick = {
+                            navController.navigate("BeritaDetail/${newsItem.id}")
+                        }
                     )
 
                 }
@@ -162,21 +164,4 @@ fun NewsCard(
             }
         }
     }
-}
-
-
-// Fake Preview Data (Avoid using viewModel in Previews)
-@Preview
-@Composable
-fun BeritaTerkiniPreview() {
-    val fakeNewsList = listOf(
-        NewsItem("1", "Breaking News: Market Crash!", "March 12, 2025", "Some description"),
-        NewsItem("2", "Weather Alert: Heavy Rain Expected", "March 11, 2025", "Another description")
-    )
-    val fakeViewModel = object : NewsViewModel() {
-        @SuppressLint("UnrememberedMutableState")
-        override val newsList: StateFlow<List<NewsItem>> = MutableStateFlow(fakeNewsList)
-    }
-
-    BeritaTerkini(navController = rememberNavController(), viewModel = fakeViewModel)
 }

@@ -1,14 +1,19 @@
 package com.example.login
 
+import BeritaDetail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.material.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.login.Routes.BeritaDetail
 import com.example.login.Routes.PanduanKebakaran
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
@@ -71,6 +76,21 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.BeritaTerkini) {
                     BeritaTerkini(navController)
                 }
+                composable(
+                    route = "BeritaDetail/{newsId}",
+                    arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val newsId = backStackEntry.arguments?.getString("newsId")
+
+                    // Ensure we don't pass null to Firebase
+                    if (!newsId.isNullOrBlank()) {
+                        BeritaDetail(newsId, NewsViewModel())  // Only pass a valid newsId
+                    } else {
+                        // Show an error screen or navigate back
+                        Text("Error: Invalid news ID")
+                    }
+                }
+
             }
         }
     }
