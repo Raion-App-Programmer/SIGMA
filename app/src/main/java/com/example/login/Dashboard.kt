@@ -395,7 +395,7 @@ fun Dashboard(navController: NavController) {
                                 navController.navigate("BeritaTerkini") {
                                     launchSingleTop = true
                                 }
-                                }
+                            }
                                 )
                                 Text(
                                     "Lapor",

@@ -105,6 +105,7 @@ fun NewsCard(
             .fillMaxWidth()
             .height(180.dp)
             .clip(RoundedCornerShape(16.dp))
+            .padding(bottom = 16.dp)
             .clickable { onClick() } // Makes it clickable
     ) {
         // Background Image
@@ -119,7 +120,12 @@ fun NewsCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0x80000000)) // Semi-transparent black overlay
+                .background(brush = Brush.horizontalGradient(
+                    listOf(
+                        Color(0XFFC4153230),
+                        Color(0XFF5E0A18)
+                    )
+                )) // Semi-transparent overlay
         )
 
         // Text & Button Overlay
