@@ -452,12 +452,17 @@ fun Dashboard(navController: NavController) {
                         .offset(y = (-15).dp, x = (-10).dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.book_gray),
-                        contentDescription = "Book button",
+                        painter = painterResource(id = R.drawable.note_gray),
+                        contentDescription = "Edit button",
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
                             .offset(y = 30.dp, x = 27.dp)
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                    launchSingleTop = true
+                                }
+                            }
                     )
                     Text(
                         "Berita",

@@ -104,28 +104,29 @@ fun NewsCard(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .clip(RoundedCornerShape(40.dp))
+            .width(372.dp)
             .height(180.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .padding(bottom = 16.dp)
+            .padding(start = 10.dp, end = 10.dp, bottom = 16.dp)
             .clickable { onClick() } // Makes it clickable
     ) {
         // Background Image
         AsyncImage(
             model = imageUrl,
             contentDescription = "News Image",
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
         )
 
         // Semi-transparent Overlay
         Box(
             modifier = Modifier
+                .clip(RoundedCornerShape(40.dp))
                 .fillMaxSize()
                 .background(brush = Brush.horizontalGradient(
                     listOf(
-                        Color(0XFFC4153230),
-                        Color(0XFF5E0A18)
+                        Color(0XFFC41532),
+                        Color(0XFF431B3B)
                     )
                 )) // Semi-transparent overlay
         )
@@ -148,12 +149,12 @@ fun NewsCard(
             )
 
             // Title & Author
-            Column {
+            Column (verticalArrangement = Arrangement.Bottom) {
                 Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(text = author, color = Color.White, fontSize = 12.sp)
             }
 
-            // Read More Button
+            // button selengkapnya
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
