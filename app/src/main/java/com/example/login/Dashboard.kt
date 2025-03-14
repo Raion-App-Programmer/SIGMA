@@ -452,7 +452,7 @@ fun Dashboard(navController: NavController) {
                         .offset(y = (-15).dp, x = (-10).dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.note_gray),
+                        painter = painterResource(id = R.drawable.book_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
                             .width(30.dp)

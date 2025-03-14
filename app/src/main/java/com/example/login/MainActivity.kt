@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
                     // Ensure we don't pass null to Firebase
                     if (!newsId.isNullOrBlank()) {
-                        BeritaDetail(newsId, NewsViewModel())  // Only pass a valid newsId
+                        BeritaDetail(newsId, NewsViewModel(), navController)  // Only pass a valid newsId
                     } else {
                         // Show an error screen or navigate back
                         Text("Error: Invalid news ID")
