@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -28,7 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
+import com.example.login.R
+import com.example.login.Routes
 
 
 @Composable

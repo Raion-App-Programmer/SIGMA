@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.fitur_panduan
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,6 +46,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.login.R
 
 @Composable
 fun PanduanKebakaran(navController: NavController) {
