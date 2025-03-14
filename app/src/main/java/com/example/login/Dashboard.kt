@@ -421,7 +421,7 @@ fun Dashboard(navController: NavController) {
                             contentPadding = PaddingValues(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
                             onClick = {
-
+                                // taruh navigasi call disini
                             }
                         ) {
 

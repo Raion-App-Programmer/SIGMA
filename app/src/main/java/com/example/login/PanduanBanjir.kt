@@ -107,6 +107,7 @@ fun PanduanBanjir(navController: NavController) {
                 .background(Color.Red)
             ) {
                 //VideoPlayer() goes here
+                VideoPlayerBanjir()
             }
                 Spacer(modifier = Modifier.height(10.dp))
                 Text("Tips Saat Terjadi Banjir", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier

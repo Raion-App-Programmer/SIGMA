@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.login.R
 
 @Composable
-fun Profile(navController: NavController.Companion) {
+fun Profile(navController: NavController) {
     val navController = rememberNavController()
     Box( // Use Box for overlapping effect
         modifier = Modifier
@@ -215,9 +215,9 @@ fun Profile(navController: NavController.Companion) {
     }
 }
 
-@Preview (showBackground = true)
-@Composable
-fun ProfilePreview() {
-    val navController = NavController
-    Profile(navController)
-}
+//@Preview (showBackground = true)
+//@Composable
+//fun ProfilePreview() {
+//    val navController = NavController
+//    Profile(navController)
+//}

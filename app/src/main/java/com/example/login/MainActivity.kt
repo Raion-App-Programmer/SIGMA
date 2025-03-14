@@ -2,6 +2,7 @@ package com.example.login
 
 import BeritaDetail
 import Profile
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,12 +10,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mytestsigma.ui.theme.Dashboard
+import com.google.android.ads.mediationtestsuite.activities.HomeActivity
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -101,7 +104,10 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // Handle logged-in user (e.g., navigate to a home screen)
+
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish() // Prevent the user from going back to the login screen
         }
     }
 }
