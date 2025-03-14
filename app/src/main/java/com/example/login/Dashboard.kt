@@ -48,6 +48,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.ContentScale
 import com.example.login.Routes
+import com.example.login.Routes.Profile
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
 
@@ -485,6 +486,9 @@ fun Dashboard(navController: NavController) {
                             .width(36.dp)
                             .height(36.dp)
                             .offset(x = (-20).dp, y = (30.dp))
+                            .clickable {
+                                navController.navigate(Profile)
+                            }
                     )
                     Text(
                         text = "Profil",

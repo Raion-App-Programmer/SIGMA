@@ -1,6 +1,7 @@
 package com.example.login
 
 import BeritaDetail
+import Profile
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,8 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.login.Routes.BeritaDetail
-import com.example.login.Routes.PanduanKebakaran
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -89,6 +88,9 @@ class MainActivity : ComponentActivity() {
                         // Show an error screen or navigate back
                         Text("Error: Invalid news ID")
                     }
+                }
+                composable(Routes.Profile) {
+                    Profile(navController)
                 }
 
             }
