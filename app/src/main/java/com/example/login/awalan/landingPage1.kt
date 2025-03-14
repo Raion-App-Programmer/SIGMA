@@ -35,7 +35,7 @@ fun landingPage1(navController: NavController){
                     )
                 )
             )
-            .clickable { navController.navigate(Routes.landingPage2) }
+            .clickable { navController.navigate(Routes.LandingPage2) }
     )
 
     Column(

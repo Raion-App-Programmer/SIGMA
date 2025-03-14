@@ -328,7 +328,7 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Normal,
                                 textDecoration = TextDecoration.Underline,
-                                color = Color.Black // Atur warna teks sesuai tema
+                                color = Color.Black
                             )
                         )}
 

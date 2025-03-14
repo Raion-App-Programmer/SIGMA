@@ -79,7 +79,7 @@ fun onBoarding(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(170.dp))
             Button(
-                onClick = { navController.navigate(Routes.signUp)},
+                onClick = { navController.navigate(Routes.SignUp)},
                 modifier = Modifier
                     .height(48.dp)
                     .width(295.dp)
@@ -104,7 +104,7 @@ fun onBoarding(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = {navController.navigate(Routes.login)},
+                onClick = {navController.navigate(Routes.Login)},
                 modifier = Modifier
 
                     .height(48.dp)

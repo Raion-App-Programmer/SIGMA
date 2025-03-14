@@ -1,7 +1,5 @@
 package com.example.mytestsigma.ui.theme
 
-//import androidx.compose.material3.carousel.rememberCarouselState
-//import coil.compose.HorizontalUncontainedCarousel
 
 
 import androidx.compose.foundation.ExperimentalFoundationApi

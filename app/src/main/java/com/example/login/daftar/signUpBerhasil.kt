@@ -34,7 +34,7 @@ fun signUpBerhasil(navController: NavController) {
 
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(Routes.login)
+        navController.navigate(Routes.Login)
     }
     Box(
         modifier = Modifier

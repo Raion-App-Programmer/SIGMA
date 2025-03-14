@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-
+@Preview
 @Composable
-fun panggilSigma1(navController: NavController){
+fun panggilSigma1(){
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
     Box(
             modifier = Modifier

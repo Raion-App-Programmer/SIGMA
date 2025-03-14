@@ -60,7 +60,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState) {
         when (authState) {
-            is AuthState.LoginSuccess -> navController.navigate(Routes.loginBerhasil)
+            is AuthState.LoginSuccess -> navController.navigate(Routes.LoginBerhasil)
             is AuthState.Error -> Toast.makeText(
                 context, // Use initialized context
                 (authState as AuthState.Error).message,
@@ -258,7 +258,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
 
                         ClickableText(
                             text = AnnotatedString(" Daftar"),
-                            onClick = { navController.navigate(Routes.signUp) },
+                            onClick = { navController.navigate(Routes.SignUp) },
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Normal,

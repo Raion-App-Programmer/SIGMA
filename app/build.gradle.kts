@@ -68,7 +68,6 @@ dependencies {
     implementation(libs.androidx.paging.common.android)
     implementation(libs.generativeai)
     implementation(libs.firebase.firestore)
-    implementation(libs.mediation.test.suite)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -77,6 +76,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.media3:media3-exoplayer-dash:1.2.0")
 
     // Pager
     implementation("com.google.accompanist:accompanist-pager:0.32.0")
@@ -87,6 +88,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0") // Firestore
+    implementation("com.google.firebase:firebase-messaging:23.1.2")
+
 
     // Compose UI & Foundation
     implementation("androidx.compose.foundation:foundation:1.4.3")
@@ -108,5 +112,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.X.X")
     implementation("androidx.media3:media3-exoplayer-dash:1.X.X")
     implementation("androidx.media3:media3-ui:1.X.X")
+
+
 }
 

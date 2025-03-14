@@ -35,7 +35,7 @@ fun landingPage2(navController: NavController){
                     )
                 )
             )
-            .clickable { navController.navigate(Routes.onBoarding) }
+            .clickable { navController.navigate(Routes.OnBoarding) }
     )
     Column(
         modifier = Modifier
