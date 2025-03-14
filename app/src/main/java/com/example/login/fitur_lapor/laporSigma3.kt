@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.lapor
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,216 +17,215 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import com.example.login.R
 
+@Preview
 @Composable
-fun panggilSigma2(navController: NavController){
-    val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
+fun laporSigma3() {
+    var pernyataan by remember { mutableStateOf("") }
+    var isChecked by remember { mutableStateOf(false) }
+
+    val dark_grey = colorResource(id = R.color.dark_grey)
+    val dark0_grey = colorResource(id = R.color.dark0_grey)
+
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 30.dp)
-            .background(
-                color = backgroundColor
-            )
-
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
+            .width(412.dp)
+            .height(917.dp)
+            .background(color = Color(0xFFF7EAEB))
     ) {
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp)
-                .height(130.dp)
-                .shadow(
-                    elevation = 100.dp,
-                    shape = RoundedCornerShape(
-                        bottomStart = 45.dp,
-                        bottomEnd = 45.dp
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top,
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(412.dp)
+                    .height(119.dp)
+                    .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFC41532),
+                                Color(0xFF431B3B)
+                            )
+                        )
                     ),
-                )
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(
-                        bottomStart = 45.dp,
-                        bottomEnd = 45.dp
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .height(24.dp)
                     )
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Hanya Untuk Darurat",
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp,
-                color = colorResource(id = R.color.font_hanyaUntuDarurat),
-                textAlign = TextAlign.Center
-            )
-        }
 
-        Spacer(
-            modifier = Modifier
-                .height(35.dp)
-        )
+                    Spacer(
+                        modifier = Modifier
+                            .width(30.dp)
+                    )
 
-        Text(
-            text = "Malang Kabupaten",
-            fontWeight = FontWeight.Bold,
-            fontSize = 26.sp,
-            textAlign = TextAlign.Center
-        )
+                    Text(
+                        modifier = Modifier
+                            .width(122.dp)
+                            .height(25.dp),
+                        text = "Lapor Sigma",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
 
-        Spacer(
-            modifier = Modifier
-                .height(35.dp)
-        )
+                    Spacer(
+                        modifier = Modifier
+                            .width(145.dp)
+                    )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
-                    .background(color = Color.Transparent),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = colorResource(id = R.color.bg_buttonPanggil),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Pemadam Kebakaran",
-                        textAlign = TextAlign.Center,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "3/3",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
 
             Spacer(
                 modifier = Modifier
-                    .width(10.dp)
+                    .height(30.dp)
             )
-
-            Button(
-                onClick = { },
+            Column(
                 modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
-                    .background(color = Color.Transparent),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues()
+                    .fillMaxWidth()
             ) {
-                Box(
+                Text(
+                    text = "Pernyataan",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = colorResource(id = R.color.bg_buttonPanggil),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        .padding(start = 20.dp, end = 20.dp)
+                )
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    modifier = Modifier
+                        .width(390.dp)
+                        .height(110.dp)
+                        .padding(top = 10.dp, start = 20.dp, end = 20.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(text = "Ambulance",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = "Laporan yang saya buat akurat dan dapat dipertanggungjawabkan.",
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 12.sp,
+                            modifier = Modifier
+                                .padding(start = 40.dp)
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 28.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = isChecked,
+                                onCheckedChange = { isChecked = it },
+                                colors = CheckboxDefaults.colors(
+                                    checkmarkColor = Color.Red, //warna nya centang saat di klik
+                                )
+                            )
+                            Spacer(
+                                modifier = Modifier
+                                    .width(8.dp)
+                            )
+                            Text(text = "Ya, Saya Setuju")
+                        }
+                    }
                 }
+
+                Spacer(
+                    modifier = Modifier
+                        .height(470.dp)
+                )
+
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(color = Color.Transparent)
+                        .padding(start = 20.dp, end = 20.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color(0xFFC41532),
+                                        Color(0xFF431B3B)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(16.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Kirim Laporan",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
+
+
             }
+
         }
-
-        Spacer(
-            modifier = Modifier
-                .height(15.dp)
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
-                    .background(color = Color.Transparent),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = colorResource(id = R.color.bg_buttonPanggil),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Polisi",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
-                }
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .width(10.dp)
-            )
-
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
-                    .background(color = Color.Transparent),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = colorResource(id = R.color.bg_buttonPanggil),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "PMI",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-// Bottom dashboard
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
@@ -264,18 +263,18 @@ fun panggilSigma2(navController: NavController){
                             )
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.home),
+                            painter = painterResource(id = R.drawable.home_black),
                             contentDescription = "Home button",
                             modifier = Modifier
                                 .width(30.dp)
                                 .height(30.dp)
                                 .offset(x = 15.dp, y = 25.dp)
                         )
-                        Text(
+                        androidx.compose.material3.Text(
                             "Beranda",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFFC35660),
+                            color = Color(0xFF616161),
                             modifier = Modifier
                                 .offset(x = 15.dp, y = 25.dp)
                         )
@@ -288,7 +287,7 @@ fun panggilSigma2(navController: NavController){
                             .offset(y = (-25).dp, x = 10.dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.note_gray),
+                            painter = painterResource(id = R.drawable.lapor_red),
                             contentDescription = "Edit button",
                             modifier = Modifier
                                 .width(30.dp)
@@ -298,7 +297,7 @@ fun panggilSigma2(navController: NavController){
                         Text(
                             "Lapor",
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
+                            color = Color(0xFFC35660),
                             fontSize = 13.sp,
                             modifier = Modifier
                                 .offset(x = (-40).dp, y = 35.dp)
@@ -314,9 +313,7 @@ fun panggilSigma2(navController: NavController){
                         Arrangement.Center
                     ) {
                         Button(
-                            onClick = {
-                                // TODO: Tambahkan aksi klik
-                            },
+                            onClick = { },
                             modifier = Modifier
                                 .size(60.dp) // Menggunakan size untuk width & height sekaligus
                                 .clip(CircleShape), // Memastikan bentuknya lingkaran
@@ -359,7 +356,7 @@ fun panggilSigma2(navController: NavController){
                                 .height(30.dp)
                                 .offset(y = 30.dp, x = 27.dp)
                         )
-                        Text(
+                        androidx.compose.material3.Text(
                             "Berita",
                             fontSize = 13.sp,
                             color = Color(0xFF616161),
@@ -397,6 +394,3 @@ fun panggilSigma2(navController: NavController){
         }
     }
 }
-
-
-
