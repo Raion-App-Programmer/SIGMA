@@ -1,0 +1,223 @@
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.login.R
+
+@Composable
+fun Profile(navController: NavController) {
+    val navController = rememberNavController()
+    Box( // Use Box for overlapping effect
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0XFFF7EAEB))
+    ) {
+        // Head NavBar
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(244.dp)
+                .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
+                .background(
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            Color(0XFFC41532),
+                            Color(0XFF431B3B)
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Profil",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.offset(y = (-50).dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.gear_settings),
+                contentDescription = "Gear Settings",
+                modifier = Modifier
+                    .size(24.dp)
+                    .offset(y = (-50).dp, x = 140.dp)
+            )
+        }
+
+        // White box (Overlapping)
+        Column( // Use Column for vertical layout within the Box
+            modifier = Modifier
+                .align(Alignment.TopCenter) // Align to top center
+                .padding(top = 150.dp) // Adjust top padding to overlap
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(371.dp)
+                    .height(149.dp)
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(Color.White)
+            ) {
+                // Profile image and text inside the white box
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Diandra Salim",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                    Text(
+                        text = "diandrasalim@gmail.com",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                    Box (
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .background(Color(0XFF431B3B), shape = RoundedCornerShape(10.dp))
+                            .width(120.dp)
+                    ) {
+
+                        Text(
+                            text = "Ubah Profil",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight(700),
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 16.dp)
+                        )
+                    }
+                }
+            }
+            // Profile picture container
+            Box (
+                modifier = Modifier
+                    .offset(y = (-215).dp, x = 140.dp)
+                    .border(5.dp, color = Color.White, RoundedCornerShape(50.dp)),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.profile_picture_image),
+                    contentDescription = "Profile Picture",
+                    Modifier.size(100.dp)
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .offset(y = (-80).dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.White)
+                    .width(371.dp)
+                    .height(788.dp)
+
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        "Lacak Laporanmu!",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .offset(x = 100.dp)
+                    )
+
+                    Column(modifier = Modifier.padding(top = 8.dp)) {
+                        listOf(
+                            Triple("Tabrakan Ijen", "Sabtu, 8 Maret 2025", "11:13 WIB" to "Menunggu persetujuan"),
+                            Triple("Suhat Banjir Terus, Rek.", "Kamis, 6 Maret 2025", "14:26 WIB" to "Berhasil diunggah"),
+                            Triple("Konslet Listrik", "Senin, 3 Februari 2025", "22:04 WIB" to "Ditolak"),
+                            Triple("Laka Lantas di Veteran", "Rabu, 22 Januari 2025", "08:34 WIB" to "Berhasil diunggah"),
+                            Triple("Pohon Jatuh, Hati-Hati", "Jumat, 17 Januari 2025", "17:26 WIB" to "Berhasil diunggah"),
+                            Triple("Kayutangan Banjir", "Sabtu, 4 Januari 2025", "22:00 WIB" to "Ditolak")
+                        ).forEach { (title, date, statusInfo) ->
+                            val (time, status) = statusInfo
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(70.dp)
+                                    .clip(RectangleShape)
+                                    .background(Color.White)
+                                    .border(0.5.dp, Color.LightGray)
+                                    .padding(12.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(date, fontSize = 12.sp, color = Color.Gray)
+                                            Spacer(modifier = Modifier.width(4.dp))
+                                            Text(
+                                                time,
+                                                fontSize = 12.sp,
+                                                color = Color.White,
+                                                modifier = Modifier
+                                                    .background(Color(0xFF8D2A2A), RoundedCornerShape(8.dp))
+                                                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                                            )
+                                        }
+                                    }
+
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        val statusColor = when (status) {
+                                            "Menunggu persetujuan" -> Color(0xFFFFC107)
+                                            "Berhasil diunggah" -> Color(0xFF4CAF50)
+                                            "Ditolak" -> Color(0xFFD32F2F)
+                                            else -> Color.Gray
+                                        }
+                                        Text(status, fontSize = 14.sp, color = Color.Gray)
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Box(
+                                            modifier = Modifier
+                                                .size(10.dp)
+                                                .background(statusColor, shape = CircleShape)
+                                        )
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+}
+
+//@Preview (showBackground = true)
+//@Composable
+//fun ProfilePreview() {
+//    val navController = NavController
+//    Profile(navController)
+//}

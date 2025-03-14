@@ -1,15 +1,18 @@
 package com.example.login
 
 object Routes {
-    var login = "loginMasuk"
-    var signUp = "signDaftar"
-    var verification = "verification"
-    var loginBerhasil = "loginBerhasil"
-    var onBoarding = "onBoarding"
-    var landingPage1 = "landingPage1"
-    var landingPage2 = "landingPage2"
+    var Login = "loginMasuk"
+    var SignUp = "signDaftar"
+    var Verification = "verification"
+    var LoginBerhasil = "loginBerhasil"
+    var OnBoarding = "onBoarding"
+    var LandingPage1 = "landingPage1"
+    var LandingPage2 = "landingPage2"
     var Dashboard = "Dashboard"
-    var signUpBerhasil = "SignUpBerhasil"
-    var panggilSigma1 = "panggilSigma1"
-    var panggilSigma2 = "panggilSigma2"
+    var SignUpBerhasil = "SignUpBerhasil"
+    var PanduanBanjir = "PanduanBanjir"
+    var PanduanKebakaran = "PanduanKebakaran"
+    var BeritaTerkini = "BeritaTerkini"
+    var BeritaDetail = "berita_detail/{id}"
+    var Profile = "Profile"
 }

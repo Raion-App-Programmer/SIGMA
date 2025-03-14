@@ -1,9 +1,13 @@
 package com.example.mytestsigma.ui.theme
 
-import androidx.annotation.DrawableRes
+//import androidx.compose.material3.carousel.rememberCarouselState
+//import coil.compose.HorizontalUncontainedCarousel
+
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,22 +21,19 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-//import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,10 +41,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-//import coil.compose.HorizontalUncontainedCarousel
 import com.example.login.R
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.layout.ContentScale
 import com.example.login.Routes
-
+import com.example.login.Routes.Profile
+import com.google.ai.client.generativeai.type.content
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -78,23 +85,32 @@ fun Dashboard(navController: NavController) {
                 ),
         ) {
             // To control profile - notification on top and weather - location on bottom
-            Column(modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 // profile - notification on top
                 Row(
                     modifier = Modifier
                 ) {
 
-                    Text(text = "Halo, Diandra!", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier
-                        .offset(x = 35.dp, y = 40.dp))
+                    Text(
+                        text = "Halo, Diandra!",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .offset(x = 35.dp, y = 40.dp)
+                    )
 
 
-                    Image(painter = painterResource(id = R.drawable.notifications),
+                    Image(
+                        painter = painterResource(id = R.drawable.notifications),
                         contentDescription = "Notifications",
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
-                            .offset(x = 230.dp, y = 30.dp))
+                            .offset(x = 230.dp, y = 30.dp)
+                    )
                 }
 
                 // weather - location
@@ -156,7 +172,7 @@ fun Dashboard(navController: NavController) {
         }
 
         // pager
-//        CarouselScreen()
+        MyPagerWithDots()
 
         // Panduan Darurat
         Column(
@@ -164,9 +180,14 @@ fun Dashboard(navController: NavController) {
                 .align(Alignment.CenterStart)
                 .offset(x = 40.dp, y = 200.dp)
         ) {
-            Text("Panduan Darurat", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier
-                .padding(bottom = 15.dp)
-                .offset(y = (-225).dp)
+            Text(
+                "Panduan Darurat",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .offset(y = (-225).dp)
             )
 
             // Panduan darurat container
@@ -174,7 +195,10 @@ fun Dashboard(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = (-230).dp)
-            ) {
+            ) {val handleClick: (String) -> Unit = {route ->
+                navController.navigate(route)
+            }
+
                 // Icons for Panduan Darurat
                 Row(
                     modifier = Modifier
@@ -190,14 +214,22 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.banjir_darurat),
-                            contentDescription = "Banjir darurat",
-                            modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp))
+                        IconButton(onClick = { handleClick(Routes.PanduanBanjir) }, modifier = Modifier
+                            .width(70.dp)
+                            .height(80.dp)
+                        ) {
+                            Image(painter = painterResource(R.drawable.banjir_darurat),
+                                contentDescription = "Banjir darurat button", modifier = Modifier
+                                    .width(70.dp)
+                                    .height(80.dp))
+                        }
 
-                        Text("Banjir", fontSize = 13.sp,  fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        Text(
+                            "Banjir",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
 
@@ -207,14 +239,22 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.kebakaran_darurat),
-                            contentDescription = "Kebakaran darurat",
-                            modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp))
+                        IconButton(onClick = { handleClick(Routes.PanduanKebakaran) }, modifier = Modifier
+                            .width(70.dp)
+                            .height(80.dp)
+                        ) {
+                            Image(painter = painterResource(R.drawable.kebakaran_darurat),
+                                contentDescription = "Kebakaran darurat button", modifier = Modifier
+                                    .width(70.dp)
+                                    .height(80.dp))
+                        }
 
-                        Text("Kebakaran", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        Text(
+                            "Kebakaran",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                     Column(
@@ -223,14 +263,19 @@ fun Dashboard(navController: NavController) {
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.gempa_darurat),
-                            contentDescription = "Gempa darurat",
-                            modifier = Modifier
+                        Image(painter = painterResource(id = R.drawable.gempa_darurat),
+                            contentDescription = "Gempa darurat png", modifier = Modifier
                                 .width(70.dp)
                                 .height(80.dp))
 
-                        Text("Gempa", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                            // bikin route
+
+                        Text(
+                            "Gempa",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                     Column(
@@ -244,9 +289,15 @@ fun Dashboard(navController: NavController) {
                             contentDescription = "P3K darurat",
                             modifier = Modifier
                                 .width(70.dp)
-                                .height(80.dp))
+                                .height(80.dp)
+                        )
 
-                        Text("P3K", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black, modifier = Modifier.padding(top = 6.dp)
+                        Text(
+                            "P3K",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                 }
@@ -259,21 +310,30 @@ fun Dashboard(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Berita Terkini", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier
-                .offset(y = 195.dp, x = ((-95).dp))
+            Text(
+                "Berita Terkini",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .offset(y = 195.dp, x = ((-95).dp))
             )
 
             Spacer(modifier = Modifier.height((-2).dp))
 
-            MyLazyRow(listOf(Color(0xFFC41532),
-                Color(0xFF431B3B)))
+            MyLazyRow(
+                listOf(
+                    Color(0xFFC41532),
+                    Color(0xFF431B3B)
+                )
+            )
         }
 
         // Bottom dashboard
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .offset(y = 770.dp)
         ) {
             // Bottom navigation bar background
             Image(
@@ -290,7 +350,7 @@ fun Dashboard(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(82.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
@@ -298,7 +358,7 @@ fun Dashboard(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .offset(
-                            y = (-15).dp
+                            y = (-15).dp, x = (-75).dp
                         )
                 ) {
                     Image(
@@ -332,16 +392,59 @@ fun Dashboard(navController: NavController) {
                             .width(30.dp)
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
-                    )
-                    Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                    launchSingleTop = true
+                                }
+                            }
+                                )
+                                Text(
+                                    "Lapor",
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF616161),
+                                    fontSize = 13.sp,
+                                    modifier = Modifier
+                                        .offset(x = (-40).dp, y = 35.dp)
+                                )
+                            }
+
+                // Floating button for calls
+                    Column(
                         modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                    )
-                }
+                            .offset(y = (-5).dp),
+                        Arrangement.Center
+                    ) {
+                        Button(modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp),
+                            shape = CircleShape,
+                            contentPadding = PaddingValues(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                            onClick = {
+                                // taruh navigasi call disini
+                            }
+                        ) {
+
+                            Image(
+                                painter = painterResource(id = R.drawable.phone_call_white),
+                                contentDescription = "Call SIGMA",
+                                modifier = Modifier
+                                    .width(34.dp)
+                                    .height(33.dp)
+                                    .offset(y = (-2).dp),
+                                Alignment.Center
+                            )
+                        }
+                        Text(
+                            text = "Darurat",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0XFF616161),
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .offset(x = 10.dp)
+                        )
+                    }
 
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -351,11 +454,16 @@ fun Dashboard(navController: NavController) {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.book_gray),
-                        contentDescription = "Book button",
+                        contentDescription = "Edit button",
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
                             .offset(y = 30.dp, x = 27.dp)
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                    launchSingleTop = true
+                                }
+                            }
                     )
                     Text(
                         "Berita",
@@ -363,62 +471,42 @@ fun Dashboard(navController: NavController) {
                         color = Color(0xFF616161),
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier
-                            .offset(y = 28.dp, x = 28.dp)
+                            .offset(y = 25.dp, x = 28.dp)
                     )
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.offset(y = (-15).dp)
+                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.profile),
+                        painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
+                            .width(36.dp)
+                            .height(36.dp)
                             .offset(x = (-20).dp, y = (30.dp))
+                            .clickable {
+                                navController.navigate(Profile)
+                            }
                     )
-                    Text(text = "Profil", color = Color(0xFF616161), fontSize = 13.sp, fontWeight = FontWeight.Medium, modifier = Modifier
-                        .offset(x = (-20).dp, y = 30.dp))
-                }
-            }
-
-            // Floating button for calls
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .offset(y = (-10).dp)
-            ) {
-                Column {
-                    Image(painter = painterResource(id = R.drawable.circle_call),
-                        contentDescription = "Circle call",
+                    Text(
+                        text = "Profil",
+                        color = Color(0xFF616161),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
                         modifier = Modifier
-                            .width(80.dp)
-                            .height(78.dp))
-
-                    Text(text = "Darurat", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF616161), modifier = Modifier
-                        .offset(y = (-4).dp, x = 21.dp))
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(Routes.panggilSigma1)
-                    }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.phone_call_white),
-                        contentDescription = "Call SIGMA",
-                        modifier = Modifier
-                            .width(34.dp)
-                            .height(33.dp)
-                            .align(Alignment.Center)
-                            .offset(y = (-10).dp)
+                            .offset(x = (-20).dp, y = 30.dp)
                     )
+                }
+
+
                 }
             }
         }
     }
-}
+
+
 
 @Composable
 fun MyLazyRow(boxList: List<Color>) {
@@ -451,56 +539,65 @@ fun MyLazyRow(boxList: List<Color>) {
     }
 }
 
-// Infinite Carousel
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun CarouselScreen() {
-//
-//    val item = remember {
-//        listOf(
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA"),
-//            CarouselItem(0, R.drawable.lapor_segala_insiden_warna, contentDescription = "Lapor SIGMA")
-//        )
-//    }
 
-//    HorizontalUncontainedCarousel(
-//        state = rememberCarouselState {
-//        item.count()
-//    },
-//        itemWidth = 370.dp,
-//        itemSpacing = 12.dp,
-//        contentPadding = PaddingValues(start = 12.dp),
-//        modifier = Modifier
-//            .width(379.dp)
-//            .height(189.dp)
-//            .wrapContentHeight()
-//            .padding(top = 16.dp, bottom = 12.dp)
-//            .offset(y = 120.dp)
-//    ) { index ->
-//
-//        val value = item[index]
-//
-//        Image(
-//            painter = painterResource(id = R.drawable.lapor_segala_insiden_warna),
-//            contentDescription = value.contentDescription,
-//            contentScale = ContentScale.Fit,
-//            modifier = Modifier
-//                .offset(y = 0.dp)
-//                .width(379.dp)
-//                .height(189.dp)
-//        )
-//
-//    }
-//}
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MyPagerWithDots() {
+    val pageCount = 3 // Set number of pages
+    val pagerState = rememberPagerState(pageCount = { pageCount })
 
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .offset(y = 125.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Pager (Scrollable)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .width(350.dp)
+                .height(170.dp)
+        ) { page ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = when (page) {
+                            0 -> R.drawable.lapor_segala_insiden_warna
+                            1 -> R.drawable.lapor_segala_insiden_warna
+                            else -> R.drawable.lapor_segala_insiden_warna
+                        }
+                    ),
+                    contentDescription = "Page $page", // Add contentDescription
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop // Add contentScale
+                )
+            }
+        }
 
-data class CarouselItem(
-    val id: Int,
-    @DrawableRes val imageResource: Int,
-    val contentDescription: String
-)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Dot Indicator
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            repeat(pageCount) { index ->
+                Box(
+                    modifier = Modifier
+                        .size(if (pagerState.currentPage == index) 12.dp else 8.dp)
+                        .clip(CircleShape)
+                        .background(if (pagerState.currentPage == index) Color.Black else Color.Gray)
+                        .padding(5.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+        }
+    }
+}
 
 @Preview
 @Composable

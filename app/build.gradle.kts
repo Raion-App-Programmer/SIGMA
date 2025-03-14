@@ -46,20 +46,19 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // Compose BOM (Bill of Materials) to manage Compose versions
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
-    // Material 3 - use the latest stable version consistently
+    // Material 3
     implementation("androidx.compose.material3:material3:1.1.2")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.auth)
+
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
@@ -68,9 +67,9 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.paging.common.android)
     implementation(libs.generativeai)
+    implementation(libs.firebase.firestore)
+    implementation(libs.mediation.test.suite)
 
-
-    // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,32 +78,35 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Pager
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+
     // Firebase Authentication
-    implementation("com.google.firebase:firebase-auth:23.2.0")
-    implementation("androidx.credentials:credentials:1.5.0-rc01")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
-    // Compose Material - use consistent versions
-    implementation("androidx.compose.material:material:1.3.0")
-    implementation("androidx.compose.material:material-icons-extended:1.5.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
-
-
-    // Compose Foundation - use consistent versions
+    // Compose UI & Foundation
     implementation("androidx.compose.foundation:foundation:1.4.3")
-
-    // Compose UI - use consistent versions
     implementation("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.ui:ui-text:1.4.3")
-
-    // Accompanist Pager
-    implementation("com.google.accompanist:accompanist-pager:0.28.0")
-
-    // Coil Image Loading
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
 
     // Navigation Compose
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Material Icons
+    implementation("androidx.compose.material:material-icons-extended:1.5.1")
+
+    // Media Compose
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
+
+    // Exoplayer
+    implementation("androidx.media3:media3-exoplayer:1.X.X")
+    implementation("androidx.media3:media3-exoplayer-dash:1.X.X")
+    implementation("androidx.media3:media3-ui:1.X.X")
 }
+
