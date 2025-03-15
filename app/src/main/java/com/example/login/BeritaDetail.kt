@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil3.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.example.login.NewsItem
 import com.example.login.NewsViewModel
 import com.example.login.R
@@ -104,8 +104,8 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
 
                 // news image
                 if (newsItem!!.imageUrl.isNotEmpty()) {
-                    Image(
-                        painter = rememberAsyncImagePainter(newsItem!!.imageUrl),
+                    AsyncImage(
+                        model = (newsItem!!.imageUrl),
                         contentDescription = "News Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

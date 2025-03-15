@@ -1,6 +1,7 @@
 package com.example.login
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,7 +41,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.layout.ContentScale
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -87,6 +88,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             navController.navigate("BeritaDetail/${newsItem.id}")
                         }
                     )
+                    Log.d("newsitem.imageurl", newsItem.imageUrl)
 
                 }
             }
@@ -112,7 +114,7 @@ fun NewsCard(
     ) {
         // Background Image
         AsyncImage(
-            model = imageUrl,
+            model = "https://cdn.idntimes.com/content-images/post/20250312/gub-tinjau-banjir-grobogan4-6ae7fee674c65cff0708eada9521cb8d_600x400.jpg",
             contentDescription = "News Image",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
