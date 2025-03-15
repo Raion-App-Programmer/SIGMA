@@ -43,12 +43,9 @@ import com.example.login.R
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.ContentScale
 import com.example.login.Routes
 import com.example.login.Routes.Profile
-import com.google.ai.client.generativeai.type.content
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -391,9 +388,7 @@ fun Dashboard(navController: NavController) {
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
                             .clickable {
-                                navController.navigate("BeritaTerkini") {
-                                    launchSingleTop = true
-                                }
+                                navController.navigate(Routes.LaporSigma1)
                             }
                                 )
                                 Text(

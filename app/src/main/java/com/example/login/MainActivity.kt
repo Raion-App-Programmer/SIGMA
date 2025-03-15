@@ -18,7 +18,10 @@ import androidx.navigation.navArgument
 import com.example.login.fitur_berita.BeritaTerkini
 import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
-import com.example.login.onboarding.onBoarding
+import com.example.login.awalan.onBoarding
+import com.example.login.lapor.laporBerhasil
+import com.example.login.lapor.laporSigma1
+import com.example.login.lapor.laporSigma2
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -97,6 +100,15 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.Profile) {
                     Profile(navController)
+                }
+                composable(Routes.LaporSigma1) {
+                    laporSigma1(navController)
+                }
+                composable(Routes.LaporSigma2) {
+                    laporSigma2(navController)
+                }
+                composable(Routes.LaporBerhasil) {
+                    laporBerhasil(navController)
                 }
 
             }

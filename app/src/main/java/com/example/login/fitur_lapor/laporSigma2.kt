@@ -1,8 +1,14 @@
 package com.example.login.lapor
 
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +30,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -36,22 +43,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.login.R
+import com.example.login.Routes
 
-@Preview
+
+fun getFileName(context: Context, uri: Uri): String {
+    var name = "IMG/VID Selected"
+    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        if (nameIndex != -1 && cursor.moveToFirst()) {
+            name = cursor.getString(nameIndex)
+        }
+    }
+    return name
+}
+
 @Composable
-fun laporSigma2(){
-        var judul by remember { mutableStateOf("") }
-        var deskripsi by remember { mutableStateOf("") }
+fun laporSigma2(navController : NavController) {
+    var judul by remember { mutableStateOf("") }
+    var deskripsi by remember { mutableStateOf("") }
 
-        val dark_grey = colorResource(id = R.color.dark_grey)
-        val dark0_grey = colorResource(id = R.color.dark0_grey)
+    val dark_grey = colorResource(id = R.color.dark_grey)
+    val dark0_grey = colorResource(id = R.color.dark0_grey)
+
+    var selectedFileName by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        selectedFileName = uri?.let { getFileName(context, it) }
+    }
 
         Box(
             modifier = Modifier
@@ -141,7 +170,12 @@ fun laporSigma2(){
                     TextField(
                         value = judul,
                         onValueChange = { judul = it },
-                        placeholder = { androidx.compose.material3.Text("Judul Laporan", color = dark_grey) },
+                        placeholder = {
+                            androidx.compose.material3.Text(
+                                "Judul Laporan",
+                                color = dark_grey
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp)
@@ -171,7 +205,12 @@ fun laporSigma2(){
                     TextField(
                         value = deskripsi,
                         onValueChange = { deskripsi = it },
-                        placeholder = { androidx.compose.material3.Text("Deskripsi Laporan", color = dark_grey) },
+                        placeholder = {
+                            androidx.compose.material3.Text(
+                                "Deskripsi Laporan",
+                                color = dark_grey
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp)
@@ -200,7 +239,7 @@ fun laporSigma2(){
                     )
 
                     Button(
-                        onClick = {},
+                        onClick = { launcher.launch("*/*") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -218,12 +257,30 @@ fun laporSigma2(){
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = "Unggah Media",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color =  Color.White
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .align(alignment = Alignment.Center),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.CloudUpload,
+                                    contentDescription = "Unggah",
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                        .height(24.dp)
+                                        .width(24.dp)
+                                )
+                                Spacer(
+                                    modifier = Modifier
+                                        .width(5.dp)
+                                )
+                                Text(
+                                    text = selectedFileName ?: "Unggah Media",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
 
@@ -234,7 +291,7 @@ fun laporSigma2(){
                     )
 
                     Button(
-                        onClick = {},
+                        onClick = {navController.navigate(Routes.LaporSigma3)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -263,7 +320,6 @@ fun laporSigma2(){
                             )
                         }
                     }
-
 
 
                 }
@@ -360,7 +416,11 @@ fun laporSigma2(){
                                 modifier = Modifier
                                     .size(60.dp) // Menggunakan size untuk width & height sekaligus
                                     .clip(CircleShape), // Memastikan bentuknya lingkaran
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(
+                                        0XFF431B3B
+                                    )
+                                ),
                                 contentPadding = PaddingValues(8.dp),
                             ) {
 
@@ -437,4 +497,4 @@ fun laporSigma2(){
             }
 
         }
-}
+    }

@@ -31,9 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
-@Preview
 @Composable
-fun laporBerhasil(){
+fun laporBerhasil(navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()

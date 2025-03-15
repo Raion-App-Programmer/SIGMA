@@ -38,19 +38,19 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.login.R
+import com.example.login.Routes
 
 
-@Preview
 @Composable
-fun laporSigma1(){
+fun laporSigma1(navController: NavController){
     var nama by remember { mutableStateOf("") }
     var tanggal by remember { mutableStateOf("") }
     var waktu by remember { mutableStateOf("") }
     var lokasi by remember { mutableStateOf("") }
 
     val dark_grey = colorResource(id = R.color.dark_grey)
-    val dark0_grey = colorResource(id = R.color.dark0_grey)
 
     Box(
         modifier = Modifier
@@ -251,7 +251,7 @@ fun laporSigma1(){
                 )
 
                 Button(
-                    onClick = {},
+                    onClick = {navController.navigate(Routes.LaporSigma2)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)

@@ -1,4 +1,4 @@
-package com.example.login.onboarding
+package com.example.login.awalan
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

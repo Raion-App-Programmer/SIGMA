@@ -43,11 +43,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.login.R
 
-@Preview
+
 @Composable
-fun laporSigma3() {
+fun laporSigma3(navController: NavController) {
     var pernyataan by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
 
