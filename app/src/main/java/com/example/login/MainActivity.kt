@@ -14,10 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.login.fitur_berita.BeritaTerkini
+import com.example.login.awalan.onBoarding
 import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
-import com.example.login.awalan.onBoarding
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
@@ -25,7 +24,6 @@ import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-
 import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
