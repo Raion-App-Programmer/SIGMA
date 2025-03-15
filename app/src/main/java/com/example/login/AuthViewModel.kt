@@ -49,6 +49,7 @@ class AuthViewModel : ViewModel()  {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authState.value = AuthState.LoginSuccess
+                    navController.navigate(Routes.LoginBerhasil)
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
                 }

@@ -2,7 +2,6 @@ package com.example.login
 
 import BeritaDetail
 import Profile
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -115,14 +114,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Prevent the user from going back to the login screen
-        }
-    }
 }
