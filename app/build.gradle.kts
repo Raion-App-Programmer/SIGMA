@@ -68,7 +68,6 @@ dependencies {
     implementation(libs.androidx.paging.common.android)
     implementation(libs.generativeai)
     implementation(libs.firebase.firestore)
-    implementation(libs.mediation.test.suite)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

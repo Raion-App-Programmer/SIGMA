@@ -17,7 +17,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mytestsigma.ui.theme.Dashboard
-import com.google.android.ads.mediationtestsuite.activities.HomeActivity
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -97,17 +96,6 @@ class MainActivity : ComponentActivity() {
                 }
 
             }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-            finish() // Prevent the user from going back to the login screen
         }
     }
 }
