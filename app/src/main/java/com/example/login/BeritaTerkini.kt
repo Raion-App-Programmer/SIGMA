@@ -114,7 +114,7 @@ fun NewsCard(
     ) {
         // Background Image
         AsyncImage(
-            model = "https://cdn.idntimes.com/content-images/post/20250312/gub-tinjau-banjir-grobogan4-6ae7fee674c65cff0708eada9521cb8d_600x400.jpg",
+            model = imageUrl,
             contentDescription = "News Image",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
@@ -127,10 +127,10 @@ fun NewsCard(
                 .fillMaxSize()
                 .background(brush = Brush.horizontalGradient(
                     listOf(
-                        Color(0XFFC41532),
-                        Color(0XFF431B3B)
+                        Color(0X99C41532),
+                        Color(0X99431B3B),
                     )
-                )) // Semi-transparent overlay
+                ))
         )
 
         // Text & Button Overlay
