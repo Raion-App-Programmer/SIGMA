@@ -3,6 +3,7 @@ package com.example.login.lapor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,6 +93,9 @@ fun laporSigma1(navController: NavController){
                         tint = Color.White,
                         modifier = Modifier
                             .height(24.dp)
+                            .clickable {
+                                navController.navigate(Routes.Dashboard)
+                            }
                     )
 
                     Spacer(
@@ -149,7 +153,9 @@ fun laporSigma1(navController: NavController){
                             color = Color.White,
                             shape = RoundedCornerShape(18.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp)),
+                        .clip(RoundedCornerShape(18.dp))
+                        .heightIn(max = 50.dp),
+                            maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White
@@ -179,7 +185,9 @@ fun laporSigma1(navController: NavController){
                             color = Color.White,
                             shape = RoundedCornerShape(18.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp)),
+                        .clip(RoundedCornerShape(18.dp))
+                        .heightIn(max = 50.dp),
+                    maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White
@@ -208,7 +216,9 @@ fun laporSigma1(navController: NavController){
                             color = Color.White,
                             shape = RoundedCornerShape(18.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp)),
+                        .clip(RoundedCornerShape(18.dp))
+                        .heightIn(max = 50.dp),
+                    maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White
@@ -238,7 +248,9 @@ fun laporSigma1(navController: NavController){
                             color = Color.White,
                             shape = RoundedCornerShape(18.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp)),
+                        .clip(RoundedCornerShape(18.dp))
+                        .heightIn(max = 100.dp),
+                    maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White
@@ -329,14 +341,21 @@ fun laporSigma1(navController: NavController){
                                 .width(30.dp)
                                 .height(30.dp)
                                 .offset(x = 15.dp, y = 25.dp)
+                                .clickable {
+                                    navController.navigate(Routes.Dashboard)
+                                }
+
                         )
-                        androidx.compose.material3.Text(
+                        Text(
                             "Beranda",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF616161),
                             modifier = Modifier
                                 .offset(x = 15.dp, y = 25.dp)
+                                .clickable {
+                                    navController.navigate(Routes.Dashboard)
+                                }
                         )
                     }
 
@@ -354,7 +373,7 @@ fun laporSigma1(navController: NavController){
                                 .height(30.dp)
                                 .offset(y = 38.dp, x = (-41).dp)
                         )
-                        androidx.compose.material3.Text(
+                        Text(
                             "Lapor",
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFFC35660),
@@ -391,7 +410,7 @@ fun laporSigma1(navController: NavController){
                                 Alignment.Center
                             )
                         }
-                        androidx.compose.material3.Text(
+                        Text(
                             text = "Darurat",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -415,14 +434,20 @@ fun laporSigma1(navController: NavController){
                                 .width(30.dp)
                                 .height(30.dp)
                                 .offset(y = 30.dp, x = 27.dp)
+                                .clickable {
+                                    navController.navigate(Routes.BeritaTerkini)
+                                }
                         )
-                        androidx.compose.material3.Text(
+                        Text(
                             "Berita",
                             fontSize = 13.sp,
                             color = Color(0xFF616161),
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier
                                 .offset(y = 25.dp, x = 28.dp)
+                                .clickable {
+                                    navController.navigate(Routes.BeritaTerkini)
+                                }
                         )
                     }
                     Column(
@@ -437,14 +462,20 @@ fun laporSigma1(navController: NavController){
                                 .width(36.dp)
                                 .height(36.dp)
                                 .offset(x = (-20).dp, y = (30.dp))
+                                .clickable {
+                                    navController.navigate(Routes.Profile)
+                                }
                         )
-                        androidx.compose.material3.Text(
+                        Text(
                             text = "Profil",
                             color = Color(0xFF616161),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier
                                 .offset(x = (-20).dp, y = 30.dp)
+                                .clickable {
+                                    navController.navigate(Routes.Profile)
+                                }
                         )
                     }
 

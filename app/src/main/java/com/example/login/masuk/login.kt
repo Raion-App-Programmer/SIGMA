@@ -58,17 +58,22 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(authState) {
-        when (authState) {
-            is AuthState.LoginSuccess -> navController.navigate(Routes.LoginBerhasil)
-            is AuthState.Error -> Toast.makeText(
-                context, // Use initialized context
-                (authState as AuthState.Error).message,
-                Toast.LENGTH_SHORT
-            ).show()
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.LoginSuccess -> {
+                navController.navigate(Routes.LoginBerhasil)
+            }
+            is AuthState.Error -> {
+                Toast.makeText(
+                    context,
+                    (authState.value as AuthState.Error).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             else -> Unit
         }
     }
+
 
 
     val dark_grey = colorResource(id = R.color.dark_grey)
@@ -77,7 +82,6 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -211,7 +215,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
 
                     Button(
                         onClick = {
-                            authViewModel.login(email, kataSandi, navController = navController)
+                            authViewModel.login(email, kataSandi)
                              },
                         modifier = Modifier
                             .padding(top = 50.dp)

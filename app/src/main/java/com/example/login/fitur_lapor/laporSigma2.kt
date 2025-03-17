@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -122,6 +124,9 @@ fun laporSigma2(navController : NavController) {
                             tint = Color.White,
                             modifier = Modifier
                                 .height(24.dp)
+                                .clickable {
+                                    navController.navigate(Routes.LaporSigma1)
+                                }
                         )
 
                         Spacer(
@@ -184,7 +189,9 @@ fun laporSigma2(navController : NavController) {
                                 color = Color.White,
                                 shape = RoundedCornerShape(18.dp),
                             )
-                            .clip(RoundedCornerShape(18.dp)),
+                            .clip(RoundedCornerShape(18.dp))
+                            .heightIn(max = 50.dp),
+                        maxLines = Int.MAX_VALUE,
 
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.White
@@ -368,14 +375,20 @@ fun laporSigma2(navController : NavController) {
                                     .width(30.dp)
                                     .height(30.dp)
                                     .offset(x = 15.dp, y = 25.dp)
+                                    .clickable {
+                                        navController.navigate(Routes.LaporSigma1)
+                                    }
                             )
-                            androidx.compose.material3.Text(
+                            Text(
                                 "Beranda",
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color(0xFF616161),
                                 modifier = Modifier
                                     .offset(x = 15.dp, y = 25.dp)
+                                    .clickable {
+                                        navController.navigate(Routes.Dashboard)
+                                    }
                             )
                         }
 
@@ -393,7 +406,7 @@ fun laporSigma2(navController : NavController) {
                                     .height(30.dp)
                                     .offset(y = 38.dp, x = (-41).dp)
                             )
-                            androidx.compose.material3.Text(
+                            Text(
                                 "Lapor",
                                 fontWeight = FontWeight.Medium,
                                 color = Color(0xFFC35660),
@@ -403,7 +416,6 @@ fun laporSigma2(navController : NavController) {
                             )
                         }
 
-                        // Floating button for calls
 
 
                         Column(
@@ -414,8 +426,8 @@ fun laporSigma2(navController : NavController) {
                             Button(
                                 onClick = { },
                                 modifier = Modifier
-                                    .size(60.dp) // Menggunakan size untuk width & height sekaligus
-                                    .clip(CircleShape), // Memastikan bentuknya lingkaran
+                                    .size(60.dp)
+                                    .clip(CircleShape),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(
                                         0XFF431B3B
@@ -434,7 +446,7 @@ fun laporSigma2(navController : NavController) {
                                     Alignment.Center
                                 )
                             }
-                            androidx.compose.material3.Text(
+                            Text(
                                 text = "Darurat",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.SemiBold,

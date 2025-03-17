@@ -21,11 +21,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -34,16 +33,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+
 
 @Preview
 @Composable
 fun panggilSigma1(){
+
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
+    val context = LocalContext.current
+    fun dialNumber(number: String) {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$number")
+        }
+        context.startActivity(intent)
+    }
     Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 30.dp)
                 .background(
                     color = backgroundColor
                 )
@@ -87,7 +99,7 @@ fun panggilSigma1(){
 
         Spacer(
             modifier = Modifier
-                .height(35.dp)
+                .height(30.dp)
         )
 
         Text(
@@ -99,20 +111,14 @@ fun panggilSigma1(){
 
         Spacer(
             modifier = Modifier
-                .height(35.dp)
+                .height(30.dp)
         )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
             Button(
-                onClick = { },
+                onClick = { dialNumber("0341362222") },
                 modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
+                    .width(372.dp)
+                    .height(125.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(20.dp),
                 contentPadding = PaddingValues()
@@ -126,23 +132,58 @@ fun panggilSigma1(){
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Pemadam Kebakaran",
-                        textAlign = TextAlign.Center,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(start = 32.dp, end = 88.dp),
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                text = "Pemadam",
+                                textAlign = TextAlign.Center,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Kebakaran",
+                                textAlign = TextAlign.Center,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.mobil_damkar),
+                                contentDescription = "damkar",
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .width(174.dp)
+                                    .height(92.dp)
+                                    .offset(x = 16.dp, y = 5.dp)
+                            )
+                        }
+                    }
                 }
             }
 
             Spacer(
                 modifier = Modifier
-                    .width(10.dp)
+                    .height(10.dp)
             )
 
             Button(
-                onClick = { },
+                onClick = { dialNumber("119") },
                 modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
+                    .width(372.dp)
+                    .height(125.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(20.dp),
                 contentPadding = PaddingValues()
@@ -156,29 +197,47 @@ fun panggilSigma1(){
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Ambulance",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 32.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Ambulance",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ambulance),
+                                contentDescription = "ambulance",
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .width(172.dp)
+                                    .height(172.dp)
+                                    .offset(x = 20.dp, y = 13.dp)
+                            )
+                        }
+                    }
                 }
             }
-        }
+
 
         Spacer(
             modifier = Modifier
                 .height(15.dp)
         )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
             Button(
-                onClick = { },
+                onClick = { dialNumber("110") },
                 modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
+                    .width(372.dp)
+                    .height(125.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(20.dp),
                 contentPadding = PaddingValues()
@@ -192,22 +251,46 @@ fun panggilSigma1(){
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Polisi",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 32.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Polisi",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.police),
+                                contentDescription = "police",
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .width(130.dp)
+                                    .height(148.dp)
+                                    .offset(x = 20.dp, y = 18.dp)
+                            )
+                        }
+                    }
                 }
             }
 
             Spacer(
                 modifier = Modifier
-                    .width(10.dp)
+                    .height(10.dp)
             )
 
             Button(
-                onClick = { },
+                onClick = { dialNumber("0341324018") },
                 modifier = Modifier
-                    .width(190.dp)
-                    .height(240.dp)
+                    .width(372.dp)
+                    .height(125.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(20.dp),
                 contentPadding = PaddingValues()
@@ -220,13 +303,39 @@ fun panggilSigma1(){
                             shape = RoundedCornerShape(16.dp)
                         ),
                     contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "PMI",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold)
+                )
+                {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 32.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "PMI",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.pmi),
+                                contentDescription = "pmi",
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .width(141.dp)
+                                    .height(138.dp)
+                                    .offset(x = 20.dp, y = 20.dp)
+                            )
+                        }
+                    }
                 }
             }
-        }
+
 // Bottom dashboard
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -265,7 +374,7 @@ fun panggilSigma1(){
                             )
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.home),
+                            painter = painterResource(id = R.drawable.home_gray_png),
                             contentDescription = "Home button",
                             modifier = Modifier
                                 .width(30.dp)
@@ -276,7 +385,7 @@ fun panggilSigma1(){
                             "Beranda",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFFC35660),
+                            color = Color(0xFF616161),
                             modifier = Modifier
                                 .offset(x = 15.dp, y = 25.dp)
                         )
@@ -339,7 +448,7 @@ fun panggilSigma1(){
                             text = "Darurat",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0XFF616161),
+                            color = Color(0xFFC35660),
                             modifier = Modifier
                                 .padding(top = 4.dp)
                                 .offset(x = 10.dp)

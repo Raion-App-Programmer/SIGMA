@@ -2,6 +2,7 @@ package com.example.login.lapor
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,15 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.login.R
+import com.example.login.Routes
 
 
 @Composable
 fun laporSigma3(navController: NavController) {
-    var pernyataan by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
 
-    val dark_grey = colorResource(id = R.color.dark_grey)
-    val dark0_grey = colorResource(id = R.color.dark0_grey)
 
     Box(
         modifier = Modifier
@@ -95,6 +94,9 @@ fun laporSigma3(navController: NavController) {
                         tint = Color.White,
                         modifier = Modifier
                             .height(24.dp)
+                            .clickable {
+                                navController.navigate(Routes.LaporSigma2)
+                            }
                     )
 
                     Spacer(
@@ -191,7 +193,7 @@ fun laporSigma3(navController: NavController) {
                 )
 
                 Button(
-                    onClick = {},
+                    onClick = {navController.navigate(Routes.LaporBerhasil)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)

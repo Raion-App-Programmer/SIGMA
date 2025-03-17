@@ -1,5 +1,8 @@
 package com.example.login.fitur_profile
 
+import alertUbahData
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.*
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,7 +26,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,24 +35,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.login.R
+import android.net.Uri
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.login.Routes
+
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+
 @Composable
-fun ubahProfile(){
+fun ubahProfile(navController: NavController){
+
+    val context = LocalContext.current
+    val imageUri = rememberSaveable { mutableStateOf<Uri?>(null) } //state uri
+    // Launcher untuk memilih gambar dari galeri
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { imageUri.value = uri } // Simpan uri
+    }
 
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -60,6 +80,18 @@ fun ubahProfile(){
 
     val dark_grey = colorResource(id = R.color.dark_grey)
     val dark0_grey = colorResource(id = R.color.dark0_grey)
+
+    var showDialog = remember { mutableStateOf(false) }
+
+    if (showDialog.value) {
+        alertUbahData(
+            onDismiss = { showDialog.value = false },
+            onConfirm = {
+                showDialog.value = false
+            }
+        )
+    }
+
 
 
     Box(
@@ -108,6 +140,7 @@ fun ubahProfile(){
                             tint = Color.White,
                             modifier = Modifier
                                 .height(24.dp)
+                                .clickable{(navController.navigate(Routes.Profile))}
                         )
 
                         Spacer(
@@ -160,10 +193,9 @@ fun ubahProfile(){
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(start = 51.dp, end = 52.dp, top = 73.dp),
+                            .padding(start = 51.dp, end = 52.dp, top = 81.dp),
                         horizontalAlignment = Alignment.Start
                     ){
-
                         Text(
                          text = "Nama",
                             fontSize = 14.sp,
@@ -179,15 +211,19 @@ fun ubahProfile(){
                         OutlinedTextField(
                             value = nama,
                             onValueChange = { nama = it },
-                            placeholder = { Text("Nama", color = dark_grey)
-                                          },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(max = 52.dp),
+                            maxLines = Int.MAX_VALUE,
+                            placeholder = { Text(text="Nama", color = dark_grey)
+                                          },
+
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = dark0_grey, // Warna border saat fokus
                                 unfocusedBorderColor = dark0_grey,
-                            )
+                            ),
+                            textStyle = TextStyle(fontSize = 14.sp)
                         )
 
                         Spacer(
@@ -213,7 +249,9 @@ fun ubahProfile(){
                             placeholder = { Text("Email", color = dark_grey)
                             },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(max = 52.dp),
+                            maxLines = Int.MAX_VALUE,
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = dark0_grey, // Warna border saat fokus
@@ -244,7 +282,9 @@ fun ubahProfile(){
                             placeholder = { Text("Kata Sandi", color = dark_grey)
                             },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(max = 52.dp),
+                            maxLines = Int.MAX_VALUE,
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = dark0_grey, // Warna border saat fokus
@@ -275,7 +315,9 @@ fun ubahProfile(){
                             placeholder = { Text("Nomor Telepon", color = dark_grey)
                             },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(max = 52.dp),
+                            maxLines = Int.MAX_VALUE,
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = dark0_grey, // Warna border saat fokus
@@ -306,7 +348,9 @@ fun ubahProfile(){
                             placeholder = { Text("Alamat", color = dark_grey)
                             },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .heightIn(max = 52.dp),
+                            maxLines = Int.MAX_VALUE,
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = dark0_grey, // Warna border saat fokus
@@ -316,6 +360,52 @@ fun ubahProfile(){
 
                     }
                 }
+
+            }
+
+        }
+        Box(
+            modifier = Modifier
+                .padding(start = 147.dp, top = 119.dp)
+        ) {
+            val painter = rememberAsyncImagePainter(
+                model = imageUri.value ?: R.drawable.person_profil
+            )
+            // Foto Profil
+            Box(
+                modifier = Modifier
+                    .size(119.dp)
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+                    .border(4.dp, Color.White, CircleShape)
+                    .clickable { launcher.launch("image/*") },
+            ) {
+                Image(
+                    painter = painter,
+                    contentDescription = "Profile Image",
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(start = 230.dp, top = 118.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .clickable { launcher.launch("image/*") }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.edit_profil_icon),
+                    contentDescription = "icon edit",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
             }
         }
         Column(
@@ -326,7 +416,7 @@ fun ubahProfile(){
             verticalArrangement = Arrangement.Bottom,
         ) {
             Button(
-                onClick = { },
+                onClick = {showDialog.value = true},
                 modifier = Modifier
                     .width(250.dp)
                     .height(50.dp),

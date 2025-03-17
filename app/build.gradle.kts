@@ -114,5 +114,12 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.X.X")
 
 
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+
+
+
 }
 

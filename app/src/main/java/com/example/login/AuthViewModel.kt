@@ -56,22 +56,22 @@ class AuthViewModel : ViewModel()  {
             }
     }
 
-    fun signup(email : String, password : String) {
-
+    fun login(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
-            _authState.value = AuthState.Error("Email or password can't be empty")
+            _authState.value = AuthState.Error("Email atau password tidak boleh kosong")
             return
         }
         _authState.value = AuthState.Loading
-        auth.createUserWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.SignUpSuccess
+                    _authState.value = AuthState.LoginSuccess
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Terjadi kesalahan")
                 }
             }
     }
+
 
     fun signout() {
         auth.signOut()
