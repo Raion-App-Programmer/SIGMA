@@ -16,6 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.login.awalan.onBoarding
+import com.example.login.fitur_panduan.PanduanBanjir
+import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -41,32 +44,32 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
-                    LandingPage1(navController)
+                    landingPage1(navController)
                 }
                 composable(Routes.LandingPage2) {
-                    LandingPage2(navController)
+                    landingPage2(navController)
                 }
                 composable(Routes.Login) {
-                    Login(navController, authViewModel = viewModel())
+                    login(navController, authViewModel = viewModel())
                 }
                 composable(Routes.SignUp) {
                     val authViewModel: AuthViewModel = viewModel()
                     SignUp(navController, authViewModel)
                 }
                 composable(Routes.Verification) {
-                    Verification(navController, authViewModel = AuthViewModel())
+                    verification(navController, authViewModel = AuthViewModel())
                 }
                 composable(Routes.LoginBerhasil) {
-                    LoginBerhasil(navController)
+                    loginBerhasil(navController)
                 }
                 composable(Routes.OnBoarding) {
-                    OnBoarding(navController)
+                    onBoarding(navController)
                 }
                 composable(Routes.Dashboard) {
                     Dashboard(navController)
                 }
                 composable(Routes.SignUpBerhasil) {
-                    SignUpBerhasil(navController)
+                    signUpBerhasil(navController)
                 }
                 composable(Routes.PanduanBanjir) {
                     PanduanBanjir(navController)
