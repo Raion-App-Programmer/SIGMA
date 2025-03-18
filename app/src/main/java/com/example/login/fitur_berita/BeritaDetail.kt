@@ -1,3 +1,5 @@
+import android.graphics.Paint.Align
+import android.view.RoundedCorner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,10 +12,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -36,8 +40,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.login.NewsItem
 import com.example.login.NewsViewModel
 import com.example.login.R
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navController: NavController) {
@@ -99,7 +105,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 // news image
                 if (newsItem!!.imageUrl.isNotEmpty()) {
                     AsyncImage(
-                         model = (newsItem!!.imageUrl),
+                        model = (newsItem!!.imageUrl),
                         contentDescription = "News Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

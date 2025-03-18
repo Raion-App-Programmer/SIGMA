@@ -2,6 +2,7 @@ package com.example.login
 
 import BeritaDetail
 import Profile
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,17 +10,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.login.awalan.onBoarding
-import com.example.login.fitur_panduan.PanduanBanjir
-import com.example.login.fitur_panduan.PanduanKebakaran
-import com.example.login.lapor.laporBerhasil
-import com.example.login.lapor.laporSigma1
-import com.example.login.lapor.laporSigma2
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -45,32 +41,32 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
-                    landingPage1(navController)
+                    LandingPage1(navController)
                 }
                 composable(Routes.LandingPage2) {
-                    landingPage2(navController)
+                    LandingPage2(navController)
                 }
                 composable(Routes.Login) {
-                    login(navController, authViewModel = viewModel())
+                    Login(navController, authViewModel = viewModel())
                 }
                 composable(Routes.SignUp) {
                     val authViewModel: AuthViewModel = viewModel()
                     SignUp(navController, authViewModel)
                 }
                 composable(Routes.Verification) {
-                    verification(navController, authViewModel = AuthViewModel())
+                    Verification(navController, authViewModel = AuthViewModel())
                 }
                 composable(Routes.LoginBerhasil) {
-                    loginBerhasil(navController)
+                    LoginBerhasil(navController)
                 }
                 composable(Routes.OnBoarding) {
-                    onBoarding(navController)
+                    OnBoarding(navController)
                 }
                 composable(Routes.Dashboard) {
                     Dashboard(navController)
                 }
                 composable(Routes.SignUpBerhasil) {
-                    signUpBerhasil(navController)
+                    SignUpBerhasil(navController)
                 }
                 composable(Routes.PanduanBanjir) {
                     PanduanBanjir(navController)
@@ -98,18 +94,8 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.Profile) {
                     Profile(navController)
                 }
-                composable(Routes.LaporSigma1) {
-                    laporSigma1(navController)
-                }
-                composable(Routes.LaporSigma2) {
-                    laporSigma2(navController)
-                }
-                composable(Routes.LaporBerhasil) {
-                    laporBerhasil(navController)
-                }
 
             }
         }
     }
-
 }
