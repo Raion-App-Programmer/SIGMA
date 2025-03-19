@@ -304,22 +304,28 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             }
         }
 
+
         // Column for Berita Terkini
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth() // Only fill width, not entire screen
+                .padding(start = 20.dp, top = 510.dp), // Adjust top padding as needed
+            verticalArrangement = Arrangement.Top, // Align items to the top
+            horizontalAlignment = Alignment.Start // Align items to the start
         ) {
             Text(
                 "Berita Terkini",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                modifier = Modifier
-                    .offset(y = 500.dp, x = ((-95).dp))
+                modifier = Modifier.padding(start = 20.dp) // Add padding for left alignment
             )
 
-            LazyRow (modifier = Modifier.fillMaxSize().padding(start = 20.dp)) {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 10.dp) // Add top padding for spacing
+            ) {
                 items(newsList) { newsItem ->
                     NewsCard(
                         imageUrl = newsItem.imageUrl,
@@ -332,13 +338,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .width(160.dp)
                             .height(240.dp)
-                            .offset(x = 50.dp, y = 50.dp)
+
                     )
                     Log.d("newsitem.imageurl", newsItem.imageUrl)
-                    Spacer(modifier = Modifier.width(16.dp))
                 }
             }
         }
+
 
         // Bottom dashboard
         Box(
@@ -528,44 +534,42 @@ fun NewsCard(
 ) {
     Box(
         modifier = Modifier
-            .width(140.dp)
+            .width(152.dp)
             .height(260.dp)
-            .offset(x = 16.dp, y = 520.dp)
             .clip(RoundedCornerShape(20.dp))
-            .padding(bottom = 16.dp)
+            .padding(start = 16.dp, bottom = 16.dp)
             .clickable { onClick() },
-        contentAlignment = Alignment.Center// Makes it clickable
+        contentAlignment = Alignment.Center
     ) {
-        // Background Image
         AsyncImage(
             model = imageUrl,
             contentDescription = "News Image",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .clip(RoundedCornerShape(40.dp))
         )
 
-        // Semi-transparent Overlay
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(
-                    listOf(
-                        Color(0X99C41532),
-                        Color(0X99431B3B),
+                .background(
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            Color(0X99C41532),
+                            Color(0X99431B3B),
+                        )
                     )
-                ))
+                )
         )
 
-        // Text & Button Overlay
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Date Label
             Text(
                 text = date,
                 color = Color.White,
@@ -575,13 +579,11 @@ fun NewsCard(
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
 
-            // Title & Author
-            Column (verticalArrangement = Arrangement.Bottom) {
+            Column(verticalArrangement = Arrangement.Bottom) {
                 Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(text = author, color = Color.White, fontSize = 12.sp)
             }
 
-            // button selengkapnya
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
