@@ -412,54 +412,54 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .clickable {
                                 navController.navigate("laporSigma1")
                             }
-                                )
-                                Text(
-                                    "Lapor",
-                                    fontWeight = FontWeight.Medium,
-                                    color = Color(0xFF616161),
-                                    fontSize = 13.sp,
-                                    modifier = Modifier
-                                        .offset(x = (-40).dp, y = 35.dp)
-                                )
-                            }
+                    )
+                    Text(
+                        "Lapor",
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF616161),
+                        fontSize = 13.sp,
+                        modifier = Modifier
+                            .offset(x = (-40).dp, y = 35.dp)
+                    )
+                }
 
                 // Floating button for calls
-                    Column(
-                        modifier = Modifier
-                            .offset(y = (-5).dp),
-                        Arrangement.Center
-                    ) {
-                        Button(modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp),
-                            shape = CircleShape,
-                            contentPadding = PaddingValues(8.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
-                            onClick = {
-                                // taruh navigasi call disini
-                            }
-                        ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.phone_call_white),
-                                contentDescription = "Call SIGMA",
-                                modifier = Modifier
-                                    .width(34.dp)
-                                    .height(33.dp)
-                                    .offset(y = (-2).dp),
-                                Alignment.Center
-                            )
+                Column(
+                    modifier = Modifier
+                        .offset(y = (-5).dp),
+                    Arrangement.Center
+                ) {
+                    Button(modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                        onClick = {
+                            // taruh navigasi call disini
                         }
-                        Text(
-                            text = "Darurat",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0XFF616161),
+                    ) {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.phone_call_white),
+                            contentDescription = "Call SIGMA",
                             modifier = Modifier
-                                .padding(top = 4.dp)
-                                .offset(x = 10.dp)
+                                .width(34.dp)
+                                .height(33.dp)
+                                .offset(y = (-2).dp),
+                            Alignment.Center
                         )
                     }
+                    Text(
+                        text = "Darurat",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0XFF616161),
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .offset(x = 10.dp)
+                    )
+                }
 
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -516,10 +516,10 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 }
 
 
-                }
             }
         }
     }
+}
 
 
 
