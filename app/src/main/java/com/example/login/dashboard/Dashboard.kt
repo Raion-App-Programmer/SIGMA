@@ -55,6 +55,7 @@ import com.example.login.NewsCard
 import com.example.login.NewsViewModel
 import com.example.login.Routes
 import com.example.login.Routes.Profile
+import com.example.login.fitur_panduan.PanduanBanjir
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -227,7 +228,10 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             Image(painter = painterResource(R.drawable.banjir_darurat),
                                 contentDescription = "Banjir darurat button", modifier = Modifier
                                     .width(70.dp)
-                                    .height(80.dp))
+                                    .height(80.dp)
+                                    .clickable {
+                                        navController.navigate(Routes.PanduanBanjir)
+                                    })
                         }
 
                         Text(
@@ -252,7 +256,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             Image(painter = painterResource(R.drawable.kebakaran_darurat),
                                 contentDescription = "Kebakaran darurat button", modifier = Modifier
                                     .width(70.dp)
-                                    .height(80.dp))
+                                    .height(80.dp)
+                                    .clickable { navController.navigate(Routes.PanduanKebakaran) })
                         }
 
                         Text(
@@ -260,7 +265,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier
+                                .padding(top = 6.dp)
                         )
                     }
                     Column(
@@ -350,7 +356,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = 790.dp)
+                .align(Alignment.BottomCenter)
         ) {
             // Bottom navigation bar background
             Image(
