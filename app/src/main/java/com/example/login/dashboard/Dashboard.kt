@@ -178,11 +178,10 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 }
             }
         }
-
         // pager
         MyPagerWithDots()
 
-        // Panduan Darurat
+// Panduan Darurat
         Column(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -203,7 +202,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = (-230).dp)
-        ) {
+            ) {
 
                 // Icons for Panduan Darurat
                 Row(
@@ -215,25 +214,22 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
+                        modifier = Modifier.offset(y = (-10).dp),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .offset(y = (-10).dp)
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                            Image(painter = painterResource(R.drawable.banjir_darurat),
-                                contentDescription = "Banjir darurat button", modifier = Modifier
-                                    .clickable { navController.navigate(Routes.PanduanBanjir) }
-                                    .width(70.dp)
-                                    .height(80.dp)
-                                    )
-
-
+                        Image(painter = painterResource(R.drawable.banjir_darurat),
+                            contentDescription = "Banjir darurat button", modifier = Modifier
+                                .clickable { navController.navigate(Routes.PanduanBanjir) }
+                                .width(70.dp)
+                                .height(80.dp)
+                        )
                         Text(
                             "Banjir",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier.offset(y = 6.dp)
                         )
                     }
 
@@ -244,14 +240,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .offset(y = (-10).dp)
 
                     ) {
-                        Box( modifier = Modifier.clickable { navController.navigate(Routes.PanduanBanjir) }) {
-                            Image(
-                                painter = painterResource(R.drawable.kebakaran_darurat),
-                                contentDescription = "Kebakaran darurat button", modifier = Modifier
-                                    .width(70.dp)
-                                    .height(80.dp)
-                            )
-                        }
+                        Image(
+                            painter = painterResource(R.drawable.kebakaran_darurat),
+                            contentDescription = "Kebakaran darurat button", modifier = Modifier
+                                .clickable { navController.navigate("PanduanKebakaran") }
+                                .width(70.dp)
+                                .height(80.dp)
+                        )
                         Text(
                             "Kebakaran",
                             fontSize = 13.sp,
@@ -259,7 +254,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             color = Color.Black,
                             modifier = Modifier
                                 .padding(top = 6.dp)
-                                .clickable { navController.navigate(Routes.PanduanKebakaran)}
+                                .clickable { navController.navigate("PanduanKebakaran")}
                         )
                     }
                     Column(
@@ -273,7 +268,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 .width(70.dp)
                                 .height(80.dp))
 
-                            // bikin route
+                        // bikin route
 
                         Text(
                             "Gempa",
@@ -337,7 +332,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .width(160.dp)
                             .height(240.dp)
-                            .offset(x = 50.dp, y = 100.dp)
+                            .offset(x = 50.dp, y = 50.dp)
                     )
                     Log.d("newsitem.imageurl", newsItem.imageUrl)
                     Spacer(modifier = Modifier.width(16.dp))
@@ -409,7 +404,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
                             .clickable {
-                                navController.navigate(Routes.LaporSigma1)
+                                navController.navigate("laporSigma1")
                             }
                                 )
                                 Text(
@@ -618,6 +613,7 @@ fun MyPagerWithDots() {
             modifier = Modifier
                 .width(350.dp)
                 .height(170.dp)
+                .background(Color.LightGray) // Add a background for debugging
         ) { page ->
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -631,9 +627,9 @@ fun MyPagerWithDots() {
                             else -> R.drawable.lapor_segala_insiden_warna
                         }
                     ),
-                    contentDescription = "Page $page", // Add contentDescription
+                    contentDescription = "Page $page",
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop // Add contentScale
+                    contentScale = ContentScale.Crop
                 )
             }
         }

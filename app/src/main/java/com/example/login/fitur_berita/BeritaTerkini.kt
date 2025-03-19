@@ -40,7 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.login.Routes.Profile
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import okhttp3.Route
 
 @Composable
 fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel()) {
@@ -48,8 +48,9 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color.White)) {
-        Column (modifier = Modifier.fillMaxSize()) {
+        .background(Color.White),
+        Alignment.Center) {
+        Column (modifier = Modifier.fillMaxSize().align(Alignment.Center)) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
@@ -74,7 +75,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            LazyColumn (modifier = Modifier.weight(1f)){
+            LazyColumn (modifier = Modifier.weight(1f).align(Alignment.CenterHorizontally)){
                 items(newsList) { newsItem ->
                     NewsCard(
                         imageUrl = newsItem.imageUrl,
@@ -121,18 +122,21 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             )
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.home),
+                            painter = painterResource(id = R.drawable.home_gray_png),
                             contentDescription = "Home button",
                             modifier = Modifier
                                 .width(30.dp)
                                 .height(30.dp)
                                 .offset(x = 15.dp, y = 25.dp)
+                                .clickable {
+                                    navController.navigate(Routes.Dashboard)
+                                }
                         )
                         Text(
                             "Beranda",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFFC35660),
+                            color = Color(0xFF616161),
                             modifier = Modifier
                                 .offset(x = 15.dp, y = 25.dp)
                         )
@@ -210,7 +214,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             .offset(y = (-15).dp, x = (-10).dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.book_gray),
+                            painter = painterResource(id = R.drawable.book_red),
                             contentDescription = "Edit button",
                             modifier = Modifier
                                 .width(30.dp)
@@ -225,7 +229,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                         Text(
                             "Berita",
                             fontSize = 13.sp,
-                            color = Color(0xFF616161),
+                            color = Color(0xFFC35660),
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier
                                 .offset(y = 25.dp, x = 28.dp)

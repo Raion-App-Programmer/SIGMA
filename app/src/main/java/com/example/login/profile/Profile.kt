@@ -369,7 +369,7 @@ fun Profile(navController: NavController) {
                     modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.user_circle),
+                        painter = painterResource(id = R.drawable.user_circle_red),
                         contentDescription = "Profile button",
                         modifier = Modifier
                             .width(36.dp)
@@ -381,7 +381,7 @@ fun Profile(navController: NavController) {
                     )
                     androidx.compose.material3.Text(
                         text = "Profil",
-                        color = Color(0xFF616161),
+                        color = Color(0xFFC35660),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier

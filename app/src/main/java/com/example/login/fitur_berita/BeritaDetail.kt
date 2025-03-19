@@ -1,5 +1,4 @@
 import android.graphics.Paint.Align
-import android.view.RoundedCorner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Badge
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -40,11 +41,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.login.NewsItem
 import com.example.login.NewsViewModel
 import com.example.login.R
 import com.example.login.Routes
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navController: NavController) {
@@ -58,23 +57,30 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0XFFF7EAEB))
+                .background(Color(0XFFF7EAEB)),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Content Column (scrollable)
             Column(
                 modifier = Modifier
                     .weight(1f) // Takes up remaining space
                     .padding(16.dp, top = 50.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = newsItem!!.title,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    fontSize = 24.sp
-                )
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Arrow back",
+                        modifier = Modifier.clickable { 
+                            navController.navigate("BeritaTerkini")
+                        })
+
+                    Text(
+                        text = newsItem!!.title,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        fontSize = 24.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally).offset(y = (-25).dp)
+                    )
+
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -110,6 +116,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         contentDescription = "News Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(12.dp))
@@ -121,7 +128,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -182,7 +189,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             )
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.home),
+                            painter = painterResource(id = R.drawable.home_gray_png),
                             contentDescription = "Home button",
                             modifier = Modifier
                                 .width(30.dp)
@@ -193,7 +200,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             "Beranda",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFFC35660),
+                            color = Color(0xFF616161),
                             modifier = Modifier
                                 .offset(x = 15.dp, y = 25.dp)
                         )
