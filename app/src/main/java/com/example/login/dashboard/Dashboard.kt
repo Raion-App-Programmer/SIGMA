@@ -2,6 +2,7 @@ package com.example.mytestsigma.ui.theme
 
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -43,13 +45,22 @@ import com.example.login.R
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.layout.ContentScale
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.example.login.AuthViewModel
+import com.example.login.NewsCard
+import com.example.login.NewsViewModel
 import com.example.login.Routes
 import com.example.login.Routes.Profile
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Dashboard(navController: NavController) {
+fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewModel()) {
+    val newsList by viewModel.newsList.collectAsState()
+
     Box(
         Modifier
             .fillMaxSize()
@@ -261,22 +272,16 @@ fun Dashboard(navController: NavController) {
                         Image(painter = painterResource(id = R.drawable.gempa_darurat),
                             contentDescription = "Gempa darurat png", modifier = Modifier
                                 .width(70.dp)
-                                .height(80.dp)
-                                .clickable {
-                                    navController.navigate(Routes.PanduanGempa)
-                                })
+                                .height(80.dp))
+
+                            // bikin route
 
                         Text(
                             "Gempa",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier
-                                .clickable{
-                                    navController.navigate(Routes.PanduanGempa)
-                                }
-                                .padding(top = 6.dp),
-
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                     Column(
@@ -291,9 +296,6 @@ fun Dashboard(navController: NavController) {
                             modifier = Modifier
                                 .width(70.dp)
                                 .height(80.dp)
-                                .clickable{
-                                    navController.navigate(Routes.P3)
-                                }
                         )
 
                         Text(
@@ -301,11 +303,7 @@ fun Dashboard(navController: NavController) {
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier
-                                .padding(top = 6.dp)
-                                .clickable{
-                                    navController.navigate(Routes.P3)
-                                }
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                 }
@@ -324,124 +322,122 @@ fun Dashboard(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier
-                    .offset(y = 195.dp, x = ((-95).dp))
+                    .offset(y = 500.dp, x = ((-95).dp))
             )
 
-            Spacer(modifier = Modifier.height((-2).dp))
-
-            MyLazyRow(
-                listOf(
-                    Color(0xFFC41532),
-                    Color(0xFF431B3B)
-                )
-            )
+            LazyRow (modifier = Modifier.fillMaxSize().padding(start = 20.dp)) {
+                items(newsList) { newsItem ->
+                    NewsCard(
+                        imageUrl = newsItem.imageUrl,
+                        date = newsItem.date,
+                        title = newsItem.title,
+                        author = newsItem.author,
+                        onClick = {
+                            navController.navigate("BeritaDetail/${newsItem.id}")
+                        },
+                        modifier = Modifier
+                            .width(160.dp)
+                            .height(240.dp)
+                            .offset(x = 50.dp, y = 100.dp)
+                    )
+                    Log.d("newsitem.imageurl", newsItem.imageUrl)
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+            }
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
+        // Bottom dashboard
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = 790.dp)
         ) {
-            Box(
+            // Bottom navigation bar background
+            Image(
+                painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
+                contentDescription = "Dashboard navigation bottom",
+                modifier = Modifier
+                    .width(412.dp)
+                    .height(100.dp)
+                    .offset(y = 10.dp)
+            )
+
+            // Row for navigation icons
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
+                    .height(82.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Bottom navigation bar background
-                Image(
-                    painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
-                    contentDescription = "Dashboard navigation bottom",
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .width(412.dp)
-                        .height(100.dp)
-                        .offset(y = 10.dp)
-                )
-
-                // Row for navigation icons
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(82.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .offset(
+                            y = (-15).dp, x = (-75).dp
+                        )
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    Image(
+                        painter = painterResource(id = R.drawable.home),
+                        contentDescription = "Home button",
                         modifier = Modifier
-                            .offset(
-                                y = (-15).dp, x = (-75).dp
-                            )
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.home),
-                            contentDescription = "Home button",
-                            modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(x = 15.dp, y = 25.dp)
-                                .clickable {
-                                    navController.navigate(Routes.Dashboard)
-                                }
-
-                        )
-                        androidx.compose.material.Text(
-                            "Beranda",
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFFC35660),
-                            modifier = Modifier
-                                .offset(x = 15.dp, y = 25.dp)
-                                .clickable {
-                                    navController.navigate(Routes.Dashboard)
-                                }
-                        )
-                    }
-
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = 15.dp, y = 25.dp)
+                    )
+                    Text(
+                        "Beranda",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFFC35660),
                         modifier = Modifier
-                            .offset(y = (-25).dp, x = 10.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.note_gray),
-                            contentDescription = "Edit button",
-                            modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(y = 38.dp, x = (-41).dp)
-                                .clickable{
-                                    navController.navigate(Routes.LaporSigma1)
-                                }
-                        )
-                        androidx.compose.material.Text(
-                            "Lapor",
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
-                            fontSize = 13.sp,
-                            modifier = Modifier
-                                .offset(x = (-40).dp, y = 35.dp)
-                                .clickable {
-                                    navController.navigate(Routes.LaporSigma1)
-                                }
-                        )
-                    }
+                            .offset(x = 15.dp, y = 25.dp)
+                    )
+                }
 
-                    // Floating button for calls
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .offset(y = (-25).dp, x = 10.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.note_gray),
+                        contentDescription = "Edit button",
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(y = 38.dp, x = (-41).dp)
+                            .clickable {
+                                navController.navigate(Routes.LaporSigma1)
+                            }
+                                )
+                                Text(
+                                    "Lapor",
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF616161),
+                                    fontSize = 13.sp,
+                                    modifier = Modifier
+                                        .offset(x = (-40).dp, y = 35.dp)
+                                )
+                            }
 
-
+                // Floating button for calls
                     Column(
                         modifier = Modifier
                             .offset(y = (-5).dp),
                         Arrangement.Center
                     ) {
-                        Button(
-                            onClick = { },
-                            modifier = Modifier
-                                .size(60.dp) // Menggunakan size untuk width & height sekaligus
-                                .clip(CircleShape), // Memastikan bentuknya lingkaran
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                        Button(modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp),
+                            shape = CircleShape,
                             contentPadding = PaddingValues(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                            onClick = {
+                                // taruh navigasi call disini
+                            }
                         ) {
 
                             Image(
@@ -454,7 +450,7 @@ fun Dashboard(navController: NavController) {
                                 Alignment.Center
                             )
                         }
-                        androidx.compose.material.Text(
+                        Text(
                             text = "Darurat",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -465,99 +461,140 @@ fun Dashboard(navController: NavController) {
                         )
                     }
 
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .offset(y = (-15).dp, x = (-10).dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.book_gray),
+                        contentDescription = "Edit button",
                         modifier = Modifier
-                            .offset(y = (-15).dp, x = (-10).dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.book_gray),
-                            contentDescription = "Book button",
-                            modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(y = 30.dp, x = 27.dp)
-                                .clickable {
-                                    navController.navigate(Routes.BeritaTerkini)
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(y = 30.dp, x = 27.dp)
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                    launchSingleTop = true
                                 }
-                        )
-                        androidx.compose.material.Text(
-                            "Berita",
-                            fontSize = 13.sp,
-                            color = Color(0xFF616161),
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(y = 25.dp, x = 28.dp)
-                                .clickable {
-                                    navController.navigate(Routes.BeritaTerkini)
-                                }
-                        )
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.profil_icon),
-                            contentDescription = "Profile button",
-                            modifier = Modifier
-                                .width(36.dp)
-                                .height(36.dp)
-                                .offset(x = (-20).dp, y = (30.dp))
-                                .clickable {
-                                    navController.navigate(Profile)
-                                }
-                        )
-                        Text(
-                            text = "Profil",
-                            color = Color(0xFF616161),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(x = (-20).dp, y = 30.dp)
-                                .clickable {
-                                    navController.navigate(Routes.Profile)
-                                }
-                        )
-                    }
+                            }
+                    )
+                    Text(
+                        "Berita",
+                        fontSize = 13.sp,
+                        color = Color(0xFF616161),
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .offset(y = 25.dp, x = 28.dp)
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.user_circle),
+                        contentDescription = "Profile button",
+                        modifier = Modifier
+                            .width(36.dp)
+                            .height(36.dp)
+                            .offset(x = (-20).dp, y = (30.dp))
+                            .clickable {
+                                navController.navigate(Profile)
+                            }
+                    )
+                    Text(
+                        text = "Profil",
+                        color = Color(0xFF616161),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .offset(x = (-20).dp, y = 30.dp)
+                    )
+                }
 
 
                 }
             }
-        }
         }
     }
 
 
 
 @Composable
-fun MyLazyRow(boxList: List<Color>) {
-    Color.Gray
-    LazyRow (
+fun NewsCard(
+    imageUrl: String,
+    date: String,
+    title: String,
+    author: String,
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .offset(y = 200.dp, x = 20.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+            .width(140.dp)
+            .height(260.dp)
+            .offset(x = 16.dp, y = 520.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .padding(bottom = 16.dp)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center// Makes it clickable
     ) {
-        items(boxList) {
-                color ->
-            Box(
+        // Background Image
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "News Image",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+                .clip(RoundedCornerShape(40.dp))
+        )
+
+        // Semi-transparent Overlay
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .fillMaxSize()
+                .background(brush = Brush.horizontalGradient(
+                    listOf(
+                        Color(0X99C41532),
+                        Color(0X99431B3B),
+                    )
+                ))
+        )
+
+        // Text & Button Overlay
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Date Label
+            Text(
+                text = date,
+                color = Color.White,
+                fontSize = 12.sp,
                 modifier = Modifier
-                    .width(152.dp)
-                    .height(227.dp)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFFC41532), Color(0XFF5E0A18)
-                            )
-                        ), shape = RoundedCornerShape(16.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                    .background(Color(0x88FFFFFF), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
+
+            // Title & Author
+            Column (verticalArrangement = Arrangement.Bottom) {
+                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = author, color = Color.White, fontSize = 12.sp)
+            }
+
+            // button selengkapnya
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier.align(Alignment.End)
             ) {
-                Text(text = "Box", color = Color.White)
+                Text(text = "Selengkapnya", color = Color.White)
             }
         }
     }
