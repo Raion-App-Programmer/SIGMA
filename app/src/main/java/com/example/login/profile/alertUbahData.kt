@@ -8,10 +8,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ui.components.alertDataDiubah
 
 @Composable
 fun alertUbahData(
+    navController: NavController,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -80,7 +82,7 @@ fun alertUbahData(
 
     // Menampilkan alert sukses setelah konfirmasi
     if (showSuccessDialog) {
-        alertDataDiubah {
+        alertDataDiubah(navController){
             showSuccessDialog = false
             onConfirm() // Menjalankan aksi konfirmasi setelah alert sukses tertutup
         }

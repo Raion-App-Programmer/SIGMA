@@ -21,4 +21,8 @@ object Routes {
     var LaporSigma2 = "laporSigma2"
     var LaporSigma3 = "laporSigma3"
     var LaporBerhasil = "laporBerhasil"
+    var P3 = "p3"
+    var PanduanGempa = "panduanGempa"
+
+
 }

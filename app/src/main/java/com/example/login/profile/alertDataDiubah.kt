@@ -12,11 +12,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import com.example.login.R
+import com.example.login.Routes
 
 @Composable
-fun alertDataDiubah(onDismiss: () -> Unit) {
+fun alertDataDiubah(
+    navController: NavController,
+    onDismiss: () -> Unit) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
@@ -61,7 +65,7 @@ fun alertDataDiubah(onDismiss: () -> Unit) {
 
                 LaunchedEffect(Unit) {
                     delay(2000)
-                    onDismiss()
+                    navController.navigate(Routes.Profile)
                 }
             }
         }

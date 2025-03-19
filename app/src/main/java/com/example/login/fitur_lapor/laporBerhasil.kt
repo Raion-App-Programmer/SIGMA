@@ -44,7 +44,6 @@ fun laporBerhasil(navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
