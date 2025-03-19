@@ -3,6 +3,7 @@ package com.example.login.fitur_panduan
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,7 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.login.R
+import com.example.login.Routes
 
 @Composable
 fun PanduanBanjir(navController: NavController) {
@@ -81,7 +83,11 @@ fun PanduanBanjir(navController: NavController) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Arrow back",
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Routes.Dashboard)
+                        }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Image(

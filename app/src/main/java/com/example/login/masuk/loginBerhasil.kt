@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -34,13 +38,12 @@ import kotlinx.coroutines.delay
 fun loginBerhasil(navController: NavController) {
 
     LaunchedEffect(Unit) {
-        delay(3000)
+        delay(1500)
         navController.navigate(Routes.Dashboard)
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -72,7 +75,7 @@ fun loginBerhasil(navController: NavController) {
                 ){
                     Image(
                         painter = painterResource(id = R.drawable.berhasil_fix),
-                        contentDescription = null,
+                        contentDescription = "login berhasil",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
@@ -96,14 +99,7 @@ fun loginBerhasil(navController: NavController) {
                             .padding(top = 18.dp)
                             .padding(bottom = 18.dp)
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.loader),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(48.dp)
-
-                    )
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
         }

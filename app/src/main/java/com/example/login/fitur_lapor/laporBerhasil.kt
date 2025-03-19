@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -29,14 +32,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.login.Routes
 import kotlinx.coroutines.delay
 
 @Composable
 fun laporBerhasil(navController: NavController){
+    LaunchedEffect(Unit) {
+        delay(2500)
+        navController.navigate(Routes.Dashboard)
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -92,14 +99,7 @@ fun laporBerhasil(navController: NavController){
                             .padding(top = 18.dp)
                             .padding(bottom = 18.dp)
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.loader),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(48.dp)
-
-                    )
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
