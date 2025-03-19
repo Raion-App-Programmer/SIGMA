@@ -1,6 +1,7 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.login.R
+import com.example.login.Routes
 
 @Composable
 fun Profile(navController: NavController) {
-    val navController = rememberNavController()
     Box( // Use Box for overlapping effect
         modifier = Modifier
             .fillMaxSize()
@@ -57,6 +58,9 @@ fun Profile(navController: NavController) {
                 modifier = Modifier
                     .size(24.dp)
                     .offset(y = (-50).dp, x = 140.dp)
+//                    .clickable(
+//                        navController.navigate(Routes)
+//                   )
             )
         }
 
@@ -95,6 +99,9 @@ fun Profile(navController: NavController) {
                             .padding(top = 8.dp)
                             .background(Color(0XFF431B3B), shape = RoundedCornerShape(10.dp))
                             .width(120.dp)
+                            .clickable {
+                                navController.navigate(Routes.UbahProfile)
+                            }
                     ) {
 
                         Text(

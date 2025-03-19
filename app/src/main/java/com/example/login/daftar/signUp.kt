@@ -88,7 +88,6 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -279,7 +278,6 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
-                                authViewModel.signup(email, kataSandi)
                                 navController.navigate(Routes.Verification)
                             }
                             },

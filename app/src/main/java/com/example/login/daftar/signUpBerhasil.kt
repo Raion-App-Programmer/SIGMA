@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,13 +35,12 @@ import kotlinx.coroutines.delay
 fun signUpBerhasil(navController: NavController) {
 
     LaunchedEffect(Unit) {
-        delay(3000)
+        delay(1500)
         navController.navigate(Routes.Login)
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 30.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -95,14 +96,7 @@ fun signUpBerhasil(navController: NavController) {
                                 .padding(top = 18.dp)
                                 .padding(bottom = 18.dp)
                         )
-                        Image(
-                            painter = painterResource(id = R.drawable.loader),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .size(48.dp)
-
-                        )
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
             }
         }

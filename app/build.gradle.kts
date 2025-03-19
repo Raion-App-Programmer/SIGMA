@@ -88,7 +88,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0") // Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0") // Firestore nya
     implementation("com.google.firebase:firebase-messaging:23.1.2")
 
 
@@ -112,6 +112,19 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.X.X")
     implementation("androidx.media3:media3-exoplayer-dash:1.X.X")
     implementation("androidx.media3:media3-ui:1.X.X")
+
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // FireStore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0")
+
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+
+
+
 
 
 }

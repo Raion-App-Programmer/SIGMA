@@ -1,4 +1,8 @@
-package com.example.login
+package com.example.login.daftar
+
+import com.example.login.AuthViewModel
+import com.example.login.R
+import com.example.login.Routes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.*
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,20 +28,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun verification(navController: NavController, authViewModel: AuthViewModel) {
+fun verificationTerisi(navController: NavController) {
     LaunchedEffect(Unit) {
-        delay(1200)
-        navController.navigate(Routes.VerificationFilled)
-    }
+        delay(800)
+        navController.navigate(Routes.Login)
+   }
 
     val font_grey= colorResource(id = R.color.font_grey)
 
@@ -65,20 +73,20 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp)
-                )
+            )
 
             Spacer(modifier = Modifier
                 .height(15.dp))
 
-                Text(text = "Masukkan angka 4-digit yang dikirim melalui email",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.White,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp)
-                )
+            Text(text = "Masukkan angka 4-digit yang dikirim melalui email",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.White,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 30.dp)
+            )
 
             Row (
                 modifier = Modifier
@@ -94,8 +102,8 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
                         .padding(start = 30.dp)
                 )
 
-                    Spacer(modifier = Modifier
-                        .width(5.dp))
+                Spacer(modifier = Modifier
+                    .width(5.dp))
 
                 Text(text = "untuk verifikasi",
                     fontSize = 12.sp,
@@ -103,7 +111,7 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
                     color = Color.White,
                     textAlign = TextAlign.Start,
 
-                )
+                    )
             }
 
             Spacer(modifier = Modifier
@@ -114,6 +122,7 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
                     .fillMaxWidth()
                     .padding(start = 30.dp)
             ){
+                repeat(4) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     modifier = Modifier
@@ -122,53 +131,31 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(100.dp)
                 ){
-
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.dot),
+                            contentDescription = "icon edit",
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.width(15.dp))
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier
-                        .width(76.dp)
-                        .height(76.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(100.dp)
-                ){
-
-                }
-                Spacer(modifier = Modifier.width(15.dp))
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier
-                        .width(76.dp)
-                        .height(76.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(100.dp)
-                ){
-
-                }
-                Spacer(modifier = Modifier.width(15.dp))
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier
-                        .width(76.dp)
-                        .height(76.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(100.dp)
-                ){
+                    if (it < 3) Spacer(modifier = Modifier.width(15.dp))
                 }
             }
 
             Spacer(modifier = Modifier
                 .height(40.dp))
 
-                Text(text = "Tidak menerima pesan apa pun? Kirim ulang",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+            Text(text = "Tidak menerima pesan apa pun? Kirim ulang",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.
             height(5.dp))
@@ -184,7 +171,7 @@ fun verification(navController: NavController, authViewModel: AuthViewModel) {
 
         }
     }
-    }
+}
 
 
 

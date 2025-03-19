@@ -4,6 +4,7 @@ object Routes {
     var Login = "loginMasuk"
     var SignUp = "signDaftar"
     var Verification = "verification"
+    var VerificationFilled = "verificationTerisi"
     var LoginBerhasil = "loginBerhasil"
     var OnBoarding = "onBoarding"
     var LandingPage1 = "landingPage1"
@@ -15,8 +16,13 @@ object Routes {
     var BeritaTerkini = "BeritaTerkini"
     var BeritaDetail = "berita_detail/{id}"
     var Profile = "Profile"
+    var UbahProfile = "ubahProfile"
     var LaporSigma1 = "laporSigma1"
     var LaporSigma2 = "laporSigma2"
     var LaporSigma3 = "laporSigma3"
     var LaporBerhasil = "laporBerhasil"
+    var P3 = "p3"
+    var PanduanGempa = "panduanGempa"
+
+
 }
