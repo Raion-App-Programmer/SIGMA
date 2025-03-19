@@ -56,6 +56,7 @@ import com.example.login.NewsViewModel
 import com.example.login.Routes
 import com.example.login.Routes.Profile
 import com.example.login.fitur_panduan.PanduanBanjir
+import okhttp3.Route
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -202,9 +203,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = (-230).dp)
-            ) {val handleClick: (String) -> Unit = {route ->
-                navController.navigate(route)
-            }
+        ) {
 
                 // Icons for Panduan Darurat
                 Row(
@@ -221,18 +220,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        IconButton(onClick = { handleClick(Routes.PanduanBanjir) }, modifier = Modifier
-                            .width(70.dp)
-                            .height(80.dp)
-                        ) {
                             Image(painter = painterResource(R.drawable.banjir_darurat),
                                 contentDescription = "Banjir darurat button", modifier = Modifier
+                                    .clickable { navController.navigate(Routes.PanduanBanjir) }
                                     .width(70.dp)
                                     .height(80.dp)
-                                    .clickable {
-                                        navController.navigate(Routes.PanduanBanjir)
-                                    })
-                        }
+                                    )
+
 
                         Text(
                             "Banjir",
@@ -248,18 +242,16 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .offset(y = (-10).dp)
+
                     ) {
-                        IconButton(onClick = { handleClick(Routes.PanduanKebakaran) }, modifier = Modifier
-                            .width(70.dp)
-                            .height(80.dp)
-                        ) {
-                            Image(painter = painterResource(R.drawable.kebakaran_darurat),
+                        Box( modifier = Modifier.clickable { navController.navigate(Routes.PanduanBanjir) }) {
+                            Image(
+                                painter = painterResource(R.drawable.kebakaran_darurat),
                                 contentDescription = "Kebakaran darurat button", modifier = Modifier
                                     .width(70.dp)
                                     .height(80.dp)
-                                    .clickable { navController.navigate(Routes.PanduanKebakaran) })
+                            )
                         }
-
                         Text(
                             "Kebakaran",
                             fontSize = 13.sp,
@@ -267,6 +259,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             color = Color.Black,
                             modifier = Modifier
                                 .padding(top = 6.dp)
+                                .clickable { navController.navigate(Routes.PanduanKebakaran)}
                         )
                     }
                     Column(

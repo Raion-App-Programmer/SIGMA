@@ -141,7 +141,9 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     Button(
                         onClick = {},
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFD61C4E)),
-                        modifier = Modifier.fillMaxWidth(0.9f)
+                        modifier = Modifier.fillMaxWidth(0.9f).clickable{
+                            navController.navigate(Routes.LaporSigma1)
+                        }
                     ) {
                         Text("Lapor disini!", color = Color.White, fontSize = 14.sp)
                     }
