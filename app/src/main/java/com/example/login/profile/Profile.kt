@@ -253,7 +253,7 @@ fun Profile(navController: NavController) {
                         )
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.home),
+                        painter = painterResource(id = R.drawable.home_gray_png),
                         contentDescription = "Home button",
                         modifier = Modifier
                             .width(30.dp)
@@ -264,7 +264,7 @@ fun Profile(navController: NavController) {
                         "Beranda",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFFC35660),
+                        color = Color(0xFF616161),
                         modifier = Modifier
                             .offset(x = 15.dp, y = 25.dp)
                     )
