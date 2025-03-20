@@ -117,7 +117,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth()
+                            .fillMaxWidth(0.9f)
                             .height(200.dp)
                             .clip(RoundedCornerShape(12.dp))
                     )
@@ -128,7 +128,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+                    modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -143,12 +143,12 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
 
                 // CTA button
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = 300.dp)
                 ) {
                     Button(
-                        onClick = {},
+                        onClick = {navController.navigate(Routes.LaporSigma1)},
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFD61C4E)),
-                        modifier = Modifier.fillMaxWidth(0.9f).clickable{
+                        modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.Center).clickable{
                             navController.navigate(Routes.LaporSigma1)
                         }
                     ) {

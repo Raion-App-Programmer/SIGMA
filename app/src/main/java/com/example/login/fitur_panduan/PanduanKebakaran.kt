@@ -56,6 +56,7 @@ fun PanduanKebakaran(navController: NavController) {
     val scrollState = rememberScrollState()
 
 
+
     // Main Background
     Box(modifier = Modifier
         .fillMaxSize()
@@ -113,9 +114,10 @@ fun PanduanKebakaran(navController: NavController) {
             Box( Modifier
                 .width(372.dp)
                 .height(190.dp)
-                .background(Color.Red)
+                .padding(top = 10.dp)
             ) {
                 //VideoPlayer() goes here
+                VideoPlayerKebakaran()
 
             }
             Spacer(modifier = Modifier.height(10.dp))

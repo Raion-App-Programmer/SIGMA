@@ -309,7 +309,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
         Column(
             modifier = Modifier
                 .fillMaxWidth() // Only fill width, not entire screen
-                .padding(start = 20.dp, top = 510.dp), // Adjust top padding as needed
+                .padding(start = 16.dp, top = 500.dp), // Adjust top padding as needed
             verticalArrangement = Arrangement.Top, // Align items to the top
             horizontalAlignment = Alignment.Start // Align items to the start
         ) {
@@ -324,7 +324,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, top = 10.dp) // Add top padding for spacing
+                    .padding(start = 15.dp, top = 5.dp) // Add top padding for spacing
             ) {
                 items(newsList) { newsItem ->
                     NewsCard(
@@ -534,10 +534,10 @@ fun NewsCard(
 ) {
     Box(
         modifier = Modifier
-            .width(152.dp)
+            .width(170.dp)
             .height(260.dp)
             .clip(RoundedCornerShape(20.dp))
-            .padding(start = 16.dp, bottom = 16.dp)
+            .padding(start = 5.dp, bottom = 16.dp)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -590,7 +590,7 @@ fun NewsCard(
                 shape = RoundedCornerShape(50),
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(text = "Selengkapnya", color = Color.White)
+                Text(text = "Selengkapnya", color = Color.White, fontSize = 12.sp)
             }
         }
     }
@@ -615,7 +615,6 @@ fun MyPagerWithDots() {
             modifier = Modifier
                 .width(350.dp)
                 .height(170.dp)
-                .background(Color.LightGray) // Add a background for debugging
         ) { page ->
             Box(
                 modifier = Modifier.fillMaxSize(),
