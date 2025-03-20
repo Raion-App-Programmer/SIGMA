@@ -132,17 +132,25 @@ class MainActivity : ComponentActivity() {
                     panduanGempa(navController)
                 }
                 composable(
-                    "panggilSigma1/{latitude}/{longitude}/{cityName}",
+                    "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",
                     arguments = listOf(
                         navArgument("latitude") { type = NavType.FloatType },
                         navArgument("longitude") { type = NavType.FloatType },
-                        navArgument("cityName") { type = NavType.StringType }
+                        navArgument("cityName") { type = NavType.StringType },
+                        navArgument("isUrban") { type = NavType.BoolType }
                     )
                 ) { backStackEntry ->
                     val latitude = backStackEntry.arguments?.getFloat("latitude")
                     val longitude = backStackEntry.arguments?.getFloat("longitude")
                     val cityName = backStackEntry.arguments?.getString("cityName")
-                    panggilSigma1(navController, latitude ,longitude, cityName)
+                    val isUrban = backStackEntry.arguments?.getBoolean("isUrban") ?: false
+
+                    val navController = rememberNavController()
+                    if (isUrban) {
+                        panggilSigma1(navController, latitude, longitude, cityName)
+                    } else {
+                        panggilSigma2(navController, latitude, longitude, cityName)
+                    }
                 }
 
             }

@@ -39,12 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
 
 
 @Composable
-fun panggilSigma1(navController: NavController, latitude: Float?, longitude: Float?, cityName: String?){
-    val navController = rememberNavController()
+fun panggilSigma1(navController: NavHostController, latitude: Float?, longitude: Float?, cityName: String?){
+    val navController : NavController
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
     val context = LocalContext.current
     fun dialNumber(number: String) {

@@ -569,9 +569,10 @@ fun getUserLocation(activity: Context, navController: NavController) {
                 val lat = it.latitude
                 val lon = it.longitude
 
-                getCityFromCoordinates(activity, lat, lon) { city ->
-                    // Navigate to Emergency Services Screen with location & city name
-                    val route = "panggilSigma1/$lat/$lon/$city"
+                getCityFromCoordinates(activity, lat, lon) { cityPair ->
+                    val city = cityPair.first
+                    val isUrban = cityPair.second
+                    val route = "emergency_services_screen/$lat/$lon/$city/$isUrban"
                     navController.navigate(route)
                 }
             } ?: run {
@@ -601,8 +602,8 @@ fun requestCallPermission(activity: Context) {
 }
 
 // This function now only gets the city, no phone numbers
-fun getCityFromCoordinates(activity: Context, lat: Double, lon: Double, callback: (String) -> Unit) {
-    val apiKey = "YOUR_GOOGLE_MAPS_API_KEY" // Replace with a valid API key
+fun getCityFromCoordinates(activity: Context, lat: Double, lon: Double, callback: (Pair<String, Boolean>) -> Unit) {
+    val apiKey = "AIzaSyAA0QM7T1eE8n1APSAUcUd9C68esEBcP0o" // Replace with a valid API key
     val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&key=$apiKey"
 
     val request = Request.Builder().url(url).build()
@@ -618,17 +619,17 @@ fun getCityFromCoordinates(activity: Context, lat: Double, lon: Double, callback
 
         override fun onResponse(call: Call, response: Response) {
             val json = response.body?.string() ?: return
-            val city = parseCityFromJson(json)
+            val cityPair = parseCityFromJson(json)
 
             (activity as Activity).runOnUiThread {
-                callback(city)
+                callback(cityPair)
             }
         }
     })
 }
 
 // Parses the city name from JSON response
-fun parseCityFromJson(json: String): String {
+fun parseCityFromJson(json: String): Pair<String, Boolean> {
     val jsonObject = JSONObject(json)
     val results = jsonObject.getJSONArray("results")
 
@@ -637,11 +638,13 @@ fun parseCityFromJson(json: String): String {
         for (j in 0 until addressComponents.length()) {
             val types = addressComponents.getJSONObject(j).getJSONArray("types")
             if (types.toString().contains("administrative_area_level_2")) {
-                return addressComponents.getJSONObject(j).getString("long_name")
+                val city = addressComponents.getJSONObject(j).getString("long_name")
+                val isUrban = city == "Jakarta" || city == "Surabaya" // Check for urban cities
+                return Pair(city, isUrban)
             }
         }
     }
-    return "Lokasi Tidak Diketahui"
+    return Pair("Lokasi Tidak Diketahui", false) // Default to rural
 }
 
 

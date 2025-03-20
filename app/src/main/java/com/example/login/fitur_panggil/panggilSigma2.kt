@@ -30,7 +30,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.content.Intent
@@ -39,11 +38,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 
-@Preview
 @Composable
-fun panggilSigma2(){
+fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude: Float?, cityName: String?){
+    val navController : NavController
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
     val context = LocalContext.current
     fun dialNumber(number: String) {

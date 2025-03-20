@@ -24,6 +24,6 @@ object Routes {
     var P3 = "p3"
     var PanduanGempa = "panduanGempa"
     var PanggilSigma1 = "PanggilSigma1"
-
+    var PanggilSigma2 = "PanggilSigma2"
 
 }
