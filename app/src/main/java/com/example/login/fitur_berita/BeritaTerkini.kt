@@ -78,15 +78,15 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
             LazyColumn (modifier = Modifier.weight(1f).align(Alignment.CenterHorizontally)){
                 items(newsList) { newsItem ->
                     NewsCard(
-                        imageUrl = newsItem.imageUrl,
-                        date = newsItem.date,
-                        title = newsItem.title,
-                        author = newsItem.author,
+                        imageUrl = newsItem.buktiUrl,
+                        date = newsItem.tanggal,
+                        title = newsItem.judul,
+                        author = newsItem.nama,
                         onClick = {
                             navController.navigate("BeritaDetail/${newsItem.id}")
                         }
                     )
-                    Log.d("newsitem.imageurl", newsItem.imageUrl)
+                    Log.d("newsitem.imageurl", newsItem.buktiUrl)
 
                 }
             }

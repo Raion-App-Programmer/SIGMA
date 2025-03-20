@@ -328,10 +328,10 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             ) {
                 items(newsList) { newsItem ->
                     NewsCard(
-                        imageUrl = newsItem.imageUrl,
-                        date = newsItem.date,
-                        title = newsItem.title,
-                        author = newsItem.author,
+                        imageUrl = newsItem.buktiUrl,
+                        date = newsItem.tanggal,
+                        title = newsItem.judul,
+                        author = newsItem.nama,
                         onClick = {
                             navController.navigate("BeritaDetail/${newsItem.id}")
                         },
@@ -340,7 +340,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .height(240.dp)
 
                     )
-                    Log.d("newsitem.imageurl", newsItem.imageUrl)
+                    Log.d("newsitem.imageurl", newsItem.buktiUrl)
                 }
             }
         }

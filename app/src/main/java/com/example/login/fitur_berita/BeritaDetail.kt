@@ -73,7 +73,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         })
 
                     Text(
-                        text = newsItem!!.title,
+                        text = newsItem!!.judul,
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
@@ -90,7 +90,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        newsItem!!.author,
+                        newsItem!!.nama,
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0XFFb42c38)),
@@ -98,7 +98,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         fontSize = 12.sp
                     )
                     Text(
-                        newsItem!!.date,
+                        newsItem!!.tanggal,
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0XFFb42c38)),
@@ -110,9 +110,9 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // news image
-                if (newsItem!!.imageUrl.isNotEmpty()) {
+                if (newsItem!!.buktiUrl.isNotEmpty()) {
                     AsyncImage(
-                        model = (newsItem!!.imageUrl),
+                        model = (newsItem!!.buktiUrl),
                         contentDescription = "News Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -132,7 +132,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = newsItem!!.description,
+                            text = newsItem!!.deskripsi,
                             fontSize = 14.sp,
                             color = Color.Black
                         )

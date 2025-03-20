@@ -23,7 +23,7 @@ class NewsViewModel : ViewModel() {
 
     /** 🔹 Fetch list of all news */
     private fun fetchNews() {
-        firestore.collection("news")
+        firestore.collection("laporan")
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.e("Firestore", "Error fetching news", e)
@@ -33,11 +33,11 @@ class NewsViewModel : ViewModel() {
                     val newsItems = snapshot.documents.map { doc ->
                         NewsItem(
                             id = doc.id,
-                            imageUrl = doc.getString("imageUrl") ?: "",
-                            date = doc.getString("date") ?: "",
-                            title = doc.getString("title") ?: "",
-                            author = doc.getString("author") ?: "",
-                            description = doc.getString("description") ?: ""
+                            buktiUrl = doc.getString("buktiUrl") ?: "",
+                            tanggal = doc.getString("tanggal") ?: "",
+                            judul =  doc.getString("judul") ?: "",
+                            nama =  doc.getString("nama") ?: "",
+                            deskripsi =  doc.getString("deskripsi") ?: ""
                         )
                     }
                     _newsList.value = newsItems

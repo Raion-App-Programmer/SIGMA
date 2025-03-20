@@ -25,10 +25,10 @@ object FireStoreRepository {
             snapshot.documents.map { doc ->
                 NewsItem(
                     id = doc.id,
-                    title = doc.getString("title") ?: "",
-                    date = doc.getString("date") ?: "",
-                    imageUrl = doc.getString("imageUrl") ?: "",
-                    description = doc.getString("description") ?: "" // Fetch description
+                    judul = doc.getString("judul") ?: "",
+                    tanggal = doc.getString("tangal") ?: "",
+                    buktiUrl =  doc.getString("buktiUrl") ?: "",
+                    deskripsi =  doc.getString("deskripsi") ?: "" // Fetch description
                 )
             }
         } catch (e: Exception) {

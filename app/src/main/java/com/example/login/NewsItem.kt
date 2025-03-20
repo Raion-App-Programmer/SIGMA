@@ -2,9 +2,10 @@ package com.example.login
 
 data class NewsItem(
     val id: String = "",
-    val imageUrl: String = "",
-    val date: String = "",
-    val title: String = "",
-    val author: String = "",
-    val description: String = ""
+    val buktiUrl: String = "",
+    val tanggal: String = "",
+    val judul: String = "",
+    val nama: String = "",
+    val deskripsi: String = "",
+    val waktu: String = ""
 )
