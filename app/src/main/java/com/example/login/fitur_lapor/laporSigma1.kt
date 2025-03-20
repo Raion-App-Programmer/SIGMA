@@ -302,7 +302,8 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                         Text(
                             text = "Selanjutnya",
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
                     }
                 }
