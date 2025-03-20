@@ -2,7 +2,16 @@ package com.example.mytestsigma.ui.theme
 
 
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,48 +29,69 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.login.R
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.IconButton
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.layout.ContentScale
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.login.AuthViewModel
-import com.example.login.NewsCard
 import com.example.login.NewsViewModel
+import com.example.login.R
 import com.example.login.Routes
 import com.example.login.Routes.Profile
-import com.example.login.fitur_panduan.PanduanBanjir
-import okhttp3.Route
+import com.google.android.gms.location.LocationServices
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewModel()) {
     val newsList by viewModel.newsList.collectAsState()
+    val context = LocalContext.current
+    val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Box(
         Modifier
@@ -436,7 +466,15 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         contentPadding = PaddingValues(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
                         onClick = {
-                            // taruh navigasi call disini
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // Permissions already granted, get the location
+                                getUserLocation(context, navController)
+                            } else {
+                                // Request both permissions
+                                permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                            }
                         }
                     ) {
 
@@ -521,6 +559,90 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
     }
 }
 
+fun getUserLocation(activity: Context, navController: NavController) {
+    val REQUEST_LOCATION = 1
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                val lat = it.latitude
+                val lon = it.longitude
+
+                getCityFromCoordinates(activity, lat, lon) { city ->
+                    // Navigate to Emergency Services Screen with location & city name
+                    val route = "panggilSigma1/$lat/$lon/$city"
+                    navController.navigate(route)
+                }
+            } ?: run {
+                Toast.makeText(activity, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+            }
+        }
+    } else {
+        // Request Location Permission
+        ActivityCompat.requestPermissions(
+            activity as Activity,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQUEST_LOCATION
+        )
+    }
+}
+
+fun requestCallPermission(activity: Context) {
+    val REQUEST_CALL = 2
+
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(
+            activity as Activity,
+            arrayOf(Manifest.permission.CALL_PHONE),
+            REQUEST_CALL
+        )
+    }
+}
+
+// This function now only gets the city, no phone numbers
+fun getCityFromCoordinates(activity: Context, lat: Double, lon: Double, callback: (String) -> Unit) {
+    val apiKey = "YOUR_GOOGLE_MAPS_API_KEY" // Replace with a valid API key
+    val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&key=$apiKey"
+
+    val request = Request.Builder().url(url).build()
+    val client = OkHttpClient()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("Location", "Error fetching location: ${e.message}")
+            (activity as Activity).runOnUiThread {
+                Toast.makeText(activity, "Gagal mendapatkan kota", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            val json = response.body?.string() ?: return
+            val city = parseCityFromJson(json)
+
+            (activity as Activity).runOnUiThread {
+                callback(city)
+            }
+        }
+    })
+}
+
+// Parses the city name from JSON response
+fun parseCityFromJson(json: String): String {
+    val jsonObject = JSONObject(json)
+    val results = jsonObject.getJSONArray("results")
+
+    for (i in 0 until results.length()) {
+        val addressComponents = results.getJSONObject(i).getJSONArray("address_components")
+        for (j in 0 until addressComponents.length()) {
+            val types = addressComponents.getJSONObject(j).getJSONArray("types")
+            if (types.toString().contains("administrative_area_level_2")) {
+                return addressComponents.getJSONObject(j).getString("long_name")
+            }
+        }
+    }
+    return "Lokasi Tidak Diketahui"
+}
 
 
 @Composable

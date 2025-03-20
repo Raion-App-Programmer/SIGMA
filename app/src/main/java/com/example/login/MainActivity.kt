@@ -131,6 +131,19 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.PanduanGempa) {
                     panduanGempa(navController)
                 }
+                composable(
+                    "panggilSigma1/{latitude}/{longitude}/{cityName}",
+                    arguments = listOf(
+                        navArgument("latitude") { type = NavType.FloatType },
+                        navArgument("longitude") { type = NavType.FloatType },
+                        navArgument("cityName") { type = NavType.StringType }
+                    )
+                ) { backStackEntry ->
+                    val latitude = backStackEntry.arguments?.getFloat("latitude")
+                    val longitude = backStackEntry.arguments?.getFloat("longitude")
+                    val cityName = backStackEntry.arguments?.getString("cityName")
+                    panggilSigma1(navController, latitude ,longitude, cityName)
+                }
 
             }
         }

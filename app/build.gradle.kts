@@ -41,6 +41,11 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1") // Latest version for Location Services
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // For API calls
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // JSON parsing
+
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +74,7 @@ dependencies {
     implementation(libs.generativeai)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
