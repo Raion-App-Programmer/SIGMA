@@ -1,6 +1,7 @@
 package com.example.login.lapor
 
-import androidx.compose.foundation.Image
+
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,10 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -35,24 +34,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.login.R
 import com.example.login.Routes
+import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
 
 
 @Composable
-fun laporSigma1(navController: NavController){
-    var nama by remember { mutableStateOf("") }
-    var tanggal by remember { mutableStateOf("") }
-    var waktu by remember { mutableStateOf("") }
-    var lokasi by remember { mutableStateOf("") }
-
+fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel){
+    var errorMessage by remember { mutableStateOf("") }
     val dark_grey = colorResource(id = R.color.dark_grey)
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -143,9 +141,9 @@ fun laporSigma1(navController: NavController){
                     color = Color.Black
                 )
                 TextField(
-                    value = nama,
-                    onValueChange = { nama = it },
-                    placeholder = { androidx.compose.material3.Text("Nama", color = dark_grey) },
+                    value = laporanViewModel.nama.value,
+                    onValueChange = { laporanViewModel.nama.value = it  },
+                    placeholder = { Text("Nama", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
@@ -175,9 +173,9 @@ fun laporSigma1(navController: NavController){
                     color = Color.Black
                 )
                 TextField(
-                    value = tanggal,
-                    onValueChange = { tanggal = it },
-                    placeholder = { androidx.compose.material3.Text("Tanggal Kejadian", color = dark_grey) },
+                    value = laporanViewModel.tanggal.value,
+                    onValueChange = { laporanViewModel.tanggal.value = it  },
+                    placeholder = { Text("Tanggal Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
@@ -206,9 +204,9 @@ fun laporSigma1(navController: NavController){
                     color = Color.Black
                 )
                 TextField(
-                    value = waktu,
-                    onValueChange = { waktu = it },
-                    placeholder = { androidx.compose.material3.Text("Waktu Kejadian", color = dark_grey) },
+                    value = laporanViewModel.waktu.value,
+                    onValueChange = { laporanViewModel.waktu.value = it  },
+                    placeholder = { Text("Waktu Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
@@ -237,9 +235,9 @@ fun laporSigma1(navController: NavController){
                     color = Color.Black
                 )
                 TextField(
-                    value = lokasi,
-                    onValueChange = { lokasi = it },
-                    placeholder = { androidx.compose.material3.Text("Lokasi Kejadian", color = dark_grey) },
+                    value = laporanViewModel.lokasi.value,
+                    onValueChange = { laporanViewModel.lokasi.value = it  },
+                    placeholder = { Text("Lokasi Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
@@ -262,9 +260,24 @@ fun laporSigma1(navController: NavController){
                     modifier = Modifier
                         .height(154.dp)
                 )
-
+                if (errorMessage.isNotEmpty()) {
+                    Text(
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 8.dp, start = 20.dp, end = 20.dp)
+                    )
+                }
                 Button(
-                    onClick = {navController.navigate(Routes.LaporSigma2)},
+                    onClick = {
+                        if (laporanViewModel.nama.value.isBlank() || laporanViewModel.tanggal.value.isBlank() || laporanViewModel.waktu.value.isBlank() || laporanViewModel.lokasi.value.isBlank()) {
+                            Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            errorMessage = ""
+                            navController.navigate(Routes.LaporSigma2)
+                        }},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
@@ -286,10 +299,11 @@ fun laporSigma1(navController: NavController){
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.material3.Text(
+                        Text(
                             text = "Selanjutnya",
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
                     }
                 }

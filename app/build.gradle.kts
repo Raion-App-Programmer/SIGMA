@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.paging.common.android)
     implementation(libs.generativeai)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -118,10 +119,16 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    // FireStore
-    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0")
+    //Youtube Player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+    // Firebase Storage
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+
+    //livedata
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
 
 
 

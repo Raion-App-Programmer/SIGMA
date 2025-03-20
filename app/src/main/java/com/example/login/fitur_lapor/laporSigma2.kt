@@ -3,13 +3,14 @@ package com.example.login.lapor
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,9 +23,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -34,7 +33,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,12 +47,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.login.R
 import com.example.login.Routes
+import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
 
 
@@ -69,21 +67,41 @@ fun getFileName(context: Context, uri: Uri): String {
     return name
 }
 
+
 @Composable
-fun laporSigma2(navController : NavController) {
-    var judul by remember { mutableStateOf("") }
-    var deskripsi by remember { mutableStateOf("") }
+fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewModel) {
 
+
+    var isUploading by remember { mutableStateOf(false) }
     val dark_grey = colorResource(id = R.color.dark_grey)
-    val dark0_grey = colorResource(id = R.color.dark0_grey)
+    var errorMessage by remember { mutableStateOf("") }
 
-    var selectedFileName by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        selectedFileName = uri?.let { getFileName(context, it) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            laporanViewModel.buktiUri.value = it
+            laporanViewModel.selectedFileName.value = "Uploading..."
+            isUploading = true
+
+            uploadFileToFirebaseStorage(
+                uri = it,
+                context = context,
+                onSuccess = { downloadUrl ->
+                    laporanViewModel.buktiUrl.value = downloadUrl
+                    laporanViewModel.selectedFileName.value = getFileName(context, it)
+                    isUploading = false
+                    Log.d("Upload", "File uploaded successfully: $downloadUrl")
+                },
+                onFailure = { exception ->
+                    laporanViewModel.selectedFileName.value = "Upload Failed"
+                    isUploading = false
+                    Log.e("Upload", "Failed to upload file: ${exception.message}")
+                }
+            )
+        }
     }
+
+
 
     Box(
         modifier = Modifier
@@ -174,8 +192,8 @@ fun laporSigma2(navController : NavController) {
                     color = Color.Black
                 )
                 TextField(
-                    value = judul,
-                    onValueChange = { judul = it },
+                    value = laporanViewModel.judul.value,
+                    onValueChange = { laporanViewModel.judul.value = it  },
                     placeholder = {
                         androidx.compose.material3.Text(
                             "Judul Laporan",
@@ -211,10 +229,10 @@ fun laporSigma2(navController : NavController) {
                     color = Color.Black
                 )
                 TextField(
-                    value = deskripsi,
-                    onValueChange = { deskripsi = it },
+                    value = laporanViewModel.deskripsi.value,
+                    onValueChange = { laporanViewModel.deskripsi.value = it  },
                     placeholder = {
-                        androidx.compose.material3.Text(
+                        Text(
                             "Deskripsi Laporan",
                             color = dark_grey
                         )
@@ -283,7 +301,7 @@ fun laporSigma2(navController : NavController) {
                                     .width(5.dp)
                             )
                             Text(
-                                text = selectedFileName ?: "Unggah Media",
+                                text = laporanViewModel.selectedFileName.value,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -299,7 +317,13 @@ fun laporSigma2(navController : NavController) {
                 )
 
                 Button(
-                    onClick = { navController.navigate(Routes.LaporSigma3) },
+                    onClick = {
+                        if (laporanViewModel.judul.value.isBlank() || laporanViewModel.deskripsi.value.isBlank() || laporanViewModel.buktiUrl.value.isBlank()) {
+                            Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
+                        } else {
+                            navController.navigate(Routes.LaporSigma3)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)

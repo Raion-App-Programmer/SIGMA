@@ -56,14 +56,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.login.Routes
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Base64
-import java.io.ByteArrayOutputStream
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -422,10 +414,7 @@ fun ubahProfile(navController: NavController){
             verticalArrangement = Arrangement.Bottom,
         ) {
             Button(
-                onClick = {imageUri.value?.let { uri ->
-                    saveProfileImageToFirestore(context, uri)
-                }
-                    showDialog.value = true},
+                onClick = {},
                 modifier = Modifier
                     .width(250.dp)
                     .height(50.dp),
@@ -460,47 +449,4 @@ fun ubahProfile(navController: NavController){
     }
 }
 
-// --MASIH BELUMMM!!!!
 
-// fungsi konversi uri to byte array
-fun uriToBase64(context: Context, uri: Uri): String? {
-    return try {
-        val bitmap: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val source = ImageDecoder.createSource(context.contentResolver, uri)
-            ImageDecoder.decodeBitmap(source)
-        } else {
-            @Suppress("DEPRECATION")
-            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-        }
-
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        val byteArray = outputStream.toByteArray()
-
-        Base64.encodeToString(byteArray, Base64.DEFAULT)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-// simpan gambar dalam format string Base64 ke Firestore
-fun saveProfileImageToFirestore(context: Context, imageUri: Uri) {
-    val db = FirebaseFirestore.getInstance()
-    val base64Image = uriToBase64(context, imageUri)
-
-    if (base64Image != null) {
-        val userProfileData = hashMapOf(
-            "profileImage" to base64Image
-        )
-
-        db.collection("users").document("USER_ID") // Ganti USER_ID dengan user yang sedang login
-            .set(userProfileData)
-            .addOnSuccessListener {
-                println("Gambar berhasil disimpan!")
-            }
-            .addOnFailureListener { e ->
-                println("Gagal menyimpan gambar: ${e.message}")
-            }
-    }
-}

@@ -18,6 +18,7 @@ import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.login.awalan.onBoarding
 import com.example.login.daftar.verificationTerisi
+import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_panduan.p3
 import com.example.login.fitur_profile.ubahProfile
 import com.example.login.lapor.laporBerhasil
@@ -50,6 +51,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+            val laporanViewModel: LaporanViewModel = viewModel()
             NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController)
@@ -112,13 +114,13 @@ class MainActivity : ComponentActivity() {
                     ubahProfile(navController)
                 }
                 composable(Routes.LaporSigma1) {
-                    laporSigma1(navController)
+                    laporSigma1(navController, laporanViewModel)
                 }
                 composable(Routes.LaporSigma2) {
-                    laporSigma2(navController)
+                    laporSigma2(navController, laporanViewModel)
                 }
                 composable(Routes.LaporSigma3) {
-                    laporSigma3(navController)
+                    laporSigma3(navController, laporanViewModel)
                 }
                 composable(Routes.LaporBerhasil) {
                     laporBerhasil(navController)
