@@ -1,5 +1,11 @@
 package com.example.login.lapor
 
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,13 +54,89 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.login.R
 import com.example.login.Routes
+import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
+fun uploadFileToFirebaseStorage(uri: Uri, context: Context, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+    val storageRef = FirebaseStorage.getInstance().reference
+    val fileRef = storageRef.child("uploads/${System.currentTimeMillis()}.jpg")
+
+    fileRef.putFile(uri)
+        .addOnSuccessListener {
+            fileRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                onSuccess(downloadUri.toString()) // URL file yang telah diupload
+            }
+        }
+        .addOnFailureListener { exception ->
+            onFailure(exception)
+        }
+}
+
+fun saveLaporanToFirestore(laporan: Map<String, Any>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    db.collection("laporan")
+        .add(laporan)
+        .addOnSuccessListener {
+            onSuccess()
+        }
+        .addOnFailureListener { exception ->
+            onFailure(exception)
+        }
+}
 
 @Composable
-fun laporSigma3(navController: NavController) {
+fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel) {
+    var errorMessage by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        selectedImageUri = uri
+    }
 
+    fun uploadAndSendReport() {
+        if (!isChecked) {
+            Toast.makeText(context, "Validasi kebenarannya ya", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        selectedImageUri?.let { uri ->
+            uploadFileToFirebaseStorage(
+                uri = uri,
+                context = context,
+                onSuccess = { downloadUrl ->
+                    laporanViewModel.buktiUrl.value = downloadUrl
+                    val laporan = laporanViewModel.toMap()
+
+                    saveLaporanToFirestore(laporan,
+                        onSuccess = {
+                            navController.navigate(Routes.LaporBerhasil)
+                        },
+                        onFailure = { exception ->
+                            errorMessage = "Gagal menyimpan laporan: ${exception.message}"
+                        }
+                    )
+                },
+                onFailure = { exception ->
+                    errorMessage = "Gagal upload file: ${exception.message}"
+                }
+            )
+        } ?: run {
+            val laporan = laporanViewModel.toMap()
+            saveLaporanToFirestore(laporan,
+                onSuccess = {
+                    navController.navigate(Routes.LaporBerhasil)
+                },
+                onFailure = { exception ->
+                    errorMessage = "Gagal menyimpan laporan: ${exception.message}"
+                }
+            )
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -194,7 +277,7 @@ fun laporSigma3(navController: NavController) {
                 )
 
                 Button(
-                    onClick = {navController.navigate(Routes.LaporBerhasil)},
+                    onClick = {uploadAndSendReport()},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
