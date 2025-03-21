@@ -47,7 +47,7 @@ class NewsViewModel : ViewModel() {
 
     // fetch items by id
     fun getNewsById(newsId: String) {
-        firestore.collection("laporan") // ✅ No need for Firebase.firestore
+        firestore.collection("laporan")
             .document(newsId)
             .get()
             .addOnSuccessListener { document ->

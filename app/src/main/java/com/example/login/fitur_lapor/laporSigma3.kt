@@ -58,6 +58,7 @@ import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlin.math.log
 
 fun uploadFileToFirebaseStorage(uri: Uri, context: Context, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
     val storageRef = FirebaseStorage.getInstance().reference
@@ -74,6 +75,7 @@ fun uploadFileToFirebaseStorage(uri: Uri, context: Context, onSuccess: (String) 
         }
 }
 
+
 fun saveLaporanToFirestore(laporan: Map<String, Any>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
     val db = FirebaseFirestore.getInstance()
     db.collection("laporan")
@@ -88,7 +90,6 @@ fun saveLaporanToFirestore(laporan: Map<String, Any>, onSuccess: () -> Unit, onF
 
 @Composable
 fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel) {
-    var errorMessage by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
@@ -104,39 +105,41 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
             return
         }
 
-        selectedImageUri?.let { uri ->
+        // Jika ada gambar yang dipilih, upload dulu ke Firebase Storage
+        if (selectedImageUri != null) {
             uploadFileToFirebaseStorage(
-                uri = uri,
+                uri = selectedImageUri!!,
                 context = context,
                 onSuccess = { downloadUrl ->
-                    laporanViewModel.buktiUrl.value = downloadUrl
-                    val laporan = laporanViewModel.toMap()
+                    laporanViewModel.buktiUrl.value = downloadUrl // Simpan URL gambar
 
-                    saveLaporanToFirestore(laporan,
+                    // Setelah URL berhasil diperoleh, simpan ke Firestore
+                    saveLaporanToFirestore(laporanViewModel.toMap(),
                         onSuccess = {
                             navController.navigate(Routes.LaporBerhasil)
                         },
                         onFailure = { exception ->
-                            errorMessage = "Gagal menyimpan laporan: ${exception.message}"
+                            Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
                         }
                     )
                 },
                 onFailure = { exception ->
-                    errorMessage = "Gagal upload file: ${exception.message}"
+                    Log.e("FirestoreError", "Gagal upload file: ${exception.message}")
                 }
             )
-        } ?: run {
-            val laporan = laporanViewModel.toMap()
-            saveLaporanToFirestore(laporan,
+        } else {
+            // Jika tidak ada gambar, langsung simpan laporan ke Firestore
+            saveLaporanToFirestore(laporanViewModel.toMap(),
                 onSuccess = {
                     navController.navigate(Routes.LaporBerhasil)
                 },
                 onFailure = { exception ->
-                    errorMessage = "Gagal menyimpan laporan: ${exception.message}"
+                    Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
                 }
             )
         }
     }
+
 
     Box(
         modifier = Modifier

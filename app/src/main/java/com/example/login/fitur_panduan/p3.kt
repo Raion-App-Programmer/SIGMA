@@ -239,6 +239,7 @@ fun YouTubeVideoPlayerP3() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         // Load video tanpa menampilkan UI default
                         youTubePlayer.cueVideo("YDN9JGgouOY", 0f)
+                        youTubePlayer.unMute()
                     }
                 })
             }

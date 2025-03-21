@@ -74,7 +74,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
 
     var isUploading by remember { mutableStateOf(false) }
     val dark_grey = colorResource(id = R.color.dark_grey)
-    var errorMessage by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -209,7 +208,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                             shape = RoundedCornerShape(18.dp),
                         )
                         .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 50.dp),
+                        .heightIn(max = 65.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -345,10 +344,11 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.material3.Text(
+                        Text(
                             text = "Selanjutnya",
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
                     }
                 }

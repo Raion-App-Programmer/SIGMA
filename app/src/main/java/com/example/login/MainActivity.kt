@@ -25,6 +25,7 @@ import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
 import com.example.login.lapor.laporSigma3
+import com.example.login.profile.UbahProfilViewModel
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -111,7 +112,10 @@ class MainActivity : ComponentActivity() {
                     Profile(navController)
                 }
                 composable(Routes.UbahProfile) {
-                    ubahProfile(navController)
+                    ubahProfile(
+                        navController,
+                        ubahProfilViewModel = UbahProfilViewModel()
+                    )
                 }
                 composable(Routes.LaporSigma1) {
                     laporSigma1(navController, laporanViewModel)
@@ -152,6 +156,7 @@ class MainActivity : ComponentActivity() {
                         panggilSigma2(navController, latitude, longitude, cityName)
                     }
                 }
+
 
             }
         }

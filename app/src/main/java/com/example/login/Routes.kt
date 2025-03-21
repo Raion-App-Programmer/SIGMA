@@ -23,7 +23,7 @@ object Routes {
     var LaporBerhasil = "laporBerhasil"
     var P3 = "p3"
     var PanduanGempa = "panduanGempa"
-    var PanggilSigma1 = "PanggilSigma1"
-    var PanggilSigma2 = "PanggilSigma2"
+    var PanggilSigma1 = "panggilSigma1"
+    var PanggilSigma2 = "panggilSigma2"
 
 }

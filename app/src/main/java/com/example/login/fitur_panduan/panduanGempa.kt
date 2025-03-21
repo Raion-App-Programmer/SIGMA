@@ -236,8 +236,8 @@ fun YouTubeVideoPlayerGempa() {
                 enableAutomaticInitialization = false // Mencegah UI default muncul
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
-                        // Load video tanpa menampilkan UI default
                         youTubePlayer.cueVideo("l3h0eWK_Oek", 0f)
+                        youTubePlayer.unMute()
                     }
                 })
             }
