@@ -34,14 +34,17 @@ class LaporanViewModel : ViewModel() {
 
     fun toMap(): Map<String, Any> {
         return mapOf(
-            "nama" to nama,
-            "waktu" to waktu,
-            "lokasi" to lokasi,
-            "judul" to judul,
-            "deskripsi" to deskripsi,
-            "buktiUrl" to buktiUrl
-        ).filterValues { it.toString().isNotEmpty() } // Pastikan tidak ada null
+            "nama" to nama.value,
+            "tanggal" to tanggal.value,
+            "waktu" to waktu.value,
+            "lokasi" to lokasi.value,
+            "judul" to judul.value,
+            "deskripsi" to deskripsi.value,
+            "buktiUrl" to (buktiUrl.value.ifEmpty { "" }) // Pastikan tidak null
+        )
     }
+
+
 }
 
 fun saveLaporanToFirestore(

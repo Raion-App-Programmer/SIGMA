@@ -153,7 +153,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                             shape = RoundedCornerShape(18.dp),
                         )
                         .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 50.dp),
+                        .heightIn(max = 65.dp),
                             maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -185,7 +185,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                             shape = RoundedCornerShape(18.dp),
                         )
                         .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 50.dp),
+                        .heightIn(max = 65.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -216,7 +216,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                             shape = RoundedCornerShape(18.dp),
                         )
                         .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 50.dp),
+                        .heightIn(max = 65.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(

@@ -1,6 +1,8 @@
 package com.example.login.fitur_profile
 
+
 import alertUbahData
+import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -50,41 +52,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.login.R
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.login.Routes
+import com.example.login.lapor.saveLaporanToFirestore
+import com.example.login.lapor.uploadFileToFirebaseStorage
+import com.example.login.profile.UbahProfilViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+
+
+fun uploadDataToFirebaseStorage(uri: Uri, context: Context, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+    val storageRef = FirebaseStorage.getInstance().reference
+    val fileRef = storageRef.child("profiles/${System.currentTimeMillis()}.jpg")
+
+    fileRef.putFile(uri)
+        .addOnSuccessListener {
+            fileRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                onSuccess(downloadUri.toString()) // URL file yang telah diupload
+            }
+        }
+        .addOnFailureListener { exception ->
+            onFailure(exception)
+        }
+}
+
+
+fun saveUbahProfileToFirestore(ubahProfile: Map<String, Any>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    db.collection("data profile")
+        .add(ubahProfile)
+        .addOnSuccessListener {
+            onSuccess()
+        }
+        .addOnFailureListener { exception ->
+            onFailure(exception)
+        }
+}
 
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun ubahProfile(navController: NavController){
+fun ubahProfile(navController : NavController, ubahProfilViewModel: UbahProfilViewModel){
 
     val context = LocalContext.current
     val imageUri = rememberSaveable { mutableStateOf<Uri?>(null) } //state uri
-    // Launcher ->  memilih gambar dari galeri
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { imageUri.value = uri } // Simpan uri
-    }
-
-
-
-    var nama by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var kataSandi by remember { mutableStateOf("") }
-    var telepon by remember { mutableStateOf("") }
-    var alamat by remember { mutableStateOf("") }
-
-    val dark_grey = colorResource(id = R.color.dark_grey)
-    val dark0_grey = colorResource(id = R.color.dark0_grey)
-
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var showDialog = remember { mutableStateOf(false) }
-
     if (showDialog.value) {
         alertUbahData(
             navController,
@@ -92,6 +112,56 @@ fun ubahProfile(navController: NavController){
             onConfirm = { showDialog.value = false }
         )
     }
+    // Launcher ->  memilih gambar dari galeri
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            imageUri.value = it
+            selectedImageUri = it
+        } // Simpan uri
+    }
+
+    fun uploadAndSendReport() {
+        // Jika ada gambar yang dipilih, upload dulu ke Firebase Storage
+        if (selectedImageUri != null) {
+            uploadDataToFirebaseStorage(
+                uri = selectedImageUri!!,
+                context = context,
+                onSuccess = { downloadUrl ->
+                    ubahProfilViewModel.buktiUrl.value = downloadUrl // Simpan URL gambar
+
+                    // Setelah URL berhasil diperoleh, simpan ke Firestore
+                    saveUbahProfileToFirestore(
+                        ubahProfilViewModel.toMap(),
+                        onSuccess = {
+                            showDialog.value = true
+                        },
+                        onFailure = { exception ->
+                            Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
+                        }
+                    )
+                },
+                onFailure = { exception ->
+                    Log.e("FirestoreError", "Gagal upload file: ${exception.message}")
+                }
+            )
+        } else {
+            // Jika tidak ada gambar, langsung simpan laporan ke Firestore
+            saveUbahProfileToFirestore(ubahProfilViewModel.toMap(),
+                onSuccess = {
+                    showDialog.value=true
+                },
+                onFailure = { exception ->
+                    Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
+                }
+            )
+        }
+    }
+
+    val dark_grey = colorResource(id = R.color.dark_grey)
+    val dark0_grey = colorResource(id = R.color.dark0_grey)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -207,8 +277,8 @@ fun ubahProfile(navController: NavController){
                         )
 
                         OutlinedTextField(
-                            value = nama,
-                            onValueChange = { nama = it },
+                            value = ubahProfilViewModel.nama.value,
+                            onValueChange = { ubahProfilViewModel.nama.value = it  },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(max = 52.dp),
@@ -242,8 +312,8 @@ fun ubahProfile(navController: NavController){
                         )
 
                         OutlinedTextField(
-                            value = email,
-                            onValueChange = { email = it },
+                            value = ubahProfilViewModel.email.value,
+                            onValueChange = { ubahProfilViewModel.email.value = it  },
                             placeholder = { Text("Email", color = dark_grey)
                             },
                             modifier = Modifier
@@ -275,8 +345,8 @@ fun ubahProfile(navController: NavController){
                         )
 
                         OutlinedTextField(
-                            value = kataSandi,
-                            onValueChange = { kataSandi = it },
+                            value = ubahProfilViewModel.kataSandi.value,
+                            onValueChange = { ubahProfilViewModel.kataSandi.value = it  },
                             placeholder = { Text("Kata Sandi", color = dark_grey)
                             },
                             modifier = Modifier
@@ -308,8 +378,8 @@ fun ubahProfile(navController: NavController){
                         )
 
                         OutlinedTextField(
-                            value = telepon,
-                            onValueChange = { telepon = it },
+                            value = ubahProfilViewModel.nomorTelepon.value,
+                            onValueChange = { ubahProfilViewModel.nomorTelepon.value = it  },
                             placeholder = { Text("Nomor Telepon", color = dark_grey)
                             },
                             modifier = Modifier
@@ -341,8 +411,8 @@ fun ubahProfile(navController: NavController){
                         )
 
                         OutlinedTextField(
-                            value = alamat,
-                            onValueChange = { alamat = it },
+                            value = ubahProfilViewModel.alamat.value,
+                            onValueChange = { ubahProfilViewModel.alamat.value = it  },
                             placeholder = { Text("Alamat", color = dark_grey)
                             },
                             modifier = Modifier
@@ -366,9 +436,41 @@ fun ubahProfile(navController: NavController){
             modifier = Modifier
                 .padding(start = 147.dp, top = 119.dp)
         ) {
-            val painter = rememberAsyncImagePainter(
-                model = imageUri.value ?: R.drawable.person_profil
-            )
+            val context = LocalContext.current
+            val imageUrl = ubahProfilViewModel.buktiUrl.value
+
+            // Activity Result Launcher untuk memilih gambar
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent()
+            ) { selectedImageUri: Uri? ->
+                selectedImageUri?.let {
+                    ubahProfilViewModel.buktiUrl.value = it.toString() // Simpan URI gambar
+                }
+            }
+
+            // Gunakan Coil untuk memuat gambar dari URI
+            val painter = if (imageUrl.isNullOrEmpty()) {
+                painterResource(id = R.drawable.person_profil) // Gambar default jika belum ada
+            } else {
+                rememberAsyncImagePainter(imageUrl)
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(119.dp)
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+                    .border(4.dp, Color.White, CircleShape)
+                    .clickable { launcher.launch("image/*") }
+            ) {
+                Image(
+                    painter = painter,
+                    contentDescription = "Profile Image",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
             // Foto Profil
             Box(
                 modifier = Modifier
@@ -414,7 +516,13 @@ fun ubahProfile(navController: NavController){
             verticalArrangement = Arrangement.Bottom,
         ) {
             Button(
-                onClick = {},
+                onClick = {if (ubahProfilViewModel.nama.value.isBlank() || ubahProfilViewModel.email.value.isBlank()
+                    || ubahProfilViewModel.buktiUrl.value.isBlank() || ubahProfilViewModel.kataSandi.value.isBlank()
+                    || ubahProfilViewModel.nomorTelepon.value.isBlank() || ubahProfilViewModel.alamat.value.isBlank()) {
+                    Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
+                } else {
+                    uploadAndSendReport()
+                }},
                 modifier = Modifier
                     .width(250.dp)
                     .height(50.dp),

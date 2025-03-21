@@ -436,10 +436,10 @@ fun Dashboard(navController: NavController) {
                         Arrangement.Center
                     ) {
                         Button(
-                            onClick = { },
+                            onClick = { navController.navigate(Routes.PanggilSigma1)},
                             modifier = Modifier
-                                .size(60.dp) // Menggunakan size untuk width & height sekaligus
-                                .clip(CircleShape), // Memastikan bentuknya lingkaran
+                                .size(60.dp)
+                                .clip(CircleShape),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
                             contentPadding = PaddingValues(8.dp),
                         ) {

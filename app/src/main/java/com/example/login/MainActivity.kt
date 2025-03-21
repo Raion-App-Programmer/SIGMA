@@ -25,6 +25,7 @@ import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
 import com.example.login.lapor.laporSigma3
+import com.example.login.profile.UbahProfilViewModel
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
+            val ubahProfilViewModel: UbahProfilViewModel = viewModel ()
             NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController)
@@ -111,7 +113,7 @@ class MainActivity : ComponentActivity() {
                     Profile(navController)
                 }
                 composable(Routes.UbahProfile) {
-                    ubahProfile(navController)
+                    ubahProfile(navController, ubahProfilViewModel)
                 }
                 composable(Routes.LaporSigma1) {
                     laporSigma1(navController, laporanViewModel)
@@ -131,6 +133,16 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.PanduanGempa) {
                     panduanGempa(navController)
                 }
+                composable(Routes.PanggilSigma1) {
+                    panggilSigma1(navController)
+                }
+                composable(Routes.PanggilSigma2) {
+                    panggilSigma2(navController)
+                }
+
+                val viewModel = GeocodingViewModel()
+                viewModel.getCityName(latitude = -7.983908, longitude = 112.621391)
+
 
             }
         }
