@@ -259,6 +259,7 @@ fun Profile(navController: NavController) {
                             .width(30.dp)
                             .height(30.dp)
                             .offset(x = 15.dp, y = 25.dp)
+                            .clickable { navController.navigate("Dashboard") }
                     )
                     androidx.compose.material3.Text(
                         "Beranda",
