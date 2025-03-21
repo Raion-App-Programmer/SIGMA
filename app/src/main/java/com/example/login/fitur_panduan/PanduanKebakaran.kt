@@ -52,7 +52,6 @@ import com.example.login.Routes
 
 @Composable
 fun PanduanKebakaran(navController: NavController) {
-    val navController = rememberNavController()
     val scrollState = rememberScrollState()
 
 

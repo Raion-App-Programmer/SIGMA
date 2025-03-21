@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -41,6 +42,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,6 +68,7 @@ import com.example.login.R
 import com.example.login.Routes
 import com.example.login.Routes.Profile
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -71,6 +76,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.util.Locale
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,6 +98,19 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
+    var userLocation by remember { mutableStateOf("Loading...") }
+    var temperature by remember { mutableStateOf("Loading...") }
+    var weatherCondition by remember { mutableStateOf("Loading...") }
+    var userName by remember { mutableStateOf("Loading...") }
+
+    // fetch location and weather data
+    getUserLocationAndWeather(context) { locationData ->
+        userLocation = locationData.address
+        temperature = locationData.temperature
+        weatherCondition = locationData.weatherCondition
+    }
+
+    userName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Pengguna"
 
     Box(
         Modifier
@@ -132,7 +151,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 ) {
 
                     Text(
-                        text = "Halo, Diandra!",
+                        text = "Halo, $userName!",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
@@ -170,7 +189,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .offset(x = (-10.dp))
                     ) {
                         Text(
-                            "Cerah",
+                            weatherCondition,
                             fontSize = 16.sp,
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
@@ -178,7 +197,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 .offset(y = 40.dp, x = 52.dp)
                         )
                         Text(
-                            "29° C", fontSize = 12.sp, color = Color.White,
+                            temperature, fontSize = 12.sp, color = Color.White,
                             modifier = Modifier.offset(y = 40.dp, x = 53.dp)
                         )
                     }
@@ -469,7 +488,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                                 ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
                             ) {
-                                // Permissions already granted, get the location
+                                // Permissions alsama ready granted, get the location
                                 getUserLocation(context, navController)
                             } else {
                                 // Request both permissions
@@ -601,7 +620,7 @@ fun requestCallPermission(activity: Context) {
     }
 }
 
-// This function now only gets the city, no phone numbers
+// gets city from longitude and latitude
 fun getCityFromCoordinates(activity: Context, lat: Double, lon: Double, callback: (Pair<String, Boolean>) -> Unit) {
     val apiKey = "AIzaSyAA0QM7T1eE8n1APSAUcUd9C68esEBcP0o" // Replace with a valid API key
     val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&key=$apiKey"
@@ -778,6 +797,42 @@ fun MyPagerWithDots() {
                 Spacer(modifier = Modifier.width(6.dp))
             }
         }
+    }
+}
+
+// Data class to hold location and weather information
+data class LocationData(
+    val address: String,
+    val temperature: String,
+    val weatherCondition: String
+)
+
+// Function to get user location and weather information
+fun getUserLocationAndWeather(context: Context, callback: (LocationData) -> Unit) {
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                val geocoder = Geocoder(context, Locale.getDefault())
+                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+
+                if (addresses != null && addresses.isNotEmpty()) {
+                    val address = addresses[0].getAddressLine(0) ?: "Alamat Tidak Diketahui"
+                    // Placeholder weather data (replace with actual weather API call)
+                    val temperature = "29° C"
+                    val weatherCondition = "Cerah"
+
+                    callback(LocationData(address, temperature, weatherCondition))
+                } else {
+                    callback(LocationData("Alamat Tidak Diketahui", "N/A", "N/A"))
+                }
+            } ?: run {
+                callback(LocationData("Lokasi Tidak Tersedia", "N/A", "N/A"))
+            }
+        }
+    } else {
+        callback(LocationData("Izin Lokasi Tidak Diberikan", "N/A", "N/A"))
     }
 }
 

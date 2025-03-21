@@ -1,4 +1,4 @@
-package com.example.login // Adjust based on your package
+package com.example.login
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -21,7 +21,7 @@ class NewsViewModel : ViewModel() {
         fetchNews()
     }
 
-    /** 🔹 Fetch list of all news */
+    // fetch all news
     private fun fetchNews() {
         firestore.collection("laporan")
             .addSnapshotListener { snapshot, e ->
@@ -45,7 +45,7 @@ class NewsViewModel : ViewModel() {
             }
     }
 
-    /** 🔹 Fetch a single news item by ID */
+    // fetch items by id
     fun getNewsById(newsId: String) {
         firestore.collection("laporan") // ✅ No need for Firebase.firestore
             .document(newsId)
@@ -53,7 +53,7 @@ class NewsViewModel : ViewModel() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val news = document.toObject(NewsItem::class.java)
-                    _newsItem.value = news // ✅ Now it works!
+                    _newsItem.value = news
                     Log.d("Firestore", "News found: $news")
                 } else {
                     Log.e("Firestore", "News not found for ID: $newsId")

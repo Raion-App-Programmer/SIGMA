@@ -54,6 +54,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -278,6 +279,19 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
+                                authViewModel.signUp(
+                                    email = email,
+                                    password = kataSandi,
+                                    displayName = nama,
+                                    onSuccess = { userId ->
+                                        writeUserToFirestore(userId, email, nama) {
+                                            navController.navigate(Routes.SignUpBerhasil)
+                                        }
+                                    },
+                                    onFailure =  { errorMessage ->
+                                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                )
                                 navController.navigate(Routes.Verification)
                             }
                             },
@@ -388,6 +402,25 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
         }
     }
 
+fun writeUserToFirestore(
+    userId: String,
+    email: String,
+    displayName: String,
+    onComplete: () -> Unit
+) {
+    val db = FirebaseFirestore.getInstance()
+    val userMap = hashMapOf(
+        "email" to email,
+        "displayName" to displayName
+    )
+
+    db.collection("users")
+        .document(userId)
+        .set(userMap)
+        .addOnCompleteListener {
+            onComplete()
+        }
+}
 // function passwordValid
 fun isValidPassword(password: String): Boolean {
     val passwordPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$".toRegex()

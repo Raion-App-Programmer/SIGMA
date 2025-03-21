@@ -51,7 +51,6 @@ import com.example.login.Routes
 
 @Composable
 fun PanduanBanjir(navController: NavController) {
-    val navController = rememberNavController()
 
 
     // Main Background
