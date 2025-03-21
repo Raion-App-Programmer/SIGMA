@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -315,7 +316,10 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         Image(painter = painterResource(id = R.drawable.gempa_darurat),
                             contentDescription = "Gempa darurat png", modifier = Modifier
                                 .width(70.dp)
-                                .height(80.dp))
+                                .height(80.dp)
+                                .clickable{
+                                    navController.navigate("panduanGempa")
+                                })
 
                         // bikin route
 
@@ -339,6 +343,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             modifier = Modifier
                                 .width(70.dp)
                                 .height(80.dp)
+                                .clickable { navController.navigate("p3")
+                                }
                         )
 
                         Text(
@@ -387,6 +393,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .width(160.dp)
                             .height(240.dp)
+                            .wrapContentSize(Alignment.Center)
 
                     )
                     Log.d("newsitem.imageurl", newsItem.buktiUrl)
@@ -691,7 +698,7 @@ fun NewsCard(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(40.dp))
+                .clip(RoundedCornerShape(20.dp))
         )
 
         Box(

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -49,6 +50,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.login.R
 import com.example.login.Routes
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 @Composable
 fun PanduanKebakaran(navController: NavController) {
@@ -119,7 +123,7 @@ fun PanduanKebakaran(navController: NavController) {
                 VideoPlayerKebakaran()
 
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text("Apa Yang Harus Dilakukan Saat \nTerjadi Kebakaran?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp))
             Spacer(modifier = Modifier.height(5.dp))
@@ -132,15 +136,17 @@ fun PanduanKebakaran(navController: NavController) {
                     .height(368.dp)
                     .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
                     .border(width = 1.dp, color = Color(0xFFD7D7D7), shape = RoundedCornerShape(size = 20.dp))
-                    .background(color = Color(0xFFF5F5F5), shape = RoundedCornerShape(size = 20.dp)))
+                    .background(color = Color(0xFFF5F5F5), shape = RoundedCornerShape(size = 20.dp))
+                    .verticalScroll(rememberScrollState())
+            )
             // Box container for text
             {
                 Text("Kebakaran adalah bencana yang dapat terjadi kapan saja dan di mana saja, dan dapat mengancam keselamatan jiwa serta harta benda. Oleh karena itu, penting untuk mengetahui langkah-langkah yang harus diambil saat menghadapi situasi darurat ini.",
-                    Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp), fontWeight = FontWeight(400), fontSize = 11.sp)
+                    Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp), fontWeight = FontWeight(400), fontSize = 15.sp)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text("Langkah-Langkah yang Harus Diambil", Modifier
                     .padding(start = 10.dp, end = 10.dp),
-                    fontWeight = FontWeight.Bold, fontSize = 12.sp )
+                    fontWeight = FontWeight.Bold, fontSize = 15.sp )
                 Spacer(modifier = Modifier.height (10.dp))
                 Text("""
                         1. Tetap Tenang: Jangan panik. Kepanikan dapat memperburuk situasi. Cobalah untuk tetap tenang dan berpikir jernih.
@@ -151,175 +157,14 @@ fun PanduanKebakaran(navController: NavController) {
                         6. Ikuti Petunjuk Petugas: Saat petugas tiba, ikuti instruksi mereka untuk memastikan keselamatan Anda dan orang lain.
                         7. Hindari Kerumunan: Jangan berkumpul di satu tempat, karena ini dapat menghambat tim penyelamat dan meningkatkan risiko bahaya.
                         8. Jaga Diri dan Sesama: Dalam situasi darurat, saling menjaga dan membantu satu sama lain sangat penting.
-                    """.trimIndent(), Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 11.sp, textAlign = TextAlign.Justify)
+                    """.trimIndent(), Modifier.padding(start = 10.dp, end = 10.dp), fontSize = 15.sp, textAlign = TextAlign.Justify)
                 Spacer(modifier = Modifier.height(10.dp))
 
 
             }
         }
     }
-    // Bottom dashboard
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .offset(y = 770.dp)
-
-    ) {
-        // Bottom navigation bar background
-        Image(
-            painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
-            contentDescription = "Dashboard navigation bottom",
-            modifier = Modifier
-                .width(412.dp)
-                .height(100.dp)
-                .offset(y = 10.dp)
-        )
-
-        // Row for navigation icons
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(82.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .offset(
-                        y = (-15).dp, x = (-75).dp
-                    )
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.home_gray_png),
-                    contentDescription = "Home button",
-                    modifier = Modifier
-                        .width(30.dp)
-                        .height(30.dp)
-                        .offset(x = 15.dp, y = 25.dp)
-                )
-                androidx.compose.material3.Text(
-                    "Beranda",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF616161),
-                    modifier = Modifier
-                        .offset(x = 15.dp, y = 25.dp)
-                )
-            }
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .offset(y = (-25).dp, x = 10.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.note_gray),
-                    contentDescription = "Edit button",
-                    modifier = Modifier
-                        .width(30.dp)
-                        .height(30.dp)
-                        .offset(y = 38.dp, x = (-41).dp)
-                )
-                androidx.compose.material3.Text(
-                    "Lapor",
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF616161),
-                    fontSize = 13.sp,
-                    modifier = Modifier
-                        .offset(x = (-40).dp, y = 35.dp)
-                )
-            }
-
-            // Floating button for calls
-            Column(
-                modifier = Modifier
-                    .offset(y = (-5).dp),
-                Arrangement.Center
-            ) {
-                Button(modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp),
-                    shape = CircleShape,
-                    contentPadding = PaddingValues(8.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
-                    onClick = {
-                        TODO()
-                    }
-                ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.phone_call_white),
-                        contentDescription = "Call SIGMA",
-                        modifier = Modifier
-                            .width(34.dp)
-                            .height(33.dp)
-                            .offset(y = (-2).dp),
-                        Alignment.Center
-                    )
-                }
-                androidx.compose.material3.Text(
-                    text = "Darurat",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0XFF616161),
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .offset(x = 10.dp)
-                )
-            }
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .offset(y = (-15).dp, x = (-10).dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.book_gray),
-                    contentDescription = "Book button",
-                    modifier = Modifier
-                        .width(30.dp)
-                        .height(30.dp)
-                        .offset(y = 30.dp, x = 27.dp)
-                )
-                androidx.compose.material3.Text(
-                    "Berita",
-                    fontSize = 13.sp,
-                    color = Color(0xFF616161),
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier
-                        .offset(y = 25.dp, x = 28.dp)
-                )
-            }
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.user_circle),
-                    contentDescription = "Profile button",
-                    modifier = Modifier
-                        .width(36.dp)
-                        .height(36.dp)
-                        .offset(x = (-20).dp, y = (30.dp))
-                )
-                androidx.compose.material3.Text(
-                    text = "Profil",
-                    color = Color(0xFF616161),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier
-                        .offset(x = (-20).dp, y = 30.dp)
-                )
-            }
-
-
-        }
-    }
+    buttomNavbarPanduan(navController)
 }
 
 
@@ -327,33 +172,23 @@ fun PanduanKebakaran(navController: NavController) {
 // video player
 @Composable
 fun VideoPlayerKebakaran() {
-    val context = LocalContext.current
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            val mediaItem = MediaItem.fromUri(
-                "https://www.dropbox.com/s/ndhhipard9z16io/Tips%20Saat%20terjadi%20Banjir.mp4?st=785q1t8v&raw=1"
-            )
-            setMediaItem(mediaItem)
-            prepare()
-            playWhenReady = true
-        }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
-        }
-    }
-
     AndroidView(
-        factory = {
-            PlayerView(it).apply {
-                player = exoPlayer  // Ensure this is inside the factory scope
+        factory = { context ->
+            YouTubePlayerView(context).apply {
+                enableAutomaticInitialization = false // Mencegah UI default muncul
+                addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        // Load video tanpa menampilkan UI default
+                        youTubePlayer.cueVideo("NihNPyDagKE", 0f)
+                        youTubePlayer.unMute()
+                    }
+                })
             }
         },
         modifier = Modifier
             .width(372.dp)
             .height(190.dp)
+            .clip(RoundedCornerShape(20.dp))
     )
 }
 
