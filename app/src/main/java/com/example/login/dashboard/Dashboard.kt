@@ -102,12 +102,12 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
     var temperature by remember { mutableStateOf("Loading...") }
     var weatherCondition by remember { mutableStateOf("Loading...") }
     var userName by remember { mutableStateOf("Loading...") }
+    var locationData by remember { mutableStateOf(LocationData("Loading...", "Loading...", "Loading...")) }
+
 
     // fetch location and weather data
-    getUserLocationAndWeather(context) { locationData ->
-        userLocation = locationData.address
-        temperature = locationData.temperature
-        weatherCondition = locationData.weatherCondition
+    getUserLocationAndWeather(context) { data ->
+       locationData = data
     }
 
     userName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Pengguna"
@@ -189,7 +189,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .offset(x = (-10.dp))
                     ) {
                         Text(
-                            weatherCondition,
+                            locationData.weatherCondition,
                             fontSize = 16.sp,
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
@@ -197,7 +197,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 .offset(y = 40.dp, x = 52.dp)
                         )
                         Text(
-                            temperature, fontSize = 12.sp, color = Color.White,
+                            locationData.temperature, fontSize = 12.sp, color = Color.White,
                             modifier = Modifier.offset(y = 40.dp, x = 53.dp)
                         )
                     }
@@ -209,7 +209,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .fillMaxWidth()
                     ) {
                         Text(
-                            "Jalan Kebangsaan Timur No. 10",
+                            locationData.address,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -807,7 +807,6 @@ data class LocationData(
     val weatherCondition: String
 )
 
-// Function to get user location and weather information
 fun getUserLocationAndWeather(context: Context, callback: (LocationData) -> Unit) {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -815,17 +814,30 @@ fun getUserLocationAndWeather(context: Context, callback: (LocationData) -> Unit
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             location?.let {
                 val geocoder = Geocoder(context, Locale.getDefault())
-                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                try {
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
-                if (addresses != null && addresses.isNotEmpty()) {
-                    val address = addresses[0].getAddressLine(0) ?: "Alamat Tidak Diketahui"
-                    // Placeholder weather data (replace with actual weather API call)
-                    val temperature = "29° C"
-                    val weatherCondition = "Cerah"
+                    if (addresses != null && addresses.isNotEmpty()) {
+                        val address = addresses[0]
+                        val addressComponents = mutableListOf<String>()
 
-                    callback(LocationData(address, temperature, weatherCondition))
-                } else {
-                    callback(LocationData("Alamat Tidak Diketahui", "N/A", "N/A"))
+                        address.thoroughfare?.let { addressComponents.add(it) } // street
+                        address.locality?.let { addressComponents.add(it) } // city
+                        address.adminArea?.let { addressComponents.add(it) } // state
+                        address.countryName?.let { addressComponents.add(it) } // country
+
+                        val formattedAddress = addressComponents.joinToString(", ")
+
+                        // masih butuh weather API
+                        val temperature = "29° C"
+                        val weatherCondition = "Cerah"
+
+                        callback(LocationData(formattedAddress, temperature, weatherCondition))
+                    } else {
+                        callback(LocationData("Alamat Tidak Ditemukan", "N/A", "N/A"))
+                    }
+                } catch (e: Exception) {
+                    callback(LocationData("Gagal Mendapatkan Alamat", "N/A", "N/A"))
                 }
             } ?: run {
                 callback(LocationData("Lokasi Tidak Tersedia", "N/A", "N/A"))
@@ -833,6 +845,53 @@ fun getUserLocationAndWeather(context: Context, callback: (LocationData) -> Unit
         }
     } else {
         callback(LocationData("Izin Lokasi Tidak Diberikan", "N/A", "N/A"))
+    }
+}
+
+fun getWeatherData(latitude: Double, longitude: Double, callback: (String, String) -> Unit) {
+    val apiKey = "8ab101584e182543f5ee7f958c65f3e6"
+    val url = "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric&lang=id"
+
+    val client = OkHttpClient()
+    val request = Request.Builder().url(url).build()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.e("Weather", "Error fetching weather: ${e.message}")
+            callback("N/A", "N/A") // Handle error
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            val json = response.body?.string()
+            if (json != null) {
+                try{
+                    val jsonObject = JSONObject(json)
+                    val main = jsonObject.getJSONObject("main")
+                    val temperature = "${main.getDouble("temp")}° C"
+                    val weather = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description")
+                    callback(temperature, weather)
+                } catch (e:Exception){
+                    Log.e("Weather","Error parsing Json: ${e.message}")
+                    callback("N/A","N/A")
+                }
+
+            } else {
+                callback("N/A", "N/A")
+            }
+        }
+    })
+}
+
+fun categorizeWeather(temperature: String, weatherDescription: String): String {
+    val tempValue = temperature.replace("° C", "").toDoubleOrNull() ?: 0.0
+
+    return when {
+        tempValue > 30 && weatherDescription.contains("cerah", ignoreCase = true) -> "Cerah Panas"
+        tempValue > 25 && weatherDescription.contains("awan", ignoreCase = true) -> "Berawan Hangat"
+        weatherDescription.contains("hujan", ignoreCase = true) -> "Hujan"
+        weatherDescription.contains("awan", ignoreCase = true) -> "Berawan"
+        weatherDescription.contains("cerah", ignoreCase = true) -> "Cerah"
+        else -> "Cuaca Tidak Diketahui"
     }
 }
 
