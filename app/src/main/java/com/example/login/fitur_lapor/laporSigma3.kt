@@ -208,6 +208,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                     // Setelah URL berhasil diperoleh, simpan ke Firestore
                     saveLaporanToFirestore(laporanViewModel.toMap(),
                         onSuccess = {
+                            laporanViewModel.resetLaporan()
                             navController.navigate(Routes.LaporBerhasil)
                         },
                         onFailure = { exception ->
@@ -223,6 +224,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
             // Jika tidak ada gambar, langsung simpan laporan ke Firestore
             saveLaporanToFirestore(laporanViewModel.toMap(),
                 onSuccess = {
+                    laporanViewModel.resetLaporan()
                     navController.navigate(Routes.LaporBerhasil)
                 },
                 onFailure = { exception ->
