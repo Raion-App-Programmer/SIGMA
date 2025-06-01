@@ -61,6 +61,18 @@ class LaporanViewModel : ViewModel() {
         )
     }
 
+    fun resetLaporan() {
+        nama.value = ""
+        tanggal.value = ""
+        waktu.value = ""
+        lokasi.value = ""
+        deskripsi.value = ""
+        buktiUrl.value = ""
+        judul.value = ""
+        buktiUri.value = null
+        selectedFileName.value = "Unggah Media"
+        // uid dan status tidak perlu direset
+    }
 
 }
 
@@ -81,3 +93,6 @@ fun saveLaporanToFirestore(
             onFailure(exception)
         }
 }
+
+
+
