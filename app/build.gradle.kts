@@ -135,9 +135,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
-
-
-
+    implementation("com.cloudinary:kotlin-url-gen:1.7.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }
