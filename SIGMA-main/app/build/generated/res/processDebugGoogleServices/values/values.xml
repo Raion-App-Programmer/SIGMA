@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">523816405296</string>
+    <string name="google_api_key" translatable="false">AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE</string>
+    <string name="google_app_id" translatable="false">1:523816405296:android:5c772acf80c638296ea0f5</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE</string>
+    <string name="google_storage_bucket" translatable="false">sigma-19210.firebasestorage.app</string>
+    <string name="project_id" translatable="false">sigma-19210</string>
+</resources>
