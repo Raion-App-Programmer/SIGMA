@@ -7,5 +7,7 @@ data class NewsItem(
     val judul: String = "",
     val nama: String = "",
     val deskripsi: String = "",
-    val waktu: String = ""
+    val waktu: String = "",
+    val uid: String = "",
+    val status: String = ""
 )

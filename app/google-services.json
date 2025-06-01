@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "803260116614",
-    "project_id": "login-b8b75",
-    "storage_bucket": "login-b8b75.firebasestorage.app"
+    "project_number": "523816405296",
+    "project_id": "sigma-19210",
+    "storage_bucket": "sigma-19210.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:803260116614:android:547ac57020972c4a8f2b07",
+        "mobilesdk_app_id": "1:523816405296:android:5c772acf80c638296ea0f5",
         "android_client_info": {
           "package_name": "com.example.login"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCZ0Yjg5zJlP-hC17U6j2IK6NEo8ALY1js"
+          "current_key": "AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE"
         }
       ],
       "services": {

@@ -317,7 +317,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
 
                 Button(
                     onClick = {
-                        if (laporanViewModel.judul.value.isBlank() || laporanViewModel.deskripsi.value.isBlank() || laporanViewModel.buktiUrl.value.isBlank()) {
+                        if (laporanViewModel.judul.value.isBlank() || laporanViewModel.deskripsi.value.isBlank()) {
                             Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
                         } else {
                             navController.navigate(Routes.LaporSigma3)

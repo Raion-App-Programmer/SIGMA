@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 data class Laporan(
@@ -17,10 +18,13 @@ data class Laporan(
     val lokasi: String,
     val deskripsi: String,
     val buktiUrl: String,
-    val judul: String
+    val judul: String,
+    val uid: String,
+    val status: String
 )
 
 class LaporanViewModel : ViewModel() {
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     var nama: MutableState<String> = mutableStateOf("")
     var tanggal: MutableState<String> = mutableStateOf("")
     var waktu: MutableState<String> = mutableStateOf("")
@@ -31,6 +35,17 @@ class LaporanViewModel : ViewModel() {
     var judul:  MutableState<String> = mutableStateOf("")
     var buktiUri : MutableState<Uri?> = mutableStateOf(null)
     var selectedFileName: MutableState<String> = mutableStateOf("Unggah Media")
+    var uid: MutableState<String> = mutableStateOf("")
+    var status: MutableState<String> = mutableStateOf("Menunggu persetujuan")
+
+    private val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+        uid.value = firebaseAuth.currentUser?.uid.orEmpty()
+    }
+
+    init {
+        uid.value = auth.currentUser?.uid.orEmpty()
+        auth.addAuthStateListener(authStateListener)
+    }
 
     fun toMap(): Map<String, Any> {
         return mapOf(
@@ -40,7 +55,9 @@ class LaporanViewModel : ViewModel() {
             "lokasi" to lokasi.value,
             "judul" to judul.value,
             "deskripsi" to deskripsi.value,
-            "buktiUrl" to (buktiUrl.value.ifEmpty { "" }) // Pastikan tidak null
+            "buktiUrl" to (buktiUrl.value.ifEmpty { "" }), // Pastikan tidak null
+            "uid" to uid.value,
+            "status" to status.value
         )
     }
 

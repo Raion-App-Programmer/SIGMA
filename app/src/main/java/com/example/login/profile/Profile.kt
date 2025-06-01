@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,13 +26,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.login.NewsViewModel
 import com.example.login.R
 import com.example.login.Routes
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun Profile(navController: NavController) {
+fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+
+    val newsList by viewModel.newsList.collectAsState()
+    Log.d("ProfileDebug", "newsList size: ${newsList.size}")
+    newsList.forEach { item ->
+        Log.d("ProfileDebug", "News UID: ${item.uid}, Judul: ${item.judul}")
+    }
+
+    val currentUid = FirebaseAuth.getInstance().currentUser?.uid
+    val laporanSaya = newsList.filter { it.uid == currentUid }
+    Log.d("ProfileDebug", "Current UID: $currentUid")
+    Log.d("ProfileDebug", "lapporan: ${laporanSaya.size}")
+
+    var userName by remember { mutableStateOf("Loading...") }
+    var userEmail by remember { mutableStateOf("Loading...") }
+
+    // Ambil data user sekali ketika Composable dipasang
+    LaunchedEffect(Unit) {
+        FirebaseAuth.getInstance().currentUser?.let { user ->
+            userName = user.displayName ?: "Nama tidak tersedia"
+            userEmail = user.email ?: "Email tidak tersedia"
+        }
+    }
+
     Box( // Use Box for overlapping effect
         modifier = Modifier
             .fillMaxSize()
@@ -86,13 +119,13 @@ fun Profile(navController: NavController) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Diandra Salim",
+                        text = "$userName",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                     Text(
-                        text = "diandrasalim@gmail.com",
+                        text = "$userEmail",
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -155,15 +188,12 @@ fun Profile(navController: NavController) {
                     )
 
                     Column(modifier = Modifier.padding(top = 8.dp)) {
-                        listOf(
-                            Triple("Tabrakan Ijen", "Sabtu, 8 Maret 2025", "11:13 WIB" to "Menunggu persetujuan"),
-                            Triple("Suhat Banjir Terus, Rek.", "Kamis, 6 Maret 2025", "14:26 WIB" to "Berhasil diunggah"),
-                            Triple("Konslet Listrik", "Senin, 3 Februari 2025", "22:04 WIB" to "Ditolak"),
-                            Triple("Laka Lantas di Veteran", "Rabu, 22 Januari 2025", "08:34 WIB" to "Berhasil diunggah"),
-                            Triple("Pohon Jatuh, Hati-Hati", "Jumat, 17 Januari 2025", "17:26 WIB" to "Berhasil diunggah"),
-                            Triple("Kayutangan Banjir", "Sabtu, 4 Januari 2025", "22:00 WIB" to "Ditolak")
-                        ).forEach { (title, date, statusInfo) ->
-                            val (time, status) = statusInfo
+
+                        laporanSaya.forEach { laporan ->
+                            val title = laporan.judul
+                            val date = laporan.tanggal
+                            val time = laporan.waktu
+                            val status = laporan.status
 
                             Box(
                                 modifier = Modifier
