@@ -37,7 +37,10 @@ class NewsViewModel : ViewModel() {
                             tanggal = doc.getString("tanggal") ?: "",
                             judul =  doc.getString("judul") ?: "",
                             nama =  doc.getString("nama") ?: "",
-                            deskripsi =  doc.getString("deskripsi") ?: ""
+                            deskripsi =  doc.getString("deskripsi") ?: "",
+                            waktu = doc.getString("waktu") ?: "",
+                            uid = doc.getString("uid") ?: "",
+                            status = doc.getString("status") ?: "",
                         )
                     }
                     _newsList.value = newsItems
