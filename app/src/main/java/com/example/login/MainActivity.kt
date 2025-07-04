@@ -156,10 +156,7 @@ class MainActivity : ComponentActivity() {
                         panggilSigma2(navController, latitude, longitude, cityName)
                     }
                 }
-
-
             }
         }
     }
-
 }
