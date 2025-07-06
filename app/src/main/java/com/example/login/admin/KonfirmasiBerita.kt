@@ -16,6 +16,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,15 +32,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.login.NewsViewModel
 import com.example.login.ui.theme.LoginTheme
 
 data class NewsItem(
+    val id: String,
     val date: String,
     val title: String,
     val author: String,
     val status: NewsStatus,
-    val imageRes: Int
+    val imageRes: String
 )
 
 enum class NewsStatus(val label: String, val color: Color) {
@@ -47,15 +53,32 @@ enum class NewsStatus(val label: String, val color: Color) {
     Confirmed("Terkonfirmasi", Color(0xFF66BB6A))
 }
 
-val dummyNews = listOf(
-    NewsItem("Selasa, 11 Maret 2025", "Maling Motor Singosari.", "Riana", NewsStatus.Pending, 0),
-    NewsItem("Minggu, 9 Maret 2025", "Longsor JLS Malang Boloo.", "Kiki", NewsStatus.Pending, 0),
-    NewsItem("Sabtu, 8 Maret 2025", "Pohon Tumbang Jl. Veteran.", "Suki", NewsStatus.Rejected, 0),
-    NewsItem("Kamis, 6 Maret 2025", "Suhat Banjir Terus, Rek.", "Diandra", NewsStatus.Confirmed, 0)
-)
+//val dummyNews = listOf(
+//    NewsItem("Selasa, 11 Maret 2025", "Maling Motor Singosari.", "Riana", NewsStatus.Pending, "0"),
+//    NewsItem("Minggu, 9 Maret 2025", "Longsor JLS Malang Boloo.", "Kiki", NewsStatus.Pending, "0"),
+//    NewsItem("Sabtu, 8 Maret 2025", "Pohon Tumbang Jl. Veteran.", "Suki", NewsStatus.Rejected, "0"),
+//    NewsItem("Kamis, 6 Maret 2025", "Suhat Banjir Terus, Rek.", "Diandra", NewsStatus.Confirmed, "0")
+//)
 
 @Composable
-fun NewsConfirmationScreen(newsList: List<NewsItem>,navController: NavController) {
+fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+    val firestoreNews by viewModel.newsList.collectAsState()
+
+    val newsList = firestoreNews.map {
+        NewsItem(
+            id = it.id,
+            date = it.tanggal,
+            title = it.judul,
+            author = it.nama,
+            status = when (it.status.lowercase()) {
+                "pending" -> NewsStatus.Pending
+                "rejected" -> NewsStatus.Rejected
+                "confirmed" -> NewsStatus.Confirmed
+                else -> NewsStatus.Pending
+            },
+            imageRes = it.buktiUrl
+        )
+    }
     Scaffold(
         topBar = {
             Surface(
@@ -91,20 +114,23 @@ fun NewsConfirmationScreen(newsList: List<NewsItem>,navController: NavController
             modifier = Modifier.background(Color(0xFFF5F5F7))
         ) {
             items(newsList) { news ->
-                NewsCard(news)
+                NewsCard(news = news, onClick = {
+                    navController.navigate("DetailPengajuan/${news.id}")
+                })
             }
         }
     }
 }
 
 @Composable
-fun NewsCard(news: NewsItem) {
+fun NewsCard(news: NewsItem, onClick: ()->Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() }
     ) {
         val isPreview = LocalInspectionMode.current
 
