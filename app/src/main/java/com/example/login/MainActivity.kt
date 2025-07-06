@@ -48,14 +48,13 @@ class MainActivity : ComponentActivity() {
         val db = Firebase.firestore
 
 
-
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
             NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
-                    landingPage1(navController)
+                    landingPage1(navController) 
                 }
                 composable(Routes.LandingPage2) {
                     landingPage2(navController)

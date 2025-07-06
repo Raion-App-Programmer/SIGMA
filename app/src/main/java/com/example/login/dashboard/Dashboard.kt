@@ -261,7 +261,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(painter = painterResource(R.drawable.banjir_darurat),
+                        Image(painter = painterResource(R.drawable.banjir),
                             contentDescription = "Banjir darurat button", modifier = Modifier
                                 .clickable { navController.navigate(Routes.PanduanBanjir) }
                                 .width(70.dp)
@@ -284,7 +284,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
 
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.kebakaran_darurat),
+                            painter = painterResource(R.drawable.kebakaran),
                             contentDescription = "Kebakaran darurat button", modifier = Modifier
                                 .clickable { navController.navigate("PanduanKebakaran") }
                                 .width(70.dp)
@@ -306,7 +306,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .offset(y = (-10).dp)
                     ) {
-                        Image(painter = painterResource(id = R.drawable.gempa_darurat),
+                        Image(painter = painterResource(id = R.drawable.gempa),
                             contentDescription = "Gempa darurat png", modifier = Modifier
                                 .width(70.dp)
                                 .height(80.dp)
@@ -331,7 +331,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             .offset(y = (-10).dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.p3k_darurat),
+                            painter = painterResource(id = R.drawable.p3k),
                             contentDescription = "P3K darurat",
                             modifier = Modifier
                                 .width(70.dp)
