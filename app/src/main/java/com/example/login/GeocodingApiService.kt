@@ -11,6 +11,7 @@ interface GeocodingApiService {
         @Query("key") apiKey: String
     ): Call<GeocodingResponse>
 }
+
 data class GeocodingResponse(
     val results: List<Result>,
     val status: String

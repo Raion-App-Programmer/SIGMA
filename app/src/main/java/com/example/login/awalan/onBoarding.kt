@@ -88,7 +88,8 @@ fun onBoarding(navController: NavController) {
                 contentPadding = PaddingValues()
             ) {
                 Box(
-                    modifier = Modifier.fillMaxSize().background(
+                    modifier = Modifier.fillMaxSize()
+                        .background(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
                                 Color(0xFFC41532),
