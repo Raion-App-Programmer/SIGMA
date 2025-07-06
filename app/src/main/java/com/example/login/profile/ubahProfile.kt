@@ -1,3 +1,4 @@
+
 package com.example.login.fitur_profile
 
 
@@ -60,8 +61,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.login.Routes
 import com.example.login.lapor.saveLaporanToFirestore
-//import com.example.login.lapor.uploadFileToFirebaseStorage
-import com.example.login.lapor.uploadFileToCloudinary
+import com.example.login.lapor.uploadFileToFirebaseStorage
 import com.example.login.profile.UbahProfilViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
