@@ -55,18 +55,17 @@ import com.example.login.Routes
 import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
 
-import com.example.login.lapor.getFileName
 
-//fun getFileName(context: Context, uri: Uri): String {
-//    var name = "IMG/VID Selected"
-//    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-//        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-//        if (nameIndex != -1 && cursor.moveToFirst()) {
-//            name = cursor.getString(nameIndex)
-//        }
-//    }
-//    return name
-//}
+fun getFileName(context: Context, uri: Uri): String {
+    var name = "IMG/VID Selected"
+    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        if (nameIndex != -1 && cursor.moveToFirst()) {
+            name = cursor.getString(nameIndex)
+        }
+    }
+    return name
+}
 
 
 @Composable
@@ -83,14 +82,12 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
             laporanViewModel.selectedFileName.value = "Uploading..."
             isUploading = true
 
-            uploadFileToCloudinary(
+            uploadFileToFirebaseStorage(
                 uri = it,
                 context = context,
                 onSuccess = { downloadUrl ->
                     laporanViewModel.buktiUrl.value = downloadUrl
-//                    laporanViewModel.selectedFileName.value = getFileName(context, it)
-                    laporanViewModel.selectedFileName.value = getFileName(context, it) ?: "Unknown file"
-
+                    laporanViewModel.selectedFileName.value = getFileName(context, it)
                     isUploading = false
                     Log.d("Upload", "File uploaded successfully: $downloadUrl")
                 },
@@ -102,30 +99,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
             )
         }
     }
-
-//    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//        uri?.let {
-//            laporanViewModel.buktiUri.value = it
-//            laporanViewModel.selectedFileName.value = "Uploading..."
-//            isUploading = true
-//
-//            uploadFileToFirebaseStorage(
-//                uri = it,
-//                context = context,
-//                onSuccess = { downloadUrl ->
-//                    laporanViewModel.buktiUrl.value = downloadUrl
-//                    laporanViewModel.selectedFileName.value = getFileName(context, it)
-//                    isUploading = false
-//                    Log.d("Upload", "File uploaded successfully: $downloadUrl")
-//                },
-//                onFailure = { exception ->
-//                    laporanViewModel.selectedFileName.value = "Upload Failed"
-//                    isUploading = false
-//                    Log.e("Upload", "Failed to upload file: ${exception.message}")
-//                }
-//            )
-//        }
-//    }
 
 
 

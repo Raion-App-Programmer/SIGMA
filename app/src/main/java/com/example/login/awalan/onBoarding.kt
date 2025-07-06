@@ -25,11 +25,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.login.R
 import com.example.login.Routes
 
@@ -46,20 +44,12 @@ fun onBoarding(navController: NavController) {
         Image(
             painter = painterResource(id = R.drawable.elipse),
             contentDescription = "Elipse circle",
-            modifier = Modifier
-                .align(alignment = Alignment.TopStart)
-                .width(650.dp)
-                .height(469.dp)
-                .offset(y = (-86).dp)
+            modifier = Modifier.align(alignment = Alignment.TopStart).width(650.dp).height(469.dp).offset(y = (-86).dp)
         )
         Image(
             painter = painterResource(id = R.drawable.logo_sigma_lengkap),
             contentDescription = "Logo Sigma lengkap",
-            modifier = Modifier
-                .width(295.5.dp)
-                .height(127.5.dp)
-                .align(Alignment.TopCenter)
-                .offset(y = 70.dp)
+            modifier = Modifier.width(295.5.dp).height(127.5.dp).align(Alignment.TopCenter).offset(y = 70.dp)
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -85,9 +75,7 @@ fun onBoarding(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.rectangle),
                 contentDescription = "",
-                modifier = Modifier
-                    .height(5.dp)
-                    .width(141.dp)
+                modifier = Modifier.height(5.dp).width(141.dp)
             )
             Spacer(modifier = Modifier.height(170.dp))
             Button(
@@ -100,17 +88,16 @@ fun onBoarding(navController: NavController) {
                 contentPadding = PaddingValues()
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                         .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFC41532),
-                                    Color(0xFF431B3B)
-                                )
-                            ),
-                            shape = RoundedCornerShape(16.dp)
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFC41532),
+                                Color(0xFF431B3B)
+                            )
                         ),
+                        shape = RoundedCornerShape(16.dp)
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(text = "Daftar", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
@@ -132,9 +119,9 @@ fun onBoarding(navController: NavController) {
                         .fillMaxSize()
                         .border(2.dp, Color.DarkGray, RoundedCornerShape(16.dp))
                         .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(16.dp)
-                        ),
+                        color = Color.White,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -146,11 +133,5 @@ fun onBoarding(navController: NavController) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun prevon() {
-    onBoarding(rememberNavController())
 }
 
