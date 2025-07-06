@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.login.admin.NewsConfirmationScreen
+import com.example.login.admin.dummyNews
 import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.login.awalan.onBoarding
@@ -134,6 +136,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.PanduanGempa) {
                     panduanGempa(navController)
+                }
+                composable(Routes.KonfirmasiBerita) {
+                    NewsConfirmationScreen(dummyNews,navController)
                 }
                 composable(
                     "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",

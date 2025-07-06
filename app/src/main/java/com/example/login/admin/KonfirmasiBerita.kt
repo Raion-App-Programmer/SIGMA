@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.login.ui.theme.LoginTheme
 
 data class NewsItem(
@@ -54,7 +55,7 @@ val dummyNews = listOf(
 )
 
 @Composable
-fun NewsConfirmationScreen(newsList: List<NewsItem>) {
+fun NewsConfirmationScreen(newsList: List<NewsItem>,navController: NavController) {
     Scaffold(
         topBar = {
             Surface(
@@ -194,10 +195,10 @@ fun NewsCard(news: NewsItem) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 360)
-@Composable
-fun PreviewNewsScreen() {
-    LoginTheme{
-        NewsConfirmationScreen(newsList = dummyNews)
-    }
-}
+//@Preview(showBackground = true, widthDp = 360)
+//@Composable
+//fun PreviewNewsScreen() {
+//    LoginTheme{
+//        NewsConfirmationScreen(newsList = dummyNews)
+//    }
+//}
