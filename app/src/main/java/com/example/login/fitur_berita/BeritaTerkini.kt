@@ -57,13 +57,8 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                     .width(412.dp)
                     .height(119.dp)
                     .background(
-                        brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(0XFFC41532),
-                                Color(0XFF431B3B)
-                            )
-                        )
-                    )
+                        Color(0xFFBF002E),
+                    ),
             ) {
                 Text(
                     "Berita Hari Ini",
@@ -299,12 +294,14 @@ fun NewsCard(
             modifier = Modifier
                 .clip(RoundedCornerShape(40.dp))
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(
-                    listOf(
-                        Color(0X99C41532),
-                        Color(0X99431B3B),
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Transparent,
+                            Color(0X99BF002E),
+                        )
                     )
-                ))
+                )
         )
 
         // Text & Button Overlay

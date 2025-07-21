@@ -5,10 +5,8 @@ package com.example.mytestsigma.ui.theme
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.net.Uri
+import android.text.Layout
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,9 +35,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,10 +48,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -77,7 +80,6 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
-import java.util.Locale
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -106,158 +108,150 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
 
     userName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Pengguna"
 
-    Box(
-        Modifier
-            .fillMaxSize()
-            .background(
-                color = Color(0XFFF7EAEB)
-            )
-    ) {
-        // NavBar Rectangle at the Top
-        Box(
-            modifier = Modifier
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 0.dp,
-                        topEnd = 0.dp,
-                        bottomStart = 20.dp,
-                        bottomEnd = 20.dp
-                    )
-                )
-                .fillMaxWidth()
-                .height(120.dp)
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFFC41532),
-                            Color(0xFF431B3B)
-                        )
-                    )
-                ),
-        ) {
-            // To control profile - notification on top and weather - location on bottom
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // profile - notification on top
-                Row(
-                    modifier = Modifier
-                ) {
 
-                    Text(
-                        text = "Halo, $userName!",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier = Modifier
-                            .offset(x = 35.dp, y = 40.dp)
-                    )
-
-
-                    Image(
-                        painter = painterResource(id = R.drawable.notifications),
-                        contentDescription = "Notifications",
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = 230.dp, y = 30.dp)
-                    )
-                }
-
-                // weather - location
-                Row(
-                    modifier = Modifier
-                ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.cloud),
-                        contentDescription = "Weather",
-                        modifier = Modifier
-                            .width(32.dp)
-                            .height(89.dp)
-                            .offset(x = 35.dp, y = 12.dp)
-                    )
-
-                    Column(
-                        modifier = Modifier
-                            .offset(x = (-10.dp))
-                    ) {
-                        Text(
-                            weatherCondition,
-                            fontSize = 16.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .offset(y = 40.dp, x = 52.dp)
-                        )
-                        Text(
-                            temperature, fontSize = 12.sp, color = Color.White,
-                            modifier = Modifier.offset(y = 40.dp, x = 53.dp)
-                        )
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .offset(x = 73.dp, y = 40.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            "N/A",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            modifier = Modifier.offset(x = 30.dp, y = 3.dp)
-                        )
-
-                        Image(
-                            painter = painterResource(id = R.drawable.location_on),
-                            contentDescription = "Location",
-                            modifier = Modifier
-                                .size(30.dp)
-                                .offset(x = 30.dp)
-                        )
-                    }
-                }
-            }
-        }
-        // pager
-        MyPagerWithDots()
-
-// Panduan Darurat
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Scrollable content area
         Column(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .offset(x = 40.dp, y = 200.dp)
+            Modifier
+                .fillMaxSize()
+                .background(
+                    color = Color(0XFFF7EAEB)
+                )
+                .verticalScroll(rememberScrollState()) // This makes the Column scrollable
         ) {
-            Text(
-                "Panduan Darurat",
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier
-                    .padding(bottom = 15.dp)
-                    .offset(y = (-225).dp)
-            )
+            // This Box now contains the top navigation bar and the pager/dots
+            Box(modifier = Modifier.fillMaxWidth()) {
+                // NavBar Rectangle at the Top
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 0.dp,
+                                topEnd = 0.dp,
+                                bottomStart = 20.dp,
+                                bottomEnd = 20.dp
+                            )
+                        )
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .background(
+                            Color(0xFFBF002E),
+                        ),
+                ) {
+                    // To control profile - notification on top and weather - location on bottom
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        // profile - notification on top
+                        Row(
+                            modifier = Modifier
+                        ) {
 
-            // Panduan darurat container
-            Box(
+                            Text(
+                                text = "Halo, $userName!",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .offset(x = 35.dp, y = 40.dp)
+                            )
+
+
+                            Image(
+                                painter = painterResource(id = R.drawable.notifications),
+                                contentDescription = "Notifications",
+                                modifier = Modifier
+                                    .width(30.dp)
+                                    .height(30.dp)
+                                    .offset(x = 230.dp, y = 30.dp)
+                            )
+                        }
+
+                        // weather - location
+                        Row(
+                            modifier = Modifier
+                        ) {
+
+                            Image(
+                                painter = painterResource(id = R.drawable.cloud),
+                                contentDescription = "Weather",
+                                modifier = Modifier
+                                    .width(32.dp)
+                                    .height(89.dp)
+                                    .offset(x = 35.dp, y = 12.dp)
+                            )
+
+                            Column(
+                                modifier = Modifier
+                                    .offset(x = (-10).dp)
+                            ) {
+                                Text(
+                                    weatherCondition,
+                                    fontSize = 16.sp,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier
+                                        .offset(y = 40.dp, x = 52.dp)
+                                )
+                                Text(
+                                    temperature, fontSize = 12.sp, color = Color.White,
+                                    modifier = Modifier.offset(y = 40.dp, x = 53.dp)
+                                )
+                            }
+
+                            Row(
+                                verticalAlignment = CenterVertically,
+                                modifier = Modifier
+                                    .offset(x = 73.dp, y = 40.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    "N/A",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    modifier = Modifier.offset(x = 30.dp, y = 3.dp)
+                                )
+
+                                Image(
+                                    painter = painterResource(id = R.drawable.location_on),
+                                    contentDescription = "Location",
+                                    modifier = Modifier
+                                        .size(30.dp)
+                                        .offset(x = 30.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+                // pager
+                MyPagerWithDots()
+            }
+
+
+            // Panduan Darurat
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-230).dp)
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
             ) {
+                Text(
+                    "Panduan Darurat",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 15.dp)
+                )
 
                 // Icons for Panduan Darurat
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                        .offset(x = (-40).dp, y = 10.dp),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Top
                 ) {
+                    // Kolom untuk Banjir
                     Column(
-                        modifier = Modifier.offset(y = (-10).dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -272,16 +266,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.offset(y = 6.dp)
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
 
+                    // Kolom untuk Kebakaran
                     Column(
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .offset(y = (-10).dp)
-
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
                             painter = painterResource(R.drawable.kebakaran),
@@ -297,14 +289,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             color = Color.Black,
                             modifier = Modifier
                                 .padding(top = 6.dp)
-                                .clickable { navController.navigate("PanduanKebakaran")}
                         )
                     }
+
+                    // Kolom untuk Gempa
                     Column(
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .offset(y = (-10).dp)
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(painter = painterResource(id = R.drawable.gempa),
                             contentDescription = "Gempa darurat png", modifier = Modifier
@@ -313,9 +304,6 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 .clickable{
                                     navController.navigate("panduanGempa")
                                 })
-
-                        // bikin route
-
                         Text(
                             "Gempa",
                             fontSize = 13.sp,
@@ -324,11 +312,11 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             modifier = Modifier.padding(top = 6.dp)
                         )
                     }
+
+                    // Kolom untuk P3K
                     Column(
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .offset(y = (-10).dp)
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.p3k),
@@ -339,7 +327,6 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 .clickable { navController.navigate("p3")
                                 }
                         )
-
                         Text(
                             "P3K",
                             fontSize = 13.sp,
@@ -350,52 +337,73 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     }
                 }
             }
-        }
 
-
-        // Column for Berita Terkini
-        Column(
-            modifier = Modifier
-                .fillMaxWidth() // Only fill width, not entire screen
-                .padding(start = 16.dp, top = 500.dp), // Adjust top padding as needed
-            verticalArrangement = Arrangement.Top, // Align items to the top
-            horizontalAlignment = Alignment.Start // Align items to the start
-        ) {
-            Text(
-                "Berita Terkini",
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(start = 20.dp) // Add padding for left alignment
-            )
-
-            LazyRow(
+            // Column for Berita Terkini
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 15.dp, top = 5.dp) // Add top padding for spacing
+                    .padding( bottom = 100.dp), // Added bottom padding to avoid overlap with nav bar
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
             ) {
-                items(newsList) { newsItem ->
-                    NewsCard(
-                        imageUrl = newsItem.buktiUrl,
-                        date = newsItem.tanggal,
-                        title = newsItem.judul,
-                        author = newsItem.nama,
-                        onClick = {
-                            navController.navigate("BeritaDetail/${newsItem.id}")
-                        },
-                        modifier = Modifier
-                            .width(160.dp)
-                            .height(240.dp)
-                            .wrapContentSize(Alignment.Center)
-
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        "Berita Terkini",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(start = 20.dp)
                     )
-                    Log.d("newsitem.imageurl", newsItem.buktiUrl)
+
+                    TextButton(
+                        onClick = {
+                            navController.navigate("BeritaTerkini")
+                        },
+                        modifier = Modifier.padding(end = 10.dp)
+                    ) {
+                        Text(
+                            "Lihat Semua",
+                            color = Color(0xFFBF002E),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+
+                        )
+                    }
+                }
+
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 10.dp)
+                ) {
+                    items(newsList) { newsItem ->
+                        NewsCard(
+                            imageUrl = newsItem.buktiUrl,
+                            date = newsItem.tanggal,
+                            title = newsItem.judul,
+                            author = newsItem.nama,
+                            onClick = {
+                                navController.navigate("BeritaDetail/${newsItem.id}")
+                            },
+                            modifier = Modifier
+                                .width(160.dp)
+                                .height(240.dp)
+                                .wrapContentSize(Alignment.Center)
+
+                        )
+                        Log.d("newsitem.imageurl", newsItem.buktiUrl)
+                    }
                 }
             }
         }
 
 
-        // Bottom dashboard
+        // Bottom dashboard - Now correctly placed inside the root Box
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -409,6 +417,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     .width(412.dp)
                     .height(100.dp)
                     .offset(y = 10.dp)
+                    .pointerInput(Unit) {}
             )
 
             // Row for navigation icons
@@ -417,7 +426,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     .fillMaxWidth()
                     .height(82.dp),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = CenterVertically
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -433,14 +442,6 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
-                            .offset(x = 15.dp, y = 25.dp)
-                    )
-                    Text(
-                        "Beranda",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFFC35660),
-                        modifier = Modifier
                             .offset(x = 15.dp, y = 25.dp)
                     )
                 }
@@ -462,14 +463,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 navController.navigate("laporSigma1")
                             }
                     )
-                    Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
-                        modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                    )
+
                 }
 
                 // Floating button for calls
@@ -483,7 +477,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         .height(60.dp),
                         shape = CircleShape,
                         contentPadding = PaddingValues(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
                         onClick = {
                             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                                 ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
@@ -501,21 +495,12 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             painter = painterResource(id = R.drawable.phone_call_white),
                             contentDescription = "Call SIGMA",
                             modifier = Modifier
-                                .width(34.dp)
-                                .height(33.dp)
-                                .offset(y = (-2).dp),
+                                .width(40.dp)
+                                .height(40.dp),
                             Alignment.Center
                         )
                     }
-                    Text(
-                        text = "Darurat",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0XFF616161),
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .offset(x = 10.dp)
-                    )
+
                 }
 
                 Column(
@@ -530,21 +515,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
-                            .offset(y = 30.dp, x = 27.dp)
+                            .offset(y = 25.dp, x = 30.dp)
                             .clickable {
                                 navController.navigate("BeritaTerkini") {
-                                    launchSingleTop = true
                                 }
                             }
                     )
-                    Text(
-                        "Berita",
-                        fontSize = 13.sp,
-                        color = Color(0xFF616161),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(y = 25.dp, x = 28.dp)
-                    )
+
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -555,21 +532,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(36.dp)
-                            .height(36.dp)
-                            .offset(x = (-20).dp, y = (30.dp))
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = (-20).dp, y = (30).dp)
                             .clickable {
                                 navController.navigate(Profile)
                             }
                     )
-                    Text(
-                        text = "Profil",
-                        color = Color(0xFF616161),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(x = (-20).dp, y = 30.dp)
-                    )
+
                 }
 
 
@@ -577,6 +547,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
         }
     }
 }
+
 
 fun getUserLocation(activity: Context, navController: NavController) {
     val REQUEST_LOCATION = 1
@@ -699,10 +670,10 @@ fun NewsCard(
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxSize()
                 .background(
-                    brush = Brush.horizontalGradient(
+                    brush = Brush.verticalGradient(
                         listOf(
-                            Color(0X99C41532),
-                            Color(0X99431B3B),
+                            Color.Transparent,
+                            Color(0X99BF002E),
                         )
                     )
                 )
@@ -714,17 +685,11 @@ fun NewsCard(
                 .padding(8.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = date,
-                color = Color.White,
-                fontSize = 12.sp,
-                modifier = Modifier
-                    .background(Color(0x88FFFFFF), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            )
 
-            Column(verticalArrangement = Arrangement.Bottom) {
-                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+
+            Column( modifier = Modifier
+                .padding(top = 100.dp), verticalArrangement = Arrangement.Bottom) {
+                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                 Text(text = author, color = Color.White, fontSize = 12.sp)
             }
 
@@ -732,7 +697,8 @@ fun NewsCard(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
                 shape = RoundedCornerShape(50),
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.Start),
+
             ) {
                 Text(text = "Selengkapnya", color = Color.White, fontSize = 12.sp)
             }
@@ -750,30 +716,33 @@ fun MyPagerWithDots() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .offset(y = 125.dp),
+            .padding( top = 136.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Pager (Scrollable)
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
-                .width(350.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp) // Margin kiri-kanan
                 .height(170.dp)
         ) { page ->
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(16.dp)), // Hanya box yang rounded
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(
                         id = when (page) {
-                            0 -> R.drawable.lapor_segala_insiden_warna
-                            1 -> R.drawable.lapor_segala_insiden_warna
-                            else -> R.drawable.lapor_segala_insiden_warna
+                            0 -> R.drawable.banner
+                            1 -> R.drawable.banner
+                            else -> R.drawable.banner
                         }
                     ),
                     contentDescription = "Page $page",
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(), // Gambar tetap kotak penuh
                     contentScale = ContentScale.Crop
                 )
             }

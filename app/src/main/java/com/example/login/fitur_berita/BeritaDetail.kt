@@ -78,7 +78,9 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         fontSize = 24.sp,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).offset(y = (-25).dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .offset(y = (-25).dp)
                     )
 
 
@@ -128,7 +130,9 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .align(Alignment.CenterHorizontally)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -143,14 +147,20 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
 
                 // CTA button
                 Box(
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = 300.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 300.dp)
                 ) {
                     Button(
                         onClick = {navController.navigate(Routes.LaporSigma1)},
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFD61C4E)),
-                        modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.Center).clickable{
-                            navController.navigate(Routes.LaporSigma1)
-                        }
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .align(Alignment.Center)
+                            .clickable {
+                                navController.navigate(Routes.LaporSigma1)
+                            }
                     ) {
                         Text("Lapor disini!", color = Color.White, fontSize = 14.sp)
                     }

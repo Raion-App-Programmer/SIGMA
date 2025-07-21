@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
-            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
+            NavHost(navController = navController, startDestination = Routes.OnBoarding) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController) 
                 }

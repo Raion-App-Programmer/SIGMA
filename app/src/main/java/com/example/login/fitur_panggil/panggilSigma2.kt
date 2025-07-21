@@ -2,7 +2,6 @@ package com.example.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.content.Intent
 import android.net.Uri
+import android.text.Layout
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
@@ -80,7 +81,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                     ),
                 )
                 .background(
-                    color = Color.White,
+                    color = Color(0xFFBF002E),
                     shape = RoundedCornerShape(
                         bottomStart = 45.dp,
                         bottomEnd = 45.dp
@@ -92,7 +93,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 text = "Hanya Untuk Darurat",
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
-                color = colorResource(id = R.color.font_hanyaUntuDarurat),
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
         }
@@ -102,12 +103,26 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 .height(30.dp)
         )
 
-        Text(
-            text = "Malang Kabupaten",
-            fontWeight = FontWeight.Bold,
-            fontSize = 26.sp,
-            textAlign = TextAlign.Center
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.location_black),
+                contentDescription = "Location",
+                modifier = Modifier
+                    .size(24.dp)
+            )
+            Text(
+                text = "Malang, Jawa Timur",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
 
         Spacer(
             modifier = Modifier
@@ -117,7 +132,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
         Button(
             onClick = { dialNumber("0341346999") },
             modifier = Modifier
-                .width(372.dp)
+                .width(300.dp)
                 .height(125.dp)
                 .background(color = Color.Transparent),
             shape = RoundedCornerShape(20.dp),
@@ -127,7 +142,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = colorResource(id = R.color.bg_buttonPanggil),
+                        color = Color(0xFFBF002E),
                         shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -165,9 +180,9 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                             contentDescription = "damkar",
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier
-                                .width(174.dp)
-                                .height(92.dp)
-                                .offset(x = 16.dp, y = 5.dp)
+                                .width(172.dp)
+                                .height(172.dp)
+                                .offset(x = 8.dp, y = 20.dp)
                         )
                     }
                 }
@@ -182,7 +197,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
         Button(
             onClick = { dialNumber("119") },
             modifier = Modifier
-                .width(372.dp)
+                .width(300.dp)
                 .height(125.dp)
                 .background(color = Color.Transparent),
             shape = RoundedCornerShape(20.dp),
@@ -192,7 +207,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = colorResource(id = R.color.bg_buttonPanggil),
+                        color = Color(0xFFBF002E),
                         shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -236,7 +251,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
         Button(
             onClick = { dialNumber("110") },
             modifier = Modifier
-                .width(372.dp)
+                .width(300.dp)
                 .height(125.dp)
                 .background(color = Color.Transparent),
             shape = RoundedCornerShape(20.dp),
@@ -246,7 +261,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = colorResource(id = R.color.bg_buttonPanggil),
+                        color = Color(0xFFBF002E),
                         shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -289,7 +304,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
         Button(
             onClick = { dialNumber("0341801829") },
             modifier = Modifier
-                .width(372.dp)
+                .width(300.dp)
                 .height(125.dp)
                 .background(color = Color.Transparent),
             shape = RoundedCornerShape(20.dp),
@@ -299,7 +314,7 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = colorResource(id = R.color.bg_buttonPanggil),
+                        color = Color(0xFFBF002E),
                         shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -500,8 +515,6 @@ fun panggilSigma2(navController: NavHostController, latitude: Float?, longitude:
                                 .offset(x = (-20).dp, y = 30.dp)
                         )
                     }
-
-
                 }
             }
         }
