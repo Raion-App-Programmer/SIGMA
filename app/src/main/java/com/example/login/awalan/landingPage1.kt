@@ -33,14 +33,9 @@ fun landingPage1(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
+                color = Color(0xFFBF002E)
                 )
             )
-    )
 
     Column(
         modifier = Modifier
