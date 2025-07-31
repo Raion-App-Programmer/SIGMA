@@ -1,10 +1,11 @@
 package com.example.login.daftar
 
-import com.example.login.AuthViewModel
+import androidx.compose.foundation.Image
 import com.example.login.R
 import com.example.login.Routes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -25,13 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -43,20 +40,15 @@ fun verificationTerisi(navController: NavController) {
     LaunchedEffect(Unit) {
         delay(800)
         navController.navigate(Routes.Login)
-   }
+    }
 
-    val font_grey= colorResource(id = R.color.font_grey)
+    val font_grey = Color(0xFF999999)
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
+                color = Color(0xFFF5F5F5)
             )
     ) {
         Column(
@@ -66,40 +58,46 @@ fun verificationTerisi(navController: NavController) {
             verticalArrangement = Arrangement.Center,
         ) {
             Text(text = "Hampir Sampai!",
-                fontSize = 20.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                textAlign = TextAlign.Start,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp)
             )
 
-            Spacer(modifier = Modifier
-                .height(15.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.send_otp_verification),
+                contentDescription = "Verification illustration",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(text = "Masukkan angka 4-digit yang dikirim melalui email",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.White,
-                textAlign = TextAlign.Start,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp)
             )
 
             Row (
                 modifier = Modifier
-                    .fillMaxWidth()
-
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ){
                 Text(text = "loremipsum@gmail.com",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = Color.Black,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
-                        .padding(start = 30.dp)
                 )
 
                 Spacer(modifier = Modifier
@@ -108,10 +106,9 @@ fun verificationTerisi(navController: NavController) {
                 Text(text = "untuk verifikasi",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
-                    color = Color.White,
+                    color = Color.Black,
                     textAlign = TextAlign.Start,
-
-                    )
+                )
             }
 
             Spacer(modifier = Modifier
@@ -119,28 +116,30 @@ fun verificationTerisi(navController: NavController) {
 
             Row (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ){
                 repeat(4) {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier
-                        .width(76.dp)
-                        .height(76.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(100.dp)
-                ){
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.dot),
-                            contentDescription = "icon edit",
-                        )
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFEAEAEA)),
+                        modifier = Modifier
+                            .width(76.dp)
+                            .height(76.dp)
+                            .border(2.dp, Color(0xFFC41532), RoundedCornerShape(10.dp)),
+                        shape = RoundedCornerShape(10.dp),
+                        elevation = CardDefaults.cardElevation(100.dp)
+                    ){
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.dot),
+                                contentDescription = "icon edit",
+                                tint = Color(0xFFC41532)
+                            )
+                        }
                     }
-                }
                     if (it < 3) Spacer(modifier = Modifier.width(15.dp))
                 }
             }
@@ -148,31 +147,31 @@ fun verificationTerisi(navController: NavController) {
             Spacer(modifier = Modifier
                 .height(40.dp))
 
-            Text(text = "Tidak menerima pesan apa pun? Kirim ulang",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Tidak menerima pesan apa pun? ",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Kirim ulang",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFFC41532),
+                    textAlign = TextAlign.Center
+                )
+            }
 
             Spacer(modifier = Modifier.
             height(5.dp))
-
-            Text(text = "Kirim ulang kode 00:30",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal,
-                color = font_grey,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-
         }
     }
 }
-
 
 
 

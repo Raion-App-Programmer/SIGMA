@@ -88,7 +88,6 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                 .align(Alignment.TopEnd),
         )
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
