@@ -19,7 +19,7 @@ import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.login.awalan.onBoarding
 import com.example.login.daftar.verificationTerisi
 import com.example.login.fitur_lapor.LaporanViewModel
-import com.example.login.fitur_panduan.p3
+import com.example.login.fitur_panduan.P3
 import com.example.login.fitur_profile.ubahProfile
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
@@ -31,7 +31,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import panduanGempa
+import PanduanGempa
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -53,7 +53,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
-            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
+//            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
+            NavHost(navController = navController, startDestination = Routes.Dashboard) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController)
                 }
@@ -130,10 +131,10 @@ class MainActivity : ComponentActivity() {
                     laporBerhasil(navController)
                 }
                 composable(Routes.P3) {
-                    p3(navController)
+                    P3(navController)
                 }
                 composable(Routes.PanduanGempa) {
-                    panduanGempa(navController)
+                    PanduanGempa(navController)
                 }
                 composable(
                     "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",

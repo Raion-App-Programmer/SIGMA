@@ -1,8 +1,6 @@
 package com.example.login.lapor
 
-import android.content.Context
 import android.net.Uri
-import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,10 +32,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,8 +50,18 @@ import com.example.login.R
 import com.example.login.Routes
 import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_lapor.buttomNavbarLapor
+import coil.compose.rememberAsyncImagePainter
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.SolidColor
 
-import com.example.login.lapor.getFileName
+
+
+
+
 
 //fun getFileName(context: Context, uri: Uri): String {
 //    var name = "IMG/VID Selected"
@@ -68,38 +74,38 @@ import com.example.login.lapor.getFileName
 //    return name
 //}
 
-
 @Composable
 fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewModel) {
 
-
-    var isUploading by remember { mutableStateOf(false) }
-    val dark_grey = colorResource(id = R.color.dark_grey)
-
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            laporanViewModel.buktiUri.value = it
-            laporanViewModel.selectedFileName.value = "Uploading..."
-            isUploading = true
+    val isUploading = remember { mutableStateOf(false) }
+    val uploadedUrls = laporanViewModel.buktiUrls
+    val dark_grey = colorResource(id = R.color.dark_grey)
+    val isFormValid = laporanViewModel.judul.value.isNotBlank() &&
+            laporanViewModel.deskripsi.value.isNotBlank()
 
-            uploadFileToCloudinary(
-                uri = it,
-                context = context,
-                onSuccess = { downloadUrl ->
-                    laporanViewModel.buktiUrl.value = downloadUrl
-//                    laporanViewModel.selectedFileName.value = getFileName(context, it)
-                    laporanViewModel.selectedFileName.value = getFileName(context, it) ?: "Unknown file"
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris: List<Uri> ->
+        if (uris.isNotEmpty()) {
+            isUploading.value = true
+//            uploadedUrls.clear()
 
-                    isUploading = false
-                    Log.d("Upload", "File uploaded successfully: $downloadUrl")
-                },
-                onFailure = { exception ->
-                    laporanViewModel.selectedFileName.value = "Upload Failed"
-                    isUploading = false
-                    Log.e("Upload", "Failed to upload file: ${exception.message}")
-                }
-            )
+            uris.forEach { uri ->
+                uploadFileToCloudinary(
+                    uri = uri,
+                    context = context,
+                    onSuccess = { downloadUrl ->
+                        uploadedUrls.add(downloadUrl)
+                        if (uploadedUrls.size == uris.size) {
+                            isUploading.value = false
+                            Log.d("Upload", "Semua file berhasil diunggah")
+                        }
+                    },
+                    onFailure = { exception ->
+                        Log.e("Upload", "Gagal mengunggah file: ${exception.message}")
+                        isUploading.value = false
+                    }
+                )
+            }
         }
     }
 
@@ -127,17 +133,62 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
 //        }
 //    }
 
+//    Button(
+//        onClick = { launcher.launch("image/*") },
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(56.dp)
+//            .padding(top = 10.dp)
+//            .background(color = Color.Transparent),
+//        shape = RoundedCornerShape(16.dp),
+//        contentPadding = PaddingValues()
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(
+//                    color = Color(0xFF616161),
+//                    shape = RoundedCornerShape(16.dp)
+//                ),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Row(
+//                modifier = Modifier
+//                    .align(alignment = Alignment.Center),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.CloudUpload,
+//                    contentDescription = "Unggah",
+//                    tint = Color.White,
+//                    modifier = Modifier
+//                        .height(24.dp)
+//                        .width(24.dp)
+//                )
+//                Spacer(modifier = Modifier.width(5.dp))
+//                Text(
+//                    text = laporanViewModel.selectedFileName.value,
+//                    fontSize = 14.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    color = Color.White
+//                )
+//            }
+//        }
+//    }
 
 
-    Box(
-        modifier = Modifier
-            .width(412.dp)
-            .height(917.dp)
-            .background(color = Color(0xFFF7EAEB))
-    ) {
+        Box(
+            modifier = Modifier
+                .width(412.dp)
+                .height(917.dp)
+                .background(color = Color(0xFFF7EAEB))
+//                .padding(bottom = 100.dp)
+        ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 120.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -146,14 +197,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                     .width(412.dp)
                     .height(119.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFFC41532),
-                                Color(0xFF431B3B)
-                            )
-                        )
-                    ),
+                    .background(Color(0xFFBF002E)),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -290,8 +334,34 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                     color = Color.Black
                 )
 
+                if (uploadedUrls.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        uploadedUrls.forEach { url ->
+                            Image(
+                                painter = rememberAsyncImagePainter(url),
+                                contentDescription = "Foto Bukti",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(180.dp)
+                                    .padding(horizontal = 8.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(18.dp),
+                                    )
+                                    .clip(RoundedCornerShape(18.dp))
+                            )
+                        }
+                    }
+                }
                 Button(
-                    onClick = { launcher.launch("*/*") },
+                    onClick = { launcher.launch("image/*") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
@@ -315,8 +385,8 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.CloudUpload,
-                                contentDescription = "Unggah",
+                                imageVector = if (uploadedUrls.isNotEmpty()) Icons.Filled.Add else Icons.Filled.CloudUpload,
+                                contentDescription = if (uploadedUrls.isNotEmpty()) "Tambah Unggahan" else "Unggah Media",
                                 tint = Color.White,
                                 modifier = Modifier
                                     .height(24.dp)
@@ -327,7 +397,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                                     .width(5.dp)
                             )
                             Text(
-                                text = laporanViewModel.selectedFileName.value,
+                                text = if (uploadedUrls.isNotEmpty()) "Tambah Unggahan" else "Unggah Media",
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -336,40 +406,37 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                     }
                 }
 
-
                 Spacer(
                     modifier = Modifier
-                        .height(154.dp)
+                        .height(20.dp)
                 )
-
-                Button(
-                    onClick = {
-                        if (laporanViewModel.judul.value.isBlank() || laporanViewModel.deskripsi.value.isBlank()) {
-                            Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
-                        } else {
-                            navController.navigate(Routes.LaporSigma3)
-                        }
-                    },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .background(color = Color.Transparent),
-                    shape = RoundedCornerShape(16.dp),
-                    contentPadding = PaddingValues()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            if (isFormValid)
+                                SolidColor(Color(0xFFBF002E))
+                            else
+                                SolidColor(Color.Gray)
+                        )
                 ) {
-                    Box(
+                    Button(
+                        onClick = {
+                            if (isFormValid) {
+                                navController.navigate(Routes.LaporSigma3)
+                            } else {
+                                Toast.makeText(context, "Harap lengkapi semua field", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.White
+                        ),
+                        elevation = null,
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFFC41532),
-                                        Color(0xFF431B3B)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "Selanjutnya",
@@ -379,10 +446,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                         )
                     }
                 }
-
-
             }
-
         }
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -394,7 +458,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
             ) {
-                // Bottom navigation bar background
                 Image(
                     painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                     contentDescription = "Dashboard navigation bottom",
@@ -403,7 +466,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                         .height(100.dp)
                         .offset(y = 10.dp)
                 )
-
                 // Row for navigation icons
                 Row(
                     modifier = Modifier
@@ -443,8 +505,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                                 }
                         )
                     }
-
-
                 }
             }
         }

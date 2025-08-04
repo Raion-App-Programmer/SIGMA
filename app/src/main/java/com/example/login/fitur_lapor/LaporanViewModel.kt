@@ -10,6 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.compose.runtime.mutableStateListOf
+
 
 data class Laporan(
     val nama: String,
@@ -17,7 +19,8 @@ data class Laporan(
     val waktu: String,
     val lokasi: String,
     val deskripsi: String,
-    val buktiUrl: String,
+//    val buktiUrl: String,
+    val buktiUrls: List<String>,
     val judul: String,
     val uid: String,
     val status: String
@@ -31,7 +34,8 @@ class LaporanViewModel : ViewModel() {
     var lokasi: MutableState<String> = mutableStateOf("")
 
     var deskripsi:  MutableState<String> = mutableStateOf("")
-    var buktiUrl:  MutableState<String> = mutableStateOf("")
+    var totalMediaCount by mutableStateOf(0)
+    val buktiUrls = mutableStateListOf<String>()
     var judul:  MutableState<String> = mutableStateOf("")
     var buktiUri : MutableState<Uri?> = mutableStateOf(null)
     var selectedFileName: MutableState<String> = mutableStateOf("Unggah Media")
@@ -55,7 +59,7 @@ class LaporanViewModel : ViewModel() {
             "lokasi" to lokasi.value,
             "judul" to judul.value,
             "deskripsi" to deskripsi.value,
-            "buktiUrl" to (buktiUrl.value.ifEmpty { "" }), // Pastikan tidak null
+            "buktiUrls" to buktiUrls.toList(),
             "uid" to uid.value,
             "status" to status.value
         )
@@ -67,7 +71,8 @@ class LaporanViewModel : ViewModel() {
         waktu.value = ""
         lokasi.value = ""
         deskripsi.value = ""
-        buktiUrl.value = ""
+//        buktiUrl.value = ""
+        buktiUrls.clear()
         judul.value = ""
         buktiUri.value = null
         selectedFileName.value = "Unggah Media"
