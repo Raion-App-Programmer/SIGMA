@@ -46,7 +46,9 @@ import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -289,18 +291,14 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
-                                var roles = "-"
-                                val valid = authViewModel.validateSignUpInputs(nama, email, kataSandi, konfirmKataSandi,roles)
+                                val valid = authViewModel.validateSignUpInputs(nama, email, kataSandi, konfirmKataSandi)
                                 if (valid){
                                     authViewModel.signUp(
                                         email = email,
                                         password = kataSandi,
                                         displayName = nama,
-                                        roles = "-",
                                         onSuccess = { userId ->
-
-                                            val roles = ""
-                                            writeUserToFirestore(userId, email, nama, roles) {
+                                            writeUserToFirestore(userId, email, nama) {
                                                 navController.navigate(Routes.SignUpBerhasil)
                                             }
                                         },
@@ -423,14 +421,12 @@ fun writeUserToFirestore(
     userId: String,
     email: String,
     displayName: String,
-    roles: String,
     onComplete: () -> Unit
 ) {
     val db = FirebaseFirestore.getInstance()
     val userMap = hashMapOf(
         "email" to email,
-        "displayName" to displayName,
-        "roles" to roles
+        "displayName" to displayName
     )
 
     db.collection("users")
