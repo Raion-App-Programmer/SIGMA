@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "523816405296",
+    "project_id": "sigma-19210",
+    "storage_bucket": "sigma-19210.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523816405296:android:5c772acf80c638296ea0f5",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
