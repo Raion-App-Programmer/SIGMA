@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.login.admin.DetailPengajuanScreen
+import com.example.login.admin.NewsConfirmationScreen
 import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.login.awalan.onBoarding
@@ -23,6 +25,7 @@ import com.example.login.fitur_panduan.P3
 import com.example.login.fitur_profile.ubahProfile
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
+//import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
 import com.example.login.lapor.laporSigma3
 import com.example.login.profile.UbahProfilViewModel
@@ -108,6 +111,17 @@ class MainActivity : ComponentActivity() {
                         Text("Error: Invalid news ID")
                     }
                 }
+                composable(
+                    "DetailPengajuan/{newsId}",
+                    arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val newsId = backStackEntry.arguments?.getString("newsId")
+                    if (!newsId.isNullOrBlank()) {
+                        DetailPengajuanScreen(newsId = newsId, navController = navController)
+                    }
+                }
+
+
                 composable(Routes.Profile) {
                     Profile(navController)
                 }
@@ -134,6 +148,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.PanduanGempa) {
                     PanduanGempa(navController)
+                }
+                composable(Routes.KonfirmasiBerita) {
+                    NewsConfirmationScreen(navController, NewsViewModel())
                 }
                 composable(
                     "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",

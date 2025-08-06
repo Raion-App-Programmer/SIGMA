@@ -25,6 +25,9 @@ object Routes {
     var PanduanGempa = "panduanGempa"
     var PanggilSigma1 = "panggilSigma1"
     var PanggilSigma2 = "panggilSigma2"
-    var KonfirmasiBerita = "konfirmasiBerita"
+    var KonfirmasiBerita = "KonfirmasiBerita"
+
+
+
 
 }
