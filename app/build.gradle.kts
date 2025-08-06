@@ -137,7 +137,7 @@ dependencies {
 
     implementation("com.cloudinary:kotlin-url-gen:1.7.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 }
 

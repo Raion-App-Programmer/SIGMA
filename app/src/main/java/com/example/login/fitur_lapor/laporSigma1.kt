@@ -1,4 +1,3 @@
-
 package com.example.login.lapor
 
 
@@ -35,14 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.login.R
 import com.example.login.Routes
 import com.example.login.fitur_lapor.LaporanViewModel
@@ -53,8 +50,11 @@ import com.example.login.fitur_lapor.buttomNavbarLapor
 fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel){
     var errorMessage by remember { mutableStateOf("") }
     val dark_grey = colorResource(id = R.color.dark_grey)
-
     val context = LocalContext.current
+    val isFormValid = laporanViewModel.nama.value.isNotBlank() &&
+            laporanViewModel.tanggal.value.isNotBlank() &&
+            laporanViewModel.waktu.value.isNotBlank() &&
+            laporanViewModel.lokasi.value.isNotBlank()
 
     Box(
         modifier = Modifier
@@ -73,14 +73,16 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     .width(412.dp)
                     .height(119.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFFC41532),
-                                Color(0xFF431B3B)
-                            )
-                        )
-                    ),
+//                    .background(
+//                        brush = Brush.horizontalGradient(
+//                            colors = listOf(
+//                                Color(0xFFC41532),
+//                                Color(0xFF431B3B)
+//                            )
+//                        )
+//                    )
+                    .background(Color(0xFFBF002E))
+                ,
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -98,6 +100,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                             .height(24.dp)
                             .clickable {
                                 navController.navigate(Routes.Dashboard)
+                                laporanViewModel.resetLaporan()
                             }
                     )
 
@@ -262,7 +265,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
 
                 Spacer(
                     modifier = Modifier
-                        .height(154.dp)
+                        .height(20.dp)
                 )
                 if (errorMessage.isNotEmpty()) {
                     Text(
@@ -273,35 +276,41 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                         modifier = Modifier.padding(top = 8.dp, start = 20.dp, end = 20.dp)
                     )
                 }
-                Button(
-                    onClick = {
-                        if (laporanViewModel.nama.value.isBlank() || laporanViewModel.tanggal.value.isBlank() || laporanViewModel.waktu.value.isBlank() || laporanViewModel.lokasi.value.isBlank()) {
-                            Toast.makeText(context, "Isi dengan benar ya", Toast.LENGTH_SHORT).show()
-
-                        } else {
-                            errorMessage = ""
-                            navController.navigate(Routes.LaporSigma2)
-                        }},
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .background(color = Color.Transparent),
-                    shape = RoundedCornerShape(16.dp),
-                    contentPadding = PaddingValues()
+                        .clip(RoundedCornerShape(16.dp))
+//                        .background(
+//                            if (isFormValid)
+//                                Brush.horizontalGradient(
+//                                    colors = listOf(Color(0xFFC41532), Color(0xFF431B3B))
+//                                )
+//                            else
+//                                SolidColor(Color.Gray)
+//                        )
+                        .background(
+                            if (isFormValid)
+                                SolidColor(Color(0xFFBF002E))
+                            else
+                                SolidColor(Color.Gray)
+                        )
                 ) {
-                    Box(
+                    Button(
+                        onClick = {
+                            if (isFormValid) {
+                                navController.navigate(Routes.LaporSigma2)
+                            } else {
+                                Toast.makeText(context, "Harap lengkapi semua field", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.White
+                        ),
+                        elevation = null,
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFFC41532),
-                                        Color(0xFF431B3B)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "Selanjutnya",
@@ -311,18 +320,8 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                         )
                     }
                 }
-
-
-
             }
-
         }
         buttomNavbarLapor(navController)
     }
 }
-
-
-
-
-
-
