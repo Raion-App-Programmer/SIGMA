@@ -1,4 +1,4 @@
-package com.example.login // Adjust based on your package
+package com.example.login
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await

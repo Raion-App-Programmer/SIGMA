@@ -6,7 +6,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.text.Layout
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -119,7 +118,6 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 )
                 .verticalScroll(rememberScrollState()) // This makes the Column scrollable
         ) {
-            // This Box now contains the top navigation bar and the pager/dots
             Box(modifier = Modifier.fillMaxWidth()) {
                 // NavBar Rectangle at the Top
                 Box(
@@ -753,6 +751,7 @@ fun MyPagerWithDots() {
         // Dot Indicator
         Row(
             horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             repeat(pageCount) { index ->

@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
-            NavHost(navController = navController, startDestination = Routes.OnBoarding) {
+            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController) 
                 }
@@ -148,7 +148,6 @@ class MainActivity : ComponentActivity() {
                     val cityName = backStackEntry.arguments?.getString("cityName")
                     val isUrban = backStackEntry.arguments?.getBoolean("isUrban") ?: false
 
-                    val navController = rememberNavController()
                     if (isUrban) {
                         panggilSigma1(navController, latitude, longitude, cityName)
                     } else {
