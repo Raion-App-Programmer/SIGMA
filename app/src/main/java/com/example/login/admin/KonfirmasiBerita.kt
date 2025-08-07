@@ -2,6 +2,7 @@ package com.example.login.admin
 
 import com.example.login.R
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.login.NewsViewModel
 import com.example.login.ui.theme.LoginTheme
+import com.google.firebase.auth.FirebaseAuth
 
 data class NewsItem(
     val id: String,
@@ -59,6 +61,10 @@ enum class NewsStatus(val label: String, val color: Color) {
 //    NewsItem("Sabtu, 8 Maret 2025", "Pohon Tumbang Jl. Veteran.", "Suki", NewsStatus.Rejected, "0"),
 //    NewsItem("Kamis, 6 Maret 2025", "Suhat Banjir Terus, Rek.", "Diandra", NewsStatus.Confirmed, "0")
 //)
+fun logoutUser(navController: NavController) {
+    FirebaseAuth.getInstance().signOut()
+    navController.navigate("loginMasuk")
+}
 
 @Composable
 fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewModel = viewModel()) {
@@ -70,14 +76,16 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
             date = it.tanggal,
             title = it.judul,
             author = it.nama,
-            status = when (it.status.lowercase()) {
-                "pending" -> NewsStatus.Pending
-                "rejected" -> NewsStatus.Rejected
-                "confirmed" -> NewsStatus.Confirmed
+            status = when (it.status) {
+                "Menunggu persetujuan" -> NewsStatus.Pending
+                "Ditolak" -> NewsStatus.Rejected
+                "Berhasil diunggah" -> NewsStatus.Confirmed
                 else -> NewsStatus.Pending
             },
             imageRes = it.buktiUrl
+
         )
+//        Log.d("status = ",it.status)
     }
     Scaffold(
         topBar = {
@@ -100,7 +108,7 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
                             .padding(end = 8.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = { logoutUser(navController)}) {
                             Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.White)
                         }
                     }

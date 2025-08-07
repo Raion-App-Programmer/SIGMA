@@ -1,6 +1,11 @@
 package com.example.login.profile
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,25 +22,50 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.login.ProfileViewModel
 import com.example.login.R
 import com.example.login.Routes
+import com.example.mytestsigma.ui.theme.getUserLocation
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun Profile(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
     val nama = viewModel.nama
     val email = viewModel.email
+    val context = LocalContext.current
+    val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+
+    fun logoutUser(navController: NavController) {
+        FirebaseAuth.getInstance().signOut()
+        navController.navigate("loginMasuk")
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadData()
@@ -231,7 +261,7 @@ fun Profile(navController: NavController, viewModel: ProfileViewModel = viewMode
 
             // Tombol Log Out
             Button(
-                onClick = { /* TODO: Implement logout logic */ },
+                onClick = { logoutUser(navController) },
                 modifier = Modifier
                     .padding(horizontal = 24.dp, vertical = 24.dp)
                     .fillMaxWidth()
@@ -243,38 +273,148 @@ fun Profile(navController: NavController, viewModel: ProfileViewModel = viewMode
             }
         } // Akhir dari Column yang bisa di-scroll
 
-        // Bottom Navigation Bar (Posisinya tetap di bawah)
+
+        // Bottom dashboard - Now correctly placed inside the root Box
         Box(
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         ) {
+            // Bottom navigation bar background
             Image(
-                painter = painterResource(id = R.drawable.butnav),
+                painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
                     .width(412.dp)
                     .height(100.dp)
+                    .offset(y = 10.dp)
+                    .pointerInput(Unit) {}
             )
+
+            // Row for navigation icons
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                    .height(82.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = CenterVertically
             ) {
-                Image(painter = painterResource(id = R.drawable.home_gray_png), "Home", Modifier.size(30.dp).clickable { navController.navigate("Dashboard") })
-                Image(painter = painterResource(id = R.drawable.note_gray), "Lapor", Modifier.size(30.dp).clickable { navController.navigate(Routes.LaporSigma1) })
-                Button(
-                    modifier = Modifier.size(65.dp).offset(y = (-30).dp),
-                    shape = CircleShape,
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
-                    onClick = { /* Navigasi Call */ }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .offset(
+                            y = (-15).dp, x = (-75).dp
+                        )
                 ) {
-                    Image(painter = painterResource(id = R.drawable.phone_call_white), "Call SIGMA", Modifier.size(30.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.home_gray_png),
+                        contentDescription = "Home button",
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = 15.dp, y = 25.dp)
+                            .clickable{
+                                navController.navigate("Dashboard")
+                            }
+                    )
                 }
-                Image(painter = painterResource(id = R.drawable.book_gray), "Berita", Modifier.size(30.dp).clickable { navController.navigate("BeritaTerkini") })
-                Image(painter = painterResource(id = R.drawable.user_circle_red), "Profile", Modifier.size(36.dp).clickable { navController.navigate(Routes.Profile) })
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .offset(y = (-25).dp, x = 10.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.note_gray),
+                        contentDescription = "Edit button",
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(y = 38.dp, x = (-41).dp)
+                            .clickable {
+                                navController.navigate("laporSigma1")
+                            }
+                    )
+
+                }
+
+                // Floating button for calls
+                Column(
+                    modifier = Modifier
+                        .offset(y = (-5).dp),
+                    Arrangement.Center
+                ) {
+                    Button(modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
+                        onClick = {
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // Permissions alsama ready granted, get the location
+                                getUserLocation(context, navController)
+                            } else {
+                                // Request both permissions
+                                permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                            }
+                        }
+                    ) {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.phone_call_white),
+                            contentDescription = "Call SIGMA",
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(40.dp),
+                            Alignment.Center
+                        )
+                    }
+
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .offset(y = (-15).dp, x = (-10).dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.book_gray),
+                        contentDescription = "Edit button",
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(y = 25.dp, x = 30.dp)
+                            .clickable {
+                                navController.navigate("BeritaTerkini") {
+                                }
+                            }
+                    )
+
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.user_circle_red),
+                        contentDescription = "Profile button",
+                        modifier = Modifier
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = (-20).dp, y = (30).dp)
+
+                    )
+
+                }
+
+
             }
         }
     }
