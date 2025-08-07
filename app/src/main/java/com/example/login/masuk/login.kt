@@ -1,11 +1,10 @@
-
-
 package com.example.login
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -82,60 +81,56 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
+                Color(0xFFF5F5F5)
             )
     )
     {
-        Column(
+        Image(
+            painter = painterResource(id = R.drawable.circle_daftar),
+            contentDescription = "Background decoration",
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-        ) {
+                .width(340.dp)
+                .height(259.dp)
+                .align(Alignment.TopEnd),
+        )
 
             Spacer(modifier = Modifier
                 .height(70.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.logo_sign_up),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(63.dp)
-                    .height(80.dp)
-            )
-
-            Spacer(modifier = Modifier
-                .height(40.dp))
-
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                modifier = Modifier
-                    .width(347.dp)
-                    .height(441.dp),
-                shape = RoundedCornerShape(30.dp),
-                elevation = CardDefaults.cardElevation(100.dp)
-            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Spacer(modifier = Modifier
+                        .height(240.dp))
                     Text(
-                        text = "Masuk",
+                        text = "Login",
+                        fontSize = 52.sp,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(top = 20.dp).padding(bottom = 15.dp)
+                        color = Color.Black
                     )
 
-                    Spacer(modifier = Modifier
-                        .height(30.dp))
+                    Text(
+                        text = "Masuk ke Akun Anda",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                    )
+
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                    // Illustration
+                    Image(
+                        painter = painterResource(id = R.drawable.ilustrasi_daftar),
+                        contentDescription = "Login illustration",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .offset(x = -50.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(37.dp))
 
                     OutlinedTextField(
                         value = email,
@@ -155,19 +150,19 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                             .padding(bottom = 7.dp)
                             .border(
                                 width = 2.dp,
-                                color = dark0_grey,
-                                shape = RoundedCornerShape(18.dp)
+                                color = Color(0xFFEAEAEA),
+                                shape = RoundedCornerShape(8.dp)
                             ),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(8.dp),
                         colors = outlinedTextFieldColors(
-                            containerColor = dark0_grey
+                            containerColor = Color(0xFFEAEAEA)
                         )
                     )
 
                     OutlinedTextField(
                         value = kataSandi,
                         onValueChange = { kataSandi = it },
-                        placeholder = { Text("kata Sandi ", color = dark_grey) },
+                        placeholder = { Text("Kata Sandi ", color = dark_grey) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Lock,
@@ -180,13 +175,13 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                             .padding(horizontal = 8.dp, vertical = 1.dp)
                             .border(
                                 width = 2.dp,
-                                color = dark0_grey,
-                                shape = RoundedCornerShape(18.dp)
+                                color = Color(0xFFEAEAEA),
+                                shape = RoundedCornerShape(8.dp)
                             ),
                         colors = outlinedTextFieldColors(
-                            containerColor = dark0_grey
+                            containerColor = Color(0xFFEAEAEA)
                         ),
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(8.dp),
                         visualTransformation = if (kataSandiVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
@@ -198,16 +193,6 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                             }
                         }
                     )
-                    Text(
-                        text = "Lupa kata sandi?",
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Right,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .padding(top = 5.dp)
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth()
-                    )
 
                     Spacer(modifier = Modifier
                         .height(20.dp))
@@ -217,25 +202,19 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                             authViewModel.login(email, kataSandi)
                              },
                         modifier = Modifier
-                            .padding(top = 50.dp)
+                            .padding(horizontal = 8.dp, vertical = 1.dp)
                             .fillMaxWidth()
                             .height(48.dp)
                             .background(color = Color.Transparent),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(8.dp),
                         contentPadding = PaddingValues()
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF431B3B),
-                                            Color(0xFFC41532)
-
-                                        )
-                                    ),
-                                    shape = RoundedCornerShape(16.dp)
+                                    color = Color(0xFFC41532),
+                                    shape = RoundedCornerShape(8.dp)
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
@@ -244,7 +223,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                     }
 
                     Spacer(modifier = Modifier
-                        .height(5.dp))
+                        .height(20.dp))
 
                     Row(
                         modifier = Modifier
@@ -254,25 +233,23 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
 
                     ) {
                         Text(
-                            text = "Belum punya akun? ",
+                            text = "Belum memiliki akun? ",
                             fontWeight = FontWeight.Normal,
                             fontSize = 12.sp
                         )
 
-                        ClickableText(
-                            text = AnnotatedString(" Daftar"),
-                            onClick = { navController.navigate(Routes.SignUp) },
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Normal,
-                                textDecoration = TextDecoration.Underline,
-                                color = Color.Black
-                            )
+                        Text(
+                            text = " Daftar",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFFC41532),
+                            modifier = Modifier.clickable {
+                                navController.navigate(Routes.SignUp)
+                            }
                         )
 
                     }
-                }
-            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()

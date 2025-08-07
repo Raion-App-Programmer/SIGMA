@@ -33,12 +33,7 @@ fun landingPage2(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
+                color = Color(0xFFBF002E)
             )
     )
     Column(
@@ -49,12 +44,12 @@ fun landingPage2(navController: NavController){
         verticalArrangement = Arrangement.Center
     ){
         Image(
-            painter = painterResource(id = R.drawable.logo_sigma_lengkap),
+            painter = painterResource(id = R.drawable.logo_sigma_putih),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .width(63.dp)
-                .height(80.dp),
+                .width(289.06.dp)
+                .height(125.dp),
         )
     }
 }

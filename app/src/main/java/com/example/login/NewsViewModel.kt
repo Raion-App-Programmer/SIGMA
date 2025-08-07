@@ -37,7 +37,10 @@ class NewsViewModel : ViewModel() {
                             tanggal = doc.getString("tanggal") ?: "",
                             judul =  doc.getString("judul") ?: "",
                             nama =  doc.getString("nama") ?: "",
-                            deskripsi =  doc.getString("deskripsi") ?: ""
+                            deskripsi =  doc.getString("deskripsi") ?: "",
+                            waktu = doc.getString("waktu") ?: "",
+                            uid = doc.getString("uid") ?: "",
+                            status = doc.getString("status") ?: "",
                         )
                     }
                     _newsList.value = newsItems
@@ -65,4 +68,18 @@ class NewsViewModel : ViewModel() {
                 _newsItem.value = null
             }
     }
+
+    fun updateStatus(laporanId: String, statusBaru: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("laporan")
+            .document(laporanId)
+            .update("status", statusBaru)
+            .addOnSuccessListener {
+                Log.d("NewsViewModel", "Status berhasil diupdate ke: $statusBaru")
+            }
+            .addOnFailureListener {
+                Log.e("NewsViewModel", "Gagal update status", it)
+            }
+    }
+
 }

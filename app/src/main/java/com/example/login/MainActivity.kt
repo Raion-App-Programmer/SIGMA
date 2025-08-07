@@ -1,7 +1,6 @@
 package com.example.login
 
 import BeritaDetail
-import Profile
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,24 +13,28 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.login.admin.DetailPengajuanScreen
+import com.example.login.admin.NewsConfirmationScreen
 import com.example.login.fitur_panduan.PanduanBanjir
 import com.example.login.fitur_panduan.PanduanKebakaran
 import com.example.login.awalan.onBoarding
 import com.example.login.daftar.verificationTerisi
 import com.example.login.fitur_lapor.LaporanViewModel
-import com.example.login.fitur_panduan.p3
-import com.example.login.fitur_profile.ubahProfile
+import com.example.login.fitur_panduan.P3
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
+//import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
 import com.example.login.lapor.laporSigma3
+import com.example.login.profile.UbahProfilViewModel
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import panduanGempa
-import com.example.login.profile.UbahProfilViewModel
+import PanduanGempa
+import com.example.login.profile.Profile
+import com.example.login.profile.ubahProfile
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -48,14 +51,14 @@ class MainActivity : ComponentActivity() {
         val db = Firebase.firestore
 
 
-
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
-            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
+//            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
+            NavHost(navController = navController, startDestination = Routes.Dashboard) {
                 composable(Routes.LandingPage1) {
-                    landingPage1(navController)
+                    landingPage1(navController) 
                 }
                 composable(Routes.LandingPage2) {
                     landingPage2(navController)
@@ -108,6 +111,17 @@ class MainActivity : ComponentActivity() {
                         Text("Error: Invalid news ID")
                     }
                 }
+                composable(
+                    "DetailPengajuan/{newsId}",
+                    arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val newsId = backStackEntry.arguments?.getString("newsId")
+                    if (!newsId.isNullOrBlank()) {
+                        DetailPengajuanScreen(newsId = newsId, navController = navController)
+                    }
+                }
+
+
                 composable(Routes.Profile) {
                     Profile(navController)
                 }
@@ -130,10 +144,13 @@ class MainActivity : ComponentActivity() {
                     laporBerhasil(navController)
                 }
                 composable(Routes.P3) {
-                    p3(navController)
+                    P3(navController)
                 }
                 composable(Routes.PanduanGempa) {
-                    panduanGempa(navController)
+                    PanduanGempa(navController)
+                }
+                composable(Routes.KonfirmasiBerita) {
+                    NewsConfirmationScreen(navController, NewsViewModel())
                 }
                 composable(
                     "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",
@@ -149,17 +166,13 @@ class MainActivity : ComponentActivity() {
                     val cityName = backStackEntry.arguments?.getString("cityName")
                     val isUrban = backStackEntry.arguments?.getBoolean("isUrban") ?: false
 
-                    val navController = rememberNavController()
                     if (isUrban) {
                         panggilSigma1(navController, latitude, longitude, cityName)
                     } else {
                         panggilSigma2(navController, latitude, longitude, cityName)
                     }
                 }
-
-
             }
         }
     }
-
 }

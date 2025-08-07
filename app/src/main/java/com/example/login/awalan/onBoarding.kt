@@ -42,14 +42,14 @@ fun onBoarding(navController: NavController) {
             .background(color = Color.White)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.elipsenew),
-            contentDescription = "Elipse circle",
-            modifier = Modifier.align(alignment = Alignment.TopStart).width(650.dp).height(469.dp).offset(y = (-86).dp)
+            painter = painterResource(id = R.drawable.logo_sigma_merah),
+            contentDescription = "Logo Sigma lengkap",
+            modifier = Modifier.width(295.5.dp).height(127.5.dp).align(Alignment.TopCenter).offset(y = 132.dp)
         )
         Image(
-            painter = painterResource(id = R.drawable.logo_sigma_lengkap),
+            painter = painterResource(id = R.drawable.ilustrasi_membantu),
             contentDescription = "Logo Sigma lengkap",
-            modifier = Modifier.width(295.5.dp).height(127.5.dp).align(Alignment.TopCenter).offset(y = 70.dp)
+            modifier = Modifier.width(419.dp).height(419.dp).align(Alignment.TopCenter).offset(y = 273.dp)
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -57,49 +57,40 @@ fun onBoarding(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Spacer(modifier = Modifier.height(340.dp))
-            Text(
-                text = "Selamat Datang, Rek!",
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
             Spacer(modifier = Modifier.height(15.dp))
             Text(
                 text = "Aplikasi darurat yang menyediakan akses cepat ke layanan darurat, panduan pertolongan pertama, dan notifikasi bencana untuk warga Malang.",
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Light,
-                modifier = Modifier.padding(horizontal = 43.dp)
+                modifier = Modifier.padding(horizontal = 43.dp).offset(y = 140.dp)
             )
             Spacer(modifier = Modifier.height(25.dp))
-            Image(
-                painter = painterResource(id = R.drawable.rectangle),
-                contentDescription = "",
-                modifier = Modifier.height(5.dp).width(141.dp)
-            )
             Spacer(modifier = Modifier.height(170.dp))
             Button(
                 onClick = { navController.navigate(Routes.SignUp)},
                 modifier = Modifier
                     .height(48.dp)
-                    .width(295.dp)
+                    .width(372.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues()
             ) {
                 Box(
-                    modifier = Modifier.fillMaxSize().background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFFC41532),
-                                Color(0xFF431B3B)
-                            )
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = Color(0xFFBF002E),
+                            shape = RoundedCornerShape(16.dp)
                         ),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Daftar", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(
+                        text = "Daftar",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -108,7 +99,7 @@ fun onBoarding(navController: NavController) {
                 modifier = Modifier
 
                     .height(48.dp)
-                    .width(295.dp)
+                    .width(372.dp)
                     .background(color = Color.Transparent),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues()
@@ -116,7 +107,7 @@ fun onBoarding(navController: NavController) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .border(2.dp, Color.DarkGray, RoundedCornerShape(16.dp))
+                        .border(2.dp, Color(0xFFC7C7C7), RoundedCornerShape(16.dp))
                         .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
