@@ -63,12 +63,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
 
-    val nameError by authViewModel.nameError.observeAsState()
-    val emailError by authViewModel.emailError.observeAsState()
-    val passwordError by authViewModel.passwordError.observeAsState()
-    val confirmPasswordError by authViewModel.confirmPasswordError.observeAsState()
-
-
 
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -161,13 +155,10 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                 color = dark0_grey,
                                 shape = RoundedCornerShape(18.dp)
                             ),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = outlinedTextFieldColors(
-                            containerColor = dark0_grey)
+                                shape = RoundedCornerShape(18.dp),
+                                colors = outlinedTextFieldColors(
+                                containerColor = dark0_grey)
                     )
-                    if (nameError != null) {
-                        Text(text = nameError ?: "", color = Color.Red, fontSize = 12.sp)
-                    }
 
                     OutlinedTextField(
                         value = email,
@@ -194,10 +185,6 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                         colors = outlinedTextFieldColors(
                             containerColor = dark0_grey)
                     )
-                    if (emailError != null) {
-                        Text(text = emailError ?: "", color = Color.Red, fontSize = 12.sp)
-                    }
-
 
                     OutlinedTextField(
                         value = kataSandi,
@@ -232,10 +219,15 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                             }
                         }
                     )
-                    if (passwordError != null) {
-                        Text(text = passwordError ?: "", color = Color.Red, fontSize = 12.sp)
-                    }
-
+                    Image(
+                        painter = painterResource(id = R.drawable.note_kata_sandi),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top =3.dp)
+                            .height(25.dp)
+                            .width(265.dp)
+                    )
 
                     OutlinedTextField(
                         value = konfirmKataSandi,
@@ -271,10 +263,6 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                             }
                         },
                     )
-                    if (confirmPasswordError != null) {
-                        Text(text = confirmPasswordError ?: "", color = Color.Red, fontSize = 12.sp)
-                    }
-
 
 
 
@@ -291,25 +279,22 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
-                                val valid = authViewModel.validateSignUpInputs(nama, email, kataSandi, konfirmKataSandi)
-                                if (valid){
-                                    authViewModel.signUp(
-                                        email = email,
-                                        password = kataSandi,
-                                        displayName = nama,
-                                        onSuccess = { userId ->
-                                            writeUserToFirestore(userId, email, nama) {
-                                                navController.navigate(Routes.SignUpBerhasil)
-                                            }
-                                        },
-                                        onFailure =  { errorMessage ->
-                                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                authViewModel.signUp(
+                                    email = email,
+                                    password = kataSandi,
+                                    displayName = nama,
+                                    onSuccess = { userId ->
+                                        writeUserToFirestore(userId, email, nama) {
+                                            navController.navigate(Routes.SignUpBerhasil)
                                         }
-                                    )
-                                    navController.navigate(Routes.Verification)
-                                }
+                                    },
+                                    onFailure =  { errorMessage ->
+                                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                )
+                                navController.navigate(Routes.Verification)
                             }
-                        },
+                            },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -359,8 +344,8 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                             )
                         )}
 
+                    }
                 }
-            }
 
             Column(
                 modifier = Modifier
@@ -413,9 +398,9 @@ fun SignUp(navController: NavController, authViewModel: AuthViewModel) {
                 }
             }
 
+            }
         }
     }
-}
 
 fun writeUserToFirestore(
     userId: String,

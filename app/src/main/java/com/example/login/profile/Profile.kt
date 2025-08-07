@@ -1,434 +1,281 @@
+package com.example.login.profile
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.login.NewsViewModel
+import com.example.login.ProfileViewModel
 import com.example.login.R
 import com.example.login.Routes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+fun Profile(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
+    val nama = viewModel.nama
+    val email = viewModel.email
 
-    val newsList by viewModel.newsList.collectAsState()
-    Log.d("ProfileDebug", "newsList size: ${newsList.size}")
-    newsList.forEach { item ->
-        Log.d("ProfileDebug", "News UID: ${item.uid}, Judul: ${item.judul}")
-    }
-
-    val currentUid = FirebaseAuth.getInstance().currentUser?.uid
-    val laporanSaya = newsList.filter { it.uid == currentUid }
-    Log.d("ProfileDebug", "Current UID: $currentUid")
-    Log.d("ProfileDebug", "lapporan: ${laporanSaya.size}")
-
-    var userName by remember { mutableStateOf("Loading...") }
-    var userEmail by remember { mutableStateOf("Loading...") }
-
-    // Ambil data user sekali ketika Composable dipasang
     LaunchedEffect(Unit) {
-        FirebaseAuth.getInstance().currentUser?.let { user ->
-            userName = user.displayName ?: "Nama tidak tersedia"
-            userEmail = user.email ?: "Email tidak tersedia"
-        }
+        viewModel.loadData()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val isEmailVerified = currentUser?.isEmailVerified ?: false
+        Log.d("ProfileScreen", "Current User Email Verified: $isEmailVerified")
     }
 
-    Box( // Use Box for overlapping effect
+    // Box utama untuk menumpuk konten yang bisa di-scroll dan navbar yang tetap.
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0XFFF7EAEB))
+            .background(Color(0XFFF5F5F5))
     ) {
-        // Head NavBar
-        Box(
+        // Column ini membungkus SEMUA konten yang ingin digulir (scrollable).
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(244.dp)
-                .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        listOf(
-                            Color(0XFFC41532),
-                            Color(0XFF431B3B)
-                        )
-                    )
-                ),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                // Beri padding di bagian bawah agar item terakhir (tombol logout) tidak tertutup navbar.
+                .padding(bottom = 110.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Profil",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.offset(y = (-50).dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.gear_settings),
-                contentDescription = "Gear Settings",
-                modifier = Modifier
-                    .size(24.dp)
-                    .offset(y = (-50).dp, x = 140.dp)
-//                    .clickable(
-//                        navController.navigate(Routes)
-//                   )
-            )
-        }
-
-        // White box (Overlapping)
-        Column( // Use Column for vertical layout within the Box
-            modifier = Modifier
-                .align(Alignment.TopCenter) // Align to top center
-                .padding(top = 150.dp) // Adjust top padding to overlap
-        ) {
+            // Box untuk Header Merah dan Kartu Profil yang tumpang tindih
             Box(
                 modifier = Modifier
-                    .width(371.dp)
-                    .height(149.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color.White)
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                contentAlignment = Alignment.TopCenter
             ) {
-                // Profile image and text inside the white box
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                // 1. Latar Belakang Header Merah (dengan sudut lengkung)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp) // Tinggi disesuaikan
+                        .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
+                        .background(color = Color(0xFFBF002E)),
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    Text(
-                        text = "$userName",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    Text(
-                        text = "$userEmail",
-                        fontSize = 14.sp,
-                        color = Color.Gray
-                    )
-                    Box (
+                    Row(
                         modifier = Modifier
-                            .padding(top = 8.dp)
-                            .background(Color(0XFF431B3B), shape = RoundedCornerShape(10.dp))
-                            .width(120.dp)
-                            .clickable {
-                                navController.navigate(Routes.UbahProfile)
-                            }
+                            .fillMaxWidth()
+                            .padding(top = 56.dp, start = 24.dp, end = 24.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        Spacer(modifier = Modifier.size(24.dp)) // Spacer untuk menyeimbangkan judul
                         Text(
-                            text = "Ubah Profil",
+                            text = "Profil",
                             fontSize = 20.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight(700),
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.gear_settings),
+                            contentDescription = "Gear Settings",
                             modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp)
+                                .size(24.dp)
+                                .clickable {
+                                    // Aksi klik untuk settings
+                                }
                         )
                     }
                 }
-            }
-            // Profile picture container
-            Box (
-                modifier = Modifier
-                    .offset(y = (-215).dp, x = 140.dp)
-                    .border(5.dp, color = Color.White, RoundedCornerShape(50.dp)),
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_picture_image),
-                    contentDescription = "Profile Picture",
-                    Modifier.size(100.dp)
-                )
-            }
 
-            Box(
-                modifier = Modifier
-                    .offset(y = (-80).dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White)
-                    .width(371.dp)
-                    .height(788.dp)
-
-            ) {
-                Column(
+                // 2. Kartu Putih untuk Informasi Profil
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .padding(top = 130.dp) // Jarak dari atas disesuaikan
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color.White)
                 ) {
-                    Text(
-                        "Lacak Laporanmu!",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
+                    Column(
                         modifier = Modifier
-                            .padding(top = 16.dp)
-                            .offset(x = 100.dp)
-                    )
-
-                    Column(modifier = Modifier.padding(top = 8.dp)) {
-
-                        laporanSaya.forEach { laporan ->
-                            val title = laporan.judul
-                            val date = laporan.tanggal
-                            val time = laporan.waktu
-                            val status = laporan.status
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(70.dp)
-                                    .clip(RectangleShape)
-                                    .background(Color.White)
-                                    .border(0.5.dp, Color.LightGray)
-                                    .padding(12.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(date, fontSize = 12.sp, color = Color.Gray)
-                                            Spacer(modifier = Modifier.width(4.dp))
-                                            Text(
-                                                time,
-                                                fontSize = 12.sp,
-                                                color = Color.White,
-                                                modifier = Modifier
-                                                    .background(Color(0xFF8D2A2A), RoundedCornerShape(8.dp))
-                                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                                            )
-                                        }
-                                    }
-
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        val statusColor = when (status) {
-                                            "Menunggu persetujuan" -> Color(0xFFFFC107)
-                                            "Berhasil diunggah" -> Color(0xFF4CAF50)
-                                            "Ditolak" -> Color(0xFFD32F2F)
-                                            else -> Color.Gray
-                                        }
-                                        Text(status, fontSize = 14.sp, color = Color.Gray)
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Box(
-                                            modifier = Modifier
-                                                .size(10.dp)
-                                                .background(statusColor, shape = CircleShape)
-                                        )
-                                    }
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(4.dp))
+                            .fillMaxWidth()
+                            .padding(top = 60.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = "Diandra Salim", // Menggunakan data statis sesuai gambar
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = "diandrasalim@gmail.com", // Menggunakan data statis sesuai gambar
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(
+                            onClick = { navController.navigate(Routes.UbahProfile) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(40.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC8102E))
+                        ) {
+                            Text("Ubah Profil", color = Color.White, fontSize = 14.sp)
                         }
                     }
                 }
 
-
+                // 3. Gambar Profil (di lapisan paling atas)
+                Box(
+                    modifier = Modifier
+                        .padding(top = 80.dp) // Jarak dari atas disesuaikan
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .border(4.dp, color = Color.White, CircleShape)
+                        .background(Color.Gray), // Fallback background
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile_picture_image),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
-        }
-        // Bottom dashboard
+
+            // Kartu untuk daftar Laporan
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.White)
+                    .padding(vertical = 16.dp)
+            ) {
+                Text(
+                    "Lacak Laporanmu!",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+
+                val reportItems = listOf(
+                    Triple("Tabrakan Ijen", "Sabtu, 8 Maret 2025", "11:13 WIB" to "Menunggu"),
+                    Triple("Suhat Banjir Terus, Rek.", "Kamis, 6 Maret 2025", "14:26 WIB" to "Disetujui"),
+                    Triple("Konslet Listrik", "Senin, 3 Februari 2025", "22:04 WIB" to "Ditolak"),
+                    Triple("Laka Lantas di Veteran", "Rabu, 22 Januari 2025", "08:34 WIB" to "Disetujui"),
+                    Triple("Pohon Jatuh, Hati-Hati", "Jumat, 17 Januari 2025", "17:26 WIB" to "Disetujui")
+                )
+
+                reportItems.forEachIndexed { index, (title, date, statusInfo) ->
+                    val (time, status) = statusInfo
+                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(date, fontSize = 12.sp, color = Color.Gray)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(time, fontSize = 12.sp, color = Color.DarkGray)
+                                }
+                            }
+
+                            // Status Badge
+                            val statusColor = when (status) {
+                                "Menunggu" -> Color(0xFFE0A800)
+                                "Disetujui" -> Color(0xFF28A745)
+                                "Ditolak" -> Color(0xFFC8102E)
+                                else -> Color.Gray
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50)) // Bentuk pil
+                                    .background(statusColor)
+                                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(text = status, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                            }
+                        }
+                        if (index < reportItems.lastIndex) {
+                            Divider(color = Color(0xFFF2F2F2), thickness = 1.dp)
+                        }
+                    }
+                }
+            }
+
+            // Tombol Log Out
+            Button(
+                onClick = { /* TODO: Implement logout logic */ },
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 24.dp)
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC8102E))
+            ) {
+                Text("Log Out", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+        } // Akhir dari Column yang bisa di-scroll
+
+        // Bottom Navigation Bar (Posisinya tetap di bawah)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            // Bottom navigation bar background
             Image(
-                painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
+                painter = painterResource(id = R.drawable.butnav),
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
                     .width(412.dp)
                     .height(100.dp)
-                    .offset(y = 10.dp)
             )
-
-            // Row for navigation icons
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(82.dp),
-                horizontalArrangement = Arrangement.Center,
+                    .align(Alignment.Center)
+                    .padding(bottom = 10.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .offset(
-                            y = (-15).dp, x = (-75).dp
-                        )
+                Image(painter = painterResource(id = R.drawable.home_gray_png), "Home", Modifier.size(30.dp).clickable { navController.navigate("Dashboard") })
+                Image(painter = painterResource(id = R.drawable.note_gray), "Lapor", Modifier.size(30.dp).clickable { navController.navigate(Routes.LaporSigma1) })
+                Button(
+                    modifier = Modifier.size(65.dp).offset(y = (-30).dp),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
+                    onClick = { /* Navigasi Call */ }
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.home_gray_png),
-                        contentDescription = "Home button",
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = 15.dp, y = 25.dp)
-                            .clickable { navController.navigate("Dashboard") }
-                    )
-                    androidx.compose.material3.Text(
-                        "Beranda",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        modifier = Modifier
-                            .offset(x = 15.dp, y = 25.dp)
-                    )
+                    Image(painter = painterResource(id = R.drawable.phone_call_white), "Call SIGMA", Modifier.size(30.dp))
                 }
-
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .offset(y = (-25).dp, x = 10.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.note_gray),
-                        contentDescription = "Edit button",
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 38.dp, x = (-41).dp)
-                            .clickable {
-                                navController.navigate(Routes.LaporSigma1)
-                            }
-                    )
-                    androidx.compose.material3.Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
-                        modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                    )
-                }
-
-                // Floating button for calls
-                Column(
-                    modifier = Modifier
-                        .offset(y = (-5).dp),
-                    Arrangement.Center
-                ) {
-                    Button(modifier = Modifier
-                        .width(60.dp)
-                        .height(60.dp),
-                        shape = CircleShape,
-                        contentPadding = PaddingValues(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
-                        onClick = {
-                            // taruh navigasi call disini
-                        }
-                    ) {
-
-                        Image(
-                            painter = painterResource(id = R.drawable.phone_call_white),
-                            contentDescription = "Call SIGMA",
-                            modifier = Modifier
-                                .width(34.dp)
-                                .height(33.dp)
-                                .offset(y = (-2).dp),
-                            Alignment.Center
-                        )
-                    }
-                    androidx.compose.material3.Text(
-                        text = "Darurat",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0XFF616161),
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .offset(x = 10.dp)
-                    )
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .offset(y = (-15).dp, x = (-10).dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.book_gray),
-                        contentDescription = "Edit button",
-                        modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 30.dp, x = 27.dp)
-                            .clickable {
-                                navController.navigate("BeritaTerkini") {
-                                    launchSingleTop = true
-                                }
-                            }
-                    )
-                    androidx.compose.material3.Text(
-                        "Berita",
-                        fontSize = 13.sp,
-                        color = Color(0xFF616161),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(y = 25.dp, x = 28.dp)
-                    )
-                }
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.user_circle_red),
-                        contentDescription = "Profile button",
-                        modifier = Modifier
-                            .width(36.dp)
-                            .height(36.dp)
-                            .offset(x = (-20).dp, y = (30.dp))
-                            .clickable {
-                                navController.navigate(Routes.Profile)
-                            }
-                    )
-                    androidx.compose.material3.Text(
-                        text = "Profil",
-                        color = Color(0xFFC35660),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(x = (-20).dp, y = 30.dp)
-                    )
-                }
-
-
+                Image(painter = painterResource(id = R.drawable.book_gray), "Berita", Modifier.size(30.dp).clickable { navController.navigate("BeritaTerkini") })
+                Image(painter = painterResource(id = R.drawable.user_circle_red), "Profile", Modifier.size(36.dp).clickable { navController.navigate(Routes.Profile) })
             }
         }
     }
 }
-
-//@Preview (showBackground = true)
-//@Composable
-//fun ProfilePreview() {
-//    val navController = NavController
-//    Profile(navController)
-//}
