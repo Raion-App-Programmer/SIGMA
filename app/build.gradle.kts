@@ -125,26 +125,18 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-//Youtube Player
+    //Youtube Player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-// Firebase Storage
+    // Firebase Storage
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
-//livedata
+    //livedata
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0") // Check for the latest stable version
-
-// This is the crucial one for .await() on Firebase Tasks
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0") // Check for the latest stable version
-
-// If you're using Compose, you should already have these, but ensure they are there
-// Check f the latest stable version
-
-
+    implementation("com.cloudinary:kotlin-url-gen:1.7.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }

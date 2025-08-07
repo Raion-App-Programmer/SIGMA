@@ -1,6 +1,7 @@
 package com.example.login
 
 import BeritaDetail
+import Profile
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import com.example.login.awalan.onBoarding
 import com.example.login.daftar.verificationTerisi
 import com.example.login.fitur_lapor.LaporanViewModel
 import com.example.login.fitur_panduan.p3
+import com.example.login.fitur_profile.ubahProfile
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
 import com.example.login.lapor.laporSigma2
@@ -30,8 +32,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import panduanGempa
 import com.example.login.profile.UbahProfilViewModel
-import com.example.login.profile.ubahProfile
-import com.example.login.profile.Profile
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
