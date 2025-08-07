@@ -33,7 +33,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import PanduanGempa
-import com.example.login.profile.Profile
+import Profile
+import com.example.login.dashboard.NotifikasiPage
 import com.example.login.profile.ubahProfile
 
 class MainActivity : ComponentActivity() {
@@ -151,6 +152,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.KonfirmasiBerita) {
                     NewsConfirmationScreen(navController, NewsViewModel())
+                }
+                composable(Routes.notifikasipage) {
+                    NotifikasiPage(navController)
                 }
                 composable(
                     "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",

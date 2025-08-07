@@ -162,6 +162,9 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                     .width(30.dp)
                                     .height(30.dp)
                                     .offset(x = 230.dp, y = 30.dp)
+                                    .clickable {
+                                        navController.navigate(Routes.notifikasipage)
+                                    }
                             )
                         }
 
