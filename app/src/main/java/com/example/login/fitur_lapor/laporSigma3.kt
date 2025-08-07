@@ -322,7 +322,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = "Pernyataan",
@@ -377,7 +377,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
                 Spacer(
                     modifier = Modifier
-                        .height(430.dp)
+                        .height(30.dp)
                 )
 
                 Button(
@@ -406,6 +406,6 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                 }
             }
         }
-        buttomNavbarLapor(navController)
+        buttomNavbarLapor(navController, context)
     }
 }

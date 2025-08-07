@@ -508,6 +508,6 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
                 }
             }
         }
-        buttomNavbarLapor(navController)
+            buttomNavbarLapor(navController, context)
     }
 }

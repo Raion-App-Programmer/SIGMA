@@ -131,10 +131,8 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
             }
             return@LaunchedEffect
         }
+        ubahProfilViewModel.loadProfileData(userId, context)
 
-        if (ubahProfilViewModel.nama.value.isEmpty()) {
-            ubahProfilViewModel.loadProfileData(userId, context)
-        }
     }
 
     if (showSuccessDialog) {

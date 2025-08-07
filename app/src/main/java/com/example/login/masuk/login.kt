@@ -102,8 +102,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                         .fillMaxSize()
                         .padding(25.dp),
                 ) {
-                    Spacer(modifier = Modifier
-                        .height(240.dp))
+
                     Text(
                         text = "Login",
                         fontSize = 52.sp,
@@ -118,7 +117,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                         color = Color.Black,
                     )
 
-                    Spacer(modifier = Modifier.height(50.dp))
+
 
                     // Illustration
                     Image(
@@ -130,7 +129,7 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
                             .offset(x = -50.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(37.dp))
+
 
                     OutlinedTextField(
                         value = email,

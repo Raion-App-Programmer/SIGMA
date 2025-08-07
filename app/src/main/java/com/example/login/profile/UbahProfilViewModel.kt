@@ -30,7 +30,6 @@ class UbahProfilViewModel : ViewModel() {
         return mapOf(
             "nama" to nama.value,
             "email" to email.value,
-            "kataSandi" to kataSandi.value,
             "nomorTelepon" to nomorTelepon.value,
             "alamat" to alamat.value,
             "buktiUrl" to buktiUrl.value
@@ -42,6 +41,7 @@ class UbahProfilViewModel : ViewModel() {
         db.collection("data profile").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
+                    Log.d("UbahProfilViewModel", "Dokumen ditemukan: ${document.data}")
                     nama.value = document.getString("nama") ?: ""
                     email.value = document.getString("email") ?: ""
                     nomorTelepon.value = document.getString("nomorTelepon") ?: ""
@@ -49,16 +49,12 @@ class UbahProfilViewModel : ViewModel() {
                     buktiUrl.value = document.getString("buktiUrl")
                 } else {
                     Log.d("UbahProfilViewModel", "No such document for user: $userId")
-                    nama.value = ""
-                    email.value = FirebaseAuth.getInstance().currentUser?.email ?: ""
-                    kataSandi.value = ""
-                    nomorTelepon.value = ""
-                    alamat.value = ""
-                    buktiUrl.value = null
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e("UbahProfilViewModel", "Error getting profile data: ", exception)
             }
+        Log.d("UbahProfilViewModel", "Data loaded: ${nama.value}, ${email.value}, ${nomorTelepon.value}, ${alamat.value}, ${buktiUrl.value}")
+
     }
 }

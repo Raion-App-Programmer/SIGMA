@@ -33,7 +33,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import PanduanGempa
-import com.example.login.profile.Profile
+import Profile
 import com.example.login.profile.ubahProfile
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
 //            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
-            NavHost(navController = navController, startDestination = Routes.Dashboard) {
+            NavHost(navController = navController, startDestination = Routes.LaporSigma3) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController) 
                 }

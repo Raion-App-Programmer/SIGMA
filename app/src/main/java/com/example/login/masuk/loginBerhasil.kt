@@ -77,12 +77,7 @@ fun loginBerhasil(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
+                Color(0xFFBF002E),
             )
     ) {
         Column(
