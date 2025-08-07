@@ -270,7 +270,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
 
 @Composable
 fun NewsCard(
-    imageUrl: String,
+    imageUrl: String?,
     date: String,
     title: String,
     author: String,
@@ -283,7 +283,7 @@ fun NewsCard(
             .height(180.dp)
             .padding(bottom = 16.dp)
             .clickable { onClick() },
-        contentAlignment = Alignment.Center// Makes it clickable
+        contentAlignment = Alignment.Center
     ) {
         // Background Image
         AsyncImage(
@@ -292,35 +292,25 @@ fun NewsCard(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(20.dp)),
+            placeholder = painterResource(id = R.drawable.no_image_available), // Gambar default saat loading
+            error = painterResource(id = R.drawable.no_image_available) // Gambar default saat gagal/error atau imageUrl kosong
         )
 
         // Semi-transparent Overlay
-        if (imageUrl.isNullOrEmpty()){
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .fillMaxSize()
-                    .background(
-                        Color(0x99BF002E),
-                    )
-            )
-        } else{
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                Color.Transparent,
-                                Color(0x99BF002E),
-                            )
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Transparent,
+                            Color(0x99BF002E),
                         )
                     )
-            )
-        }
-
+                )
+        )
 
         // Text & Button Overlay
         Column(
@@ -340,29 +330,42 @@ fun NewsCard(
             )
 
             // Title & Author
-            Column () {
-                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp, modifier = Modifier.padding(bottom = 10.dp))
+            Column {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
                 Row(horizontalArrangement = Arrangement.Start) {
-                    // Gunakan Coil untuk memuat gambar dari URI
-                    Box(modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                        .background(Color.Gray)
-                        .padding(1.dp)){
-                        val painter = painterResource(id = R.drawable.person_profil) // Gambar default jika belum ada
-
-                        Image(painter = painter,
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50.dp))
+                            .background(Color.Gray)
+                            .padding(1.dp)
+                    ) {
+                        val painter = painterResource(id = R.drawable.person_profil) // Gambar default profil
+                        Image(
+                            painter = painter,
                             contentDescription = "Profile Image",
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier
+                                .size(16.dp)
                                 .clip(RoundedCornerShape(50.dp)),
-                            contentScale = ContentScale.Crop)
+                            contentScale = ContentScale.Crop
+                        )
                     }
-                    Text(text = author, Modifier.padding(start = 5.dp), color = Color.White, fontSize = 12.sp)
+                    Text(
+                        text = author,
+                        modifier = Modifier.padding(start = 5.dp),
+                        color = Color.White,
+                        fontSize = 12.sp
+                    )
                 }
             }
-
         }
     }
 }
-
 fun requestCallPermission(activity: Context) {
     val REQUEST_CALL = 2
 

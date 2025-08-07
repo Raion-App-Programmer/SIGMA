@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.10.1"
 core = "12.1.0"
 firebaseBomVersion = "34.0.0"
 firebaseStorageKtx = "21.0.2"
