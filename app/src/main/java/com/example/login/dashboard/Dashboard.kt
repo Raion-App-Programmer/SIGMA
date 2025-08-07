@@ -657,10 +657,12 @@ fun NewsCard(
         AsyncImage(
             model = imageUrl,
             contentDescription = "News Image",
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(20.dp)),
+            placeholder = painterResource(id = R.drawable.no_image_available), // Gambar default saat loading
+            error = painterResource(id = R.drawable.no_image_available)
         )
 
         Box(
