@@ -32,24 +32,37 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import PanduanGempa
 import Profile
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.os.Build
+import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.example.login.dashboard.NotifikasiPage
 import com.example.login.lapor.laporSigma2
 import com.example.login.lapor.laporSigma3
 import com.example.login.profile.ubahProfile
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentChange
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private val authViewModel by viewModels<AuthViewModel>()
+
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Initialize Firebase BEFORE using auth
         FirebaseApp.initializeApp(this)
+        firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
         // Firebase Storage
         val db = Firebase.firestore
+        listenToStatusChange()
 
 
         enableEdgeToEdge()
@@ -180,5 +193,87 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun listenToStatusChange() {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            Log.w("DEBUG_LISTEN", "UID is null, cannot listen to laporan")
+            return
+        }
+
+        Log.d("DEBUG_LISTEN", "Start listening to laporan where uid = $uid")
+
+        firestore.collection("laporan")
+            .whereEqualTo("uid", uid)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.e("DEBUG_LISTEN", "Error while listening: ${e.message}")
+                    return@addSnapshotListener
+                }
+
+                if (snapshots == null) {
+                    Log.w("DEBUG_LISTEN", "Snapshot is null")
+                    return@addSnapshotListener
+                }
+
+                Log.d("DEBUG_LISTEN", "Snapshot size: ${snapshots.size()}")
+
+                for (change in snapshots.documentChanges) {
+                    Log.d("DEBUG_LISTEN", "Document change detected: ${change.type}")
+
+                    if (change.type == DocumentChange.Type.MODIFIED) {
+                        val docId = change.document.id
+                        val newStatus = change.document.getString("status")
+
+                        Log.d("DEBUG_LISTEN", "Doc ID: $docId, New Status: $newStatus")
+
+                        if (!newStatus.isNullOrEmpty()) {
+                            showNotification(
+                                "Status Diperbarui",
+                                "Status laporan Anda kini: $newStatus"
+                            )
+                            Log.d("DEBUG_LISTEN", "Notification triggered for status: $newStatus")
+                        } else {
+                            Log.w("DEBUG_LISTEN", "Status field is null or empty")
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun showNotification(title: String, message: String) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.logo_notif)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setAutoCancel(true)
+            .setVibrate(longArrayOf(1000, 1000))
+            .setOnlyAlertOnce(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Status Notifikasi",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }
