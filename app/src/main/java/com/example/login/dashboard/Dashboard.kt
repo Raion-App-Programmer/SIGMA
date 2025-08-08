@@ -41,6 +41,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +67,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.login.GeocodingViewModel
 import com.example.login.NewsViewModel
 import com.example.login.R
 import com.example.login.Routes
@@ -83,27 +85,44 @@ import java.io.IOException
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewModel()) {
+fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewModel(), geoViewModel: GeocodingViewModel = viewModel()) {
     val newsList by viewModel.newsList.collectAsState()
     val context = LocalContext.current
+
     val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
-            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
-            getUserLocation(context, navController)
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
+            permissions[Manifest.permission.CALL_PHONE] == true
+        ) {
+            Toast.makeText(context, "Izin lokasi & panggilan diberikan", Toast.LENGTH_SHORT).show()
+            geoViewModel.loadWeather() // ⬅ langsung load cuaca
         } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Izin lokasi diberikan", Toast.LENGTH_SHORT).show()
+            geoViewModel.loadWeather() // ⬅ langsung load cuaca
         } else {
             Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
-    var userLocation by remember { mutableStateOf("Loading...") }
-    var temperature by remember { mutableStateOf("Loading...") }
-    var weatherCondition by remember { mutableStateOf("Loading...") }
+
+    // Panggil permission & load cuaca saat pertama kali halaman dibuka
+    LaunchedEffect(Unit) {
+        if (ContextCompat.checkSelfPermission(context, locationPermission) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            geoViewModel.loadWeather()
+        } else {
+            permissionLauncher.launch(arrayOf(locationPermission, Manifest.permission.CALL_PHONE))
+        }
+    }
+
+    val userLocation = geoViewModel.cityName
+    val temperature = geoViewModel.temperature
+    val weatherCondition = geoViewModel.weatherCondition
     var userName by remember { mutableStateOf("Loading...") }
+
 
     userName = FirebaseAuth.getInstance().currentUser?.displayName ?: "Pengguna"
 
@@ -142,26 +161,27 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     ) {
                         // profile - notification on top
                         Row(
-                            modifier = Modifier
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(top = 40.dp, start = 30.dp, end = 30.dp)
+                                .align(alignment = Alignment.CenterHorizontally),
+                            Arrangement.SpaceBetween
                         ) {
 
                             Text(
                                 text = "Halo, $userName!",
-                                fontSize = 16.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
                                 modifier = Modifier
-                                    .offset(x = 35.dp, y = 40.dp)
                             )
-
 
                             Image(
                                 painter = painterResource(id = R.drawable.notifications),
                                 contentDescription = "Notifications",
                                 modifier = Modifier
-                                    .width(30.dp)
-                                    .height(30.dp)
-                                    .offset(x = 230.dp, y = 30.dp)
+                                    .width(24.dp)
+                                    .height(24.dp)
+                                    .align(alignment = Alignment.CenterVertically)
                                     .clickable {
                                         navController.navigate(Routes.notifikasipage)
                                     }
@@ -170,56 +190,57 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
 
                         // weather - location
                         Row(
-                            modifier = Modifier
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(top = 8.dp,start = 30.dp,end = 30.dp)
+                                .align(alignment = Alignment.CenterHorizontally),
+                            Arrangement.SpaceBetween
                         ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.cloud),
-                                contentDescription = "Weather",
-                                modifier = Modifier
-                                    .width(32.dp)
-                                    .height(89.dp)
-                                    .offset(x = 35.dp, y = 12.dp)
-                            )
-
-                            Column(
-                                modifier = Modifier
-                                    .offset(x = (-10).dp)
-                            ) {
-                                Text(
-                                    weatherCondition,
-                                    fontSize = 16.sp,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold,
+                            Row {
+                                Image(
+                                    painter = painterResource(id = R.drawable.cloud),
+                                    contentDescription = "Weather",
                                     modifier = Modifier
-                                        .offset(y = 40.dp, x = 52.dp)
+                                        .size(30.dp)
+
                                 )
-                                Text(
-                                    temperature, fontSize = 12.sp, color = Color.White,
-                                    modifier = Modifier.offset(y = 40.dp, x = 53.dp)
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterVertically)
+                                        .padding(start = 8.dp)
+                                ) {
+                                        Text(
+                                            weatherCondition,
+                                            fontSize = 12.sp,
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier
+                                        )
+                                        Text(
+                                            temperature, fontSize = 12.sp, color = Color.White,
+                                            modifier = Modifier
+                                        )
+                                }
                             }
 
                             Row(
-                                verticalAlignment = CenterVertically,
-                                modifier = Modifier
-                                    .offset(x = 73.dp, y = 40.dp)
-                                    .fillMaxWidth()
+                                modifier = Modifier.align(alignment = Alignment.CenterVertically)
+
                             ) {
                                 Text(
-                                    "N/A",
-                                    fontSize = 11.sp,
+                                    userLocation,
+                                    fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White,
-                                    modifier = Modifier.offset(x = 30.dp, y = 3.dp)
+                                    modifier = Modifier.align(alignment = Alignment.CenterVertically)
                                 )
 
                                 Image(
-                                    painter = painterResource(id = R.drawable.location_on),
+
+                                    painter = painterResource(id = R.drawable.location_white),
                                     contentDescription = "Location",
                                     modifier = Modifier
-                                        .size(30.dp)
-                                        .offset(x = 30.dp)
+                                        .size(12.dp)
+
                                 )
                             }
                         }
@@ -382,7 +403,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 10.dp)
                 ) {
-                    items(newsList) { newsItem ->
+                    items(newsList.filter { it.status == "Berhasil diunggah" }) { newsItem ->
                         NewsCard(
                             imageUrl = newsItem.buktiUrl,
                             date = newsItem.tanggal,

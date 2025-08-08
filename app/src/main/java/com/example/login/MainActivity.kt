@@ -24,8 +24,6 @@ import com.example.login.fitur_panduan.P3
 import com.example.login.lapor.laporBerhasil
 import com.example.login.lapor.laporSigma1
 //import com.example.login.lapor.laporSigma1
-import com.example.login.lapor.laporSigma2
-import com.example.login.lapor.laporSigma3
 import com.example.login.profile.UbahProfilViewModel
 import com.example.mytestsigma.ui.theme.Dashboard
 import com.google.firebase.Firebase
@@ -35,7 +33,8 @@ import com.google.firebase.firestore.firestore
 import PanduanGempa
 import Profile
 import com.example.login.dashboard.NotifikasiPage
-import Profile
+import com.example.login.lapor.laporSigma2
+import com.example.login.lapor.laporSigma3
 import com.example.login.profile.ubahProfile
 
 class MainActivity : ComponentActivity() {

@@ -106,7 +106,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                 .weight(1f)
                 .padding(horizontal = 16.dp)
                 .align(Alignment.CenterHorizontally)){
-                items(newsList) { newsItem ->
+                items(newsList.filter { it.status == "Berhasil diunggah" }) { newsItem ->
                     NewsCard(
                         imageUrl = newsItem.buktiUrl,
                         date = newsItem.tanggal,
