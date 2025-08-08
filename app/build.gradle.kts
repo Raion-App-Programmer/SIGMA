@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.play.services.location)
+    implementation(libs.androidx.tools.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

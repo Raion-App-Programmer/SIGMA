@@ -31,7 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val remoteView = RemoteViews("com.example.login", R.layout.notif)
         remoteView.setTextViewText(R.id.title, title)
         remoteView.setTextViewText(R.id.message, message)
-        remoteView.setImageViewResource(R.id.app_logo, R.drawable.logo_notif)
+//        remoteView.setImageViewResource(R.id.app_logo, R.drawable.logo_notif)
         return remoteView
     }
 
@@ -71,4 +71,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         builder.setColorized(true)
         notificationManager.notify(0, builder.build())
     }
+
 }
