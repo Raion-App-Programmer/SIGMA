@@ -1,8 +1,8 @@
 package com.example.login
 
-import android.content.Context // Import ini
-import android.util.Log // Import ini
-import android.widget.Toast // Import ini
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,25 +26,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext // Import ini
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth // Import ini
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 @Composable
 fun signUpBerhasil(navController: NavController) {
-    val context = LocalContext.current // Dapatkan Context untuk Toast
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         if (currentUser != null) {
-            // Kirim email verifikasi
             currentUser.sendEmailVerification()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -56,20 +55,19 @@ fun signUpBerhasil(navController: NavController) {
                     }
                 }
         } else {
-            // Ini bisa terjadi jika user tidak berhasil terdaftar atau logout terlalu cepat
             Log.e("SignUpSuccess", "CurrentUser is null setelah pendaftaran berhasil.")
             Toast.makeText(context, "Terjadi kesalahan saat pendaftaran. Silakan coba lagi.", Toast.LENGTH_LONG).show()
         }
 
-        delay(1500) // Tunggu 1.5 detik
-        navController.navigate(Routes.Login) // Lalu navigasi ke halaman Login
+        delay(1500)
+        navController.navigate(Routes.Login)
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Color(0xFFBF002E),
+                    color = Color(0xFFBF002E)
             )
     ) {
         Column(
@@ -101,7 +99,8 @@ fun signUpBerhasil(navController: NavController) {
                             .width(360.dp)
                             .padding(top = 35.dp)
                     )
-                    Text(text = "Pendaftaran Berhasil!", // Mengubah teks
+                    Text(
+                        text = "Pendaftaran Berhasil!",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -109,7 +108,8 @@ fun signUpBerhasil(navController: NavController) {
                             .fillMaxWidth()
                             .padding(top = 35.dp)
                     )
-                    Text(text = "Email verifikasi telah dikirim. Tunggu sebentar...", // Mengubah teks
+                    Text(
+                        text = "Email verifikasi telah dikirim. Tunggu sebentar...",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Light,
                         textAlign = TextAlign.Center,
