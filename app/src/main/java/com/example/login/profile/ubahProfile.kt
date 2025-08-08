@@ -3,6 +3,8 @@ package com.example.login.profile
 import alertUbahData
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -73,27 +75,87 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
+import java.io.File
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.login.lapor.getFileName
 import kotlinx.coroutines.tasks.await
 
 // Pastikan UbahProfilViewModel ada di package ini: com.example.login.profile
 import com.example.login.profile.UbahProfilViewModel
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import java.io.IOException
 
 // --- Firestore and Storage Utility Functions ---
-fun uploadDataToFirebaseStorage(uri: Uri, context: Context, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
-    val storageRef = FirebaseStorage.getInstance().reference
-    val fileRef = storageRef.child("profiles/${FirebaseAuth.getInstance().currentUser?.uid}.jpg")
+fun uploadFileToCloudinary(
+    uri: Uri,
+    context: Context,
+    onSuccess: (String) -> Unit,
+    onFailure: (Exception) -> Unit
+) {
+    val contentResolver = context.contentResolver
+    val inputStream = contentResolver.openInputStream(uri)
+    val fileName = getFileName(context, uri) ?: "upload"
 
-    fileRef.putFile(uri)
-        .addOnSuccessListener {
-            fileRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                onSuccess(downloadUri.toString())
+    val bytes = inputStream?.readBytes()
+    if (bytes == null) {
+        onFailure(Exception("Gagal membaca file"))
+        return
+    }
+
+    val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+
+    val multipartBody = MultipartBody.Builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart("file", fileName, requestBody)
+        .addFormDataPart("upload_preset", "sigmaRaion")
+        .build()
+
+    val request = Request.Builder()
+        .url("https://api.cloudinary.com/v1_1/dydoectss/image/upload")
+        .post(multipartBody)
+        .build()
+
+    val client = OkHttpClient()
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Handler(Looper.getMainLooper()).post {
+                onFailure(e)
             }
         }
-        .addOnFailureListener { exception ->
-            onFailure(exception)
+
+        override fun onResponse(call: Call, response: Response) {
+            if (!response.isSuccessful) {
+                Handler(Looper.getMainLooper()).post {
+                    onFailure(Exception("Upload gagal: ${response.message}"))
+                }
+            } else {
+                val responseBody = response.body?.string()
+                val json = JSONObject(responseBody ?: "{}")
+                val url = json.optString("secure_url")
+                if (url.isNotEmpty()) {
+                    Handler(Looper.getMainLooper()).post {
+                        onSuccess(url)
+                    }
+                } else {
+                    Handler(Looper.getMainLooper()).post {
+                        onFailure(Exception("URL upload tidak ditemukan"))
+                    }
+                }
+            }
         }
+    })
 }
 
 fun saveUbahProfileToFirestore(userId: String, ubahProfile: Map<String, Any?>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
@@ -222,16 +284,15 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
 
             // Jika ada gambar baru yang dipilih, upload dulu
             if (selectedImageUri != null) {
-                uploadDataToFirebaseStorage(
+                uploadFileToCloudinary(
                     uri = selectedImageUri!!,
                     context = context,
-                    onSuccess = { downloadUrl ->
-                        Log.d("AuthFlow", "Upload foto berhasil. URL: $downloadUrl")
-                        ubahProfilViewModel.buktiUrl.value = downloadUrl // Update ViewModel dengan URL final
+                    onSuccess = { secureUrl ->
+                        ubahProfilViewModel.buktiUrl.value = secureUrl
+                        Log.d("BUKTI_URLS", "Isi buktiUrls: ${ubahProfilViewModel.buktiUrl.value}")
                         saveUbahProfileToFirestore(userId!!, ubahProfilViewModel.toMap(), onFirestoreSuccess, onFirestoreFailure)
                     },
                     onFailure = { e ->
-                        Log.e("AuthFlow", "Gagal upload foto: ${e.message}", e)
                         Toast.makeText(context, "Gagal upload foto: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 )

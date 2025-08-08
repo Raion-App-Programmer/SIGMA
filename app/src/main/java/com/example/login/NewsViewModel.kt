@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.login.profile.ProfileItem
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -81,5 +82,8 @@ class NewsViewModel : ViewModel() {
                 Log.e("NewsViewModel", "Gagal update status", it)
             }
     }
+
+
+
 
 }

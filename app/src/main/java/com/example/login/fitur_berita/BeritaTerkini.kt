@@ -60,8 +60,11 @@ import com.example.mytestsigma.ui.theme.getUserLocation
 
 
 @Composable
-fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel(), profileViewModel: ProfileViewModel = viewModel()) {
     val newsList by viewModel.newsList.collectAsState()
+    val profileList by profileViewModel.profileList.collectAsState()
+
+
     val context = LocalContext.current
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -75,6 +78,18 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
             Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
+
+    val combinedList = newsList
+        .filter { it.status == "Berhasil diunggah" }
+        .map { news ->
+            val profile = profileList.find { it.id == news.uid }
+            Triple(
+                news,
+                profile?.nama ?: news.nama,
+                profile?.buktiUrl // kalau tidak ada cocokannya otomatis null
+            )
+        }
+
 
 
     Box(modifier = Modifier
@@ -102,22 +117,24 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            LazyColumn (modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp)
-                .align(Alignment.CenterHorizontally)){
-                items(newsList.filter { it.status == "Berhasil diunggah" }) { newsItem ->
+            // Gabungkan data
+
+
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(combinedList) { (news, authorName, profileUrl) ->
                     NewsCard(
-                        imageUrl = newsItem.buktiUrl,
-                        date = newsItem.tanggal,
-                        title = newsItem.judul,
-                        author = newsItem.nama,
-                        onClick = {
-                            Log.d("Navigation", "Navigating to detail with ID: ${newsItem.id}")
-                            navController.navigate("BeritaDetail/${newsItem.id}")
-                        }
-                    )
-                    Log.d("newsitem.imageurl", newsItem.buktiUrl)
+                        imageUrl = news.buktiUrl, // ini gambar berita
+                        date = news.tanggal,
+                        title = news.judul,
+                        author = authorName,
+                        profileUrl = profileUrl
+                    ) {
+                        navController.navigate("BeritaDetail/${news.id}")
+                    }
                 }
             }
 
@@ -274,6 +291,7 @@ fun NewsCard(
     date: String,
     title: String,
     author: String,
+    profileUrl: String?,
     onClick: () -> Unit,
 ) {
     Box(
@@ -339,22 +357,32 @@ fun NewsCard(
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
                 Row(horizontalArrangement = Arrangement.Start) {
-                    Box(
+                    AsyncImage(
+                        model = profileUrl,
+                        contentDescription = "Profile Image",
                         modifier = Modifier
-                            .clip(RoundedCornerShape(50.dp))
-                            .background(Color.Gray)
-                            .padding(1.dp)
-                    ) {
-                        val painter = painterResource(id = R.drawable.person_profil) // Gambar default profil
-                        Image(
-                            painter = painter,
-                            contentDescription = "Profile Image",
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(RoundedCornerShape(50.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
+                            .size(20.dp)
+                            .clip(CircleShape),
+                        placeholder = painterResource(id = R.drawable.person_profil),
+                        error = painterResource(id = R.drawable.person_profil),
+                        contentScale = ContentScale.Crop
+                    )
+//                    Box(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(50.dp))
+//                            .background(Color.Gray)
+//                            .padding(1.dp)
+//                    ) {
+//                        val painter = painterResource(id = R.drawable.person_profil) // Gambar default profil
+//                        Image(
+//                            painter = painter,
+//                            contentDescription = "Profile Image",
+//                            modifier = Modifier
+//                                .size(16.dp)
+//                                .clip(RoundedCornerShape(50.dp)),
+//                            contentScale = ContentScale.Crop
+//                        )
+//                    }
                     Text(
                         text = author,
                         modifier = Modifier.padding(start = 5.dp),

@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,14 +40,17 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.login.NewsViewModel
+import com.example.login.ProfileViewModel
 import com.example.login.R
 import com.example.login.Routes
 import com.example.mytestsigma.ui.theme.getUserLocation
 import com.google.firebase.auth.FirebaseAuth
+import org.jetbrains.annotations.Async
 
 @Composable
-fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel(), profileViewModel: ProfileViewModel = viewModel()) {
 
     val context = LocalContext.current
     val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
@@ -63,20 +67,20 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
             Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
-    // --- DATA LOGIC (UNCHANGED) ---
+    // Ambil data dari StateFlow
+    val nama by profileViewModel.nama.collectAsState()
+    val email by profileViewModel.email.collectAsState()
+    val buktiUrl by profileViewModel.buktiUrl.collectAsState()
+
+    // Load data profil sekali saat pertama kali composable muncul
+    LaunchedEffect(Unit) {
+        profileViewModel.loadData()
+    }
+
+    // --- DATA LAPORAN ---
     val newsList by viewModel.newsList.collectAsState()
     val currentUid = FirebaseAuth.getInstance().currentUser?.uid
     val laporanSaya = newsList.filter { it.uid == currentUid }
-
-    var userName by remember { mutableStateOf("Loading...") }
-    var userEmail by remember { mutableStateOf("Loading...") }
-
-    LaunchedEffect(Unit) {
-        FirebaseAuth.getInstance().currentUser?.let { user ->
-            userName = user.displayName ?: "Diandra Salim" // Placeholder for visual preview
-            userEmail = user.email ?: "diandrasalim@gmail.com" // Placeholder for visual preview
-        }
-    }
 
     // --- UI STRUCTURE ---
     Box(
@@ -149,14 +153,14 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = userName,
+                            text = nama,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = userEmail,
+                            text = email,
                             fontSize = 14.sp,
                             color = Color.Gray
                         )
@@ -178,14 +182,18 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                         }
                     }
                     // Profile Picture, drawn on top of the Column
-                    Image(
-                        painter = painterResource(id = R.drawable.profile_picture_image),
+                    AsyncImage(
+                        model = buktiUrl,
                         contentDescription = "Profile Picture",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
-                            .border(4.dp, Color.White, CircleShape)
+                            .border(4.dp, Color.White, CircleShape),
+                        placeholder = painterResource(id = R.drawable.profil_icon), // Gambar default saat loading
+                        error = painterResource(id = R.drawable.profil_icon)
                     )
+                    Log.d("Url Photo :", buktiUrl)
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
