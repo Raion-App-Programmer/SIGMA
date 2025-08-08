@@ -150,7 +150,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             )
                         )
                         .fillMaxWidth()
-                        .height(120.dp)
+                        .height(130.dp)
                         .background(
                             Color(0xFFBF002E),
                         ),
@@ -162,7 +162,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         // profile - notification on top
                         Row(
                             modifier = Modifier.fillMaxWidth()
-                                .padding(top = 40.dp, start = 30.dp, end = 30.dp)
+                                .padding(top = 50.dp, start = 30.dp, end = 30.dp)
                                 .align(alignment = Alignment.CenterHorizontally),
                             Arrangement.SpaceBetween
                         ) {
@@ -280,12 +280,12 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         Image(painter = painterResource(R.drawable.banjir),
                             contentDescription = "Banjir darurat button", modifier = Modifier
                                 .clickable { navController.navigate(Routes.PanduanBanjir) }
-                                .width(70.dp)
-                                .height(80.dp)
+                                .width(60.dp)
+                                .height(60.dp)
                         )
                         Text(
                             "Banjir",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
                             modifier = Modifier.padding(top = 6.dp)
@@ -301,12 +301,12 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             painter = painterResource(R.drawable.kebakaran),
                             contentDescription = "Kebakaran darurat button", modifier = Modifier
                                 .clickable { navController.navigate("PanduanKebakaran") }
-                                .width(70.dp)
-                                .height(80.dp)
+                                .width(60.dp)
+                                .height(60.dp)
                         )
                         Text(
                             "Kebakaran",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
                             modifier = Modifier
@@ -321,14 +321,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     ) {
                         Image(painter = painterResource(id = R.drawable.gempa),
                             contentDescription = "Gempa darurat png", modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp)
+                                .width(60.dp)
+                                .height(60.dp)
                                 .clickable{
                                     navController.navigate("panduanGempa")
                                 })
                         Text(
                             "Gempa",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
                             modifier = Modifier.padding(top = 6.dp)
@@ -344,14 +344,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             painter = painterResource(id = R.drawable.p3k),
                             contentDescription = "P3K darurat",
                             modifier = Modifier
-                                .width(70.dp)
-                                .height(80.dp)
+                                .width(60.dp)
+                                .height(60.dp)
                                 .clickable { navController.navigate("p3")
                                 }
                         )
                         Text(
                             "P3K",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
                             modifier = Modifier.padding(top = 6.dp)
@@ -740,7 +740,7 @@ fun MyPagerWithDots() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding( top = 136.dp),
+            .padding( top = 150.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Pager (Scrollable)

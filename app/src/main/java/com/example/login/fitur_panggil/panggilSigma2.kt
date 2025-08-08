@@ -31,10 +31,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -52,8 +52,9 @@ import com.example.login.Routes.Profile
 import com.example.mytestsigma.ui.theme.getUserLocation
 
 @Composable
-fun panggilSigma2(navController: NavController, latitude: Float?, longitude: Float?, cityName: String?) {
+fun panggilSigma2(navController: NavController, geoViewModel: GeocodingViewModel) {
     val backgroundColor = colorResource(id = R.color.bg_panggilsigma)
+    val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
     val context = LocalContext.current
     fun dialNumber(number: String) {
         val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -73,6 +74,17 @@ fun panggilSigma2(navController: NavController, latitude: Float?, longitude: Flo
             Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
+
+    LaunchedEffect(Unit) {
+        if (ContextCompat.checkSelfPermission(context, locationPermission) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            geoViewModel.loadWeather()
+        } else {
+            permissionLauncher.launch(arrayOf(locationPermission, Manifest.permission.CALL_PHONE))
+        }
+    }
+    val userLocation = geoViewModel.cityName
 
     Box(
         modifier = Modifier
@@ -127,7 +139,7 @@ fun panggilSigma2(navController: NavController, latitude: Float?, longitude: Flo
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = cityName ?: "Lokasi Tidak Diketahui",
+                        text = userLocation ?: "Lokasi Tidak Diketahui",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center

@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
+            val geoViewModel: GeocodingViewModel = viewModel()
 //            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
             NavHost(navController = navController, startDestination = Routes.Dashboard) {
                 composable(Routes.LandingPage1) {
@@ -164,7 +165,8 @@ class MainActivity : ComponentActivity() {
                         navArgument("cityName") { type = NavType.StringType },
                         navArgument("isUrban") { type = NavType.BoolType }
                     )
-                ) { backStackEntry ->
+                ) {
+                    backStackEntry ->
                     val latitude = backStackEntry.arguments?.getFloat("latitude")
                     val longitude = backStackEntry.arguments?.getFloat("longitude")
                     val cityName = backStackEntry.arguments?.getString("cityName")
@@ -173,7 +175,7 @@ class MainActivity : ComponentActivity() {
                     if (isUrban) {
                         panggilSigma1(navController, latitude, longitude, cityName)
                     } else {
-                        panggilSigma2(navController, latitude, longitude, cityName)
+                        panggilSigma2(navController, geoViewModel)
                     }
                 }
             }
