@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,7 @@ data class PointWithBullets(
 
 @Composable
 fun PanduanGempa(navController: NavController) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +51,7 @@ fun PanduanGempa(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-                .height(120.dp)
+                .height(130.dp)
                 .align(Alignment.TopCenter)
                 .background(Color(0xFFBF002E))
         ) {
@@ -182,7 +184,7 @@ fun PanduanGempa(navController: NavController) {
                 )
             }
         }
-        buttomNavbarPanduan(navController)
+        buttomNavbarPanduan(navController,context)
     }
 }
 @Composable

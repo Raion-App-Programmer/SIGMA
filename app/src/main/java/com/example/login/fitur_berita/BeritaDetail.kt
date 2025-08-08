@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,6 +59,8 @@ import com.example.login.NewsViewModel
 import com.example.login.R
 import com.example.login.Routes
 import com.example.mytestsigma.ui.theme.getUserLocation
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 
 @Composable
 fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navController: NavController) {
@@ -109,15 +112,39 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
 
-                AsyncImage(
-                    model = newsItem!!.buktiUrl,
-                    contentDescription = "News Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                )
+                val imageUrls = newsItem?.buktiUrls ?: newsItem?.buktiUrl?.let { listOf(it) } ?: emptyList()
+
+                if (imageUrls.isNotEmpty()) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(imageUrls) { url ->
+                            AsyncImage(
+                                model = url,
+                                contentDescription = "Gambar Bukti",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(width = 250.dp, height = 200.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                } else {
+                    AsyncImage(
+                        model = newsItem!!.buktiUrl,
+                        contentDescription = "News Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(220.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+
+
+                Log.d("List",newsItem!!.buktiUrl)
 
                 Spacer(modifier = Modifier.height(12.dp))
 

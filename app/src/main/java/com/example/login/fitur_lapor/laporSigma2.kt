@@ -195,7 +195,7 @@ fun laporSigma2(navController : NavController, laporanViewModel: LaporanViewMode
             Box(
                 modifier = Modifier
                     .width(412.dp)
-                    .height(119.dp)
+                    .height(130.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
                     .background(Color(0xFFBF002E)),
                 contentAlignment = Alignment.Center

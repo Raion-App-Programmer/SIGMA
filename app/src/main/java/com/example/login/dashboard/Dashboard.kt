@@ -87,6 +87,7 @@ import java.io.IOException
 @Composable
 fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewModel(), geoViewModel: GeocodingViewModel = viewModel()) {
     val newsList by viewModel.newsList.collectAsState()
+
     val context = LocalContext.current
 
     val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
@@ -398,27 +399,48 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     }
                 }
 
+
+
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 10.dp)
                 ) {
                     items(newsList.filter { it.status == "Berhasil diunggah" }) { newsItem ->
-                        NewsCard(
-                            imageUrl = newsItem.buktiUrl,
-                            date = newsItem.tanggal,
-                            title = newsItem.judul,
-                            author = newsItem.nama,
-                            onClick = {
-                                navController.navigate("BeritaDetail/${newsItem.id}")
-                            },
-                            modifier = Modifier
-                                .width(160.dp)
-                                .height(240.dp)
-                                .wrapContentSize(Alignment.Center)
+                        val imageUrls = newsItem?.buktiUrls ?: newsItem?.buktiUrl?.let { listOf(it) } ?: emptyList()
+                        if(imageUrls.isNotEmpty()){
+                            NewsCard(
+                                imageUrl = newsItem.buktiUrls[0],
+                                date = newsItem.tanggal,
+                                title = newsItem.judul,
+                                author = newsItem.nama,
+                                onClick = {
+                                    navController.navigate("BeritaDetail/${newsItem.id}")
+                                },
+                                modifier = Modifier
+                                    .width(160.dp)
+                                    .height(240.dp)
+                                    .wrapContentSize(Alignment.Center)
 
-                        )
-                        Log.d("newsitem.imageurl", newsItem.buktiUrl)
+                            )
+                            Log.d("newsitem.imageurl", newsItem.buktiUrl)
+                        } else {
+                            NewsCard(
+                                imageUrl = newsItem.buktiUrl,
+                                date = newsItem.tanggal,
+                                title = newsItem.judul,
+                                author = newsItem.nama,
+                                onClick = {
+                                    navController.navigate("BeritaDetail/${newsItem.id}")
+                                },
+                                modifier = Modifier
+                                    .width(160.dp)
+                                    .height(240.dp)
+                                    .wrapContentSize(Alignment.Center)
+
+                            )
+                            Log.d("newsitem.imageurl", newsItem.buktiUrl)
+                        }
                     }
                 }
             }

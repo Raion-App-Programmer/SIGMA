@@ -1,6 +1,12 @@
 package com.example.login.fitur_panduan
 
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,27 +27,42 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.login.R
 import com.example.login.Routes
+import com.example.login.Routes.Profile
+import com.example.mytestsigma.ui.theme.getUserLocation
 
 @Composable
-fun buttomNavbarPanduan(navController: NavController){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
+fun buttomNavbarPanduan(navController: NavController, context: Context){
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.BottomCenter)
         ) {
             // Bottom navigation bar background
             Image(
@@ -51,6 +72,7 @@ fun buttomNavbarPanduan(navController: NavController){
                     .width(412.dp)
                     .height(100.dp)
                     .offset(y = 10.dp)
+                    .pointerInput(Unit) {}
             )
 
             // Row for navigation icons
@@ -59,7 +81,7 @@ fun buttomNavbarPanduan(navController: NavController){
                     .fillMaxWidth()
                     .height(82.dp),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = CenterVertically
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -70,27 +92,13 @@ fun buttomNavbarPanduan(navController: NavController){
                         )
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.home_black),
+                        painter = painterResource(id = R.drawable.home_gray_png),
                         contentDescription = "Home button",
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
                             .offset(x = 15.dp, y = 25.dp)
-                            .clickable {
-                                navController.navigate(Routes.Dashboard)
-                            }
-
-                    )
-                    Text(
-                        "Beranda",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        modifier = Modifier
-                            .offset(x = 15.dp, y = 25.dp)
-                            .clickable {
-                                navController.navigate(Routes.Dashboard)
-                            }
+                            .clickable{navController.navigate("Dashboard")}
                     )
                 }
 
@@ -107,59 +115,49 @@ fun buttomNavbarPanduan(navController: NavController){
                             .width(30.dp)
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
-                            .clickable{
-                                navController.navigate(Routes.LaporSigma1)
+                            .clickable(){
+                                navController.navigate("laporSigma1")
                             }
+
                     )
-                    Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
-                        modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                            .clickable{
-                                navController.navigate(Routes.LaporSigma1)
-                            }
-                    )
+
                 }
 
                 // Floating button for calls
-
-
                 Column(
                     modifier = Modifier
                         .offset(y = (-5).dp),
                     Arrangement.Center
                 ) {
-                    Button(
-                        onClick = { },
-                        modifier = Modifier
-                            .size(60.dp) // Menggunakan size untuk width & height sekaligus
-                            .clip(CircleShape), // Memastikan bentuknya lingkaran
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                    Button(modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp),
+                        shape = CircleShape,
                         contentPadding = PaddingValues(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
+                        onClick = {
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // Permissions alsama ready granted, get the location
+                                getUserLocation(context, navController)
+                            } else {
+                                // Request both permissions
+                                permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                            }
+                        }
                     ) {
 
                         Image(
                             painter = painterResource(id = R.drawable.phone_call_white),
                             contentDescription = "Call SIGMA",
                             modifier = Modifier
-                                .width(34.dp)
-                                .height(33.dp)
-                                .offset(y = (-2).dp),
+                                .width(40.dp)
+                                .height(40.dp),
                             Alignment.Center
                         )
                     }
-                    Text(
-                        text = "Darurat",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0XFF616161),
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .offset(x = 10.dp)
-                    )
+
                 }
 
                 Column(
@@ -170,26 +168,17 @@ fun buttomNavbarPanduan(navController: NavController){
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.book_gray),
-                        contentDescription = "Book button",
+                        contentDescription = "Edit button",
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
-                            .offset(y = 30.dp, x = 27.dp)
+                            .offset(y = 25.dp, x = 30.dp)
                             .clickable {
-                                navController.navigate(Routes.BeritaTerkini)
+                                navController.navigate("BeritaTerkini") {
+                                }
                             }
                     )
-                    Text(
-                        "Berita",
-                        fontSize = 13.sp,
-                        color = Color(0xFF616161),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(y = 25.dp, x = 28.dp)
-                            .clickable {
-                                navController.navigate(Routes.BeritaTerkini)
-                            }
-                    )
+
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -197,27 +186,17 @@ fun buttomNavbarPanduan(navController: NavController){
                     modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.profil_icon),
+                        painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(36.dp)
-                            .height(36.dp)
-                            .offset(x = (-20).dp, y = (30.dp))
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = (-20).dp, y = (30).dp)
                             .clickable {
-                                navController.navigate(Routes.Profile)
+                                navController.navigate(Profile)
                             }
                     )
-                    Text(
-                        text = "Profil",
-                        color = Color(0xFF616161),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(x = (-20).dp, y = 30.dp)
-                            .clickable {
-                                navController.navigate(Routes.Profile)
-                            }
-                    )
+
                 }
 
 

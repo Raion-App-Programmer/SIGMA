@@ -82,9 +82,15 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
     val combinedList = newsList
         .filter { it.status == "Berhasil diunggah" }
         .map { news ->
+            val thumbnailUrl = when {
+                !news.buktiUrls.isNullOrEmpty() -> news.buktiUrls[0].toString()
+                !news.buktiUrl.isNullOrEmpty() -> news.buktiUrl
+                else -> null
+            }
+
             val profile = profileList.find { it.id == news.uid }
             Triple(
-                news,
+                news.copy(buktiUrl = thumbnailUrl ?: "" ),
                 profile?.nama ?: news.nama,
                 profile?.buktiUrl // kalau tidak ada cocokannya otomatis null
             )
@@ -102,7 +108,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
                     .width(412.dp)
-                    .height(119.dp)
+                    .height(130.dp)
                     .background(
                         Color(0xFFBF002E),
                     ),

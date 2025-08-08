@@ -35,6 +35,7 @@ class NewsViewModel : ViewModel() {
                         NewsItem(
                             id = doc.id,
                             buktiUrl = doc.getString("buktiUrl") ?: "",
+                            buktiUrls = (doc["buktiUrls"] as? List<String>)?.mapNotNull { it?.toString() } ?: emptyList(),
                             tanggal = doc.getString("tanggal") ?: "",
                             judul =  doc.getString("judul") ?: "",
                             nama =  doc.getString("nama") ?: "",
@@ -68,6 +69,17 @@ class NewsViewModel : ViewModel() {
                 Log.e("Firestore", "Error fetching news", e)
                 _newsItem.value = null
             }
+    }
+
+    fun getBuktiUrls(data: Map<String, Any?>): List<String> {
+        val single = data["buktiUrl"] as? String
+        val multiple = data["buktiUrls"] as? List<*>
+
+        return when {
+            multiple != null -> multiple.mapNotNull { it?.toString() }
+            single != null -> listOf(single)
+            else -> emptyList()
+        }
     }
 
     fun updateStatus(laporanId: String, statusBaru: String) {
