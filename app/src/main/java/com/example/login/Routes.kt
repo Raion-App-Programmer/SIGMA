@@ -26,7 +26,7 @@ object Routes {
     var PanggilSigma1 = "panggilSigma1"
     var PanggilSigma2 = "panggilSigma2"
     var KonfirmasiBerita = "KonfirmasiBerita"
-
+    var notifikasipage = "notifikasiPage"
 
 
 
