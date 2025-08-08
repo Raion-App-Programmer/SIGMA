@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.cloudinary.transformation.resize.Thumbnail
 import com.example.login.NewsViewModel
 import com.example.login.ui.theme.LoginTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +48,8 @@ data class NewsItem(
     val title: String,
     val author: String,
     val status: NewsStatus,
-    val imageRes: String
+    val imageRes: String,
+    val imageResS: List<String>
 )
 
 enum class NewsStatus(val label: String, val color: Color) {
@@ -82,7 +85,8 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
                 "Berhasil diunggah" -> NewsStatus.Confirmed
                 else -> NewsStatus.Pending
             },
-            imageRes = it.buktiUrl
+            imageRes = it.buktiUrl,
+            imageResS = it.buktiUrls
 
         )
 //        Log.d("status = ",it.status)
@@ -97,15 +101,15 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.dp),
+                        .height(120.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Konfirmasi Berita", color = Color.White, fontSize = 20.sp)
+                    Text("Konfirmasi Berita", color = Color.White, fontSize = 20.sp, modifier = Modifier.padding(top = 20.dp))
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(end = 8.dp),
+                            .padding(top = 20.dp,end = 8.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         IconButton(onClick = { logoutUser(navController)}) {
@@ -122,7 +126,12 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
             modifier = Modifier.background(Color(0xFFF5F5F7))
         ) {
             items(newsList) { news ->
-                NewsCard(news = news, onClick = {
+                val thumbnailUrl = when {
+                    !news.imageResS.isNullOrEmpty() -> news.imageResS[0].toString()
+                    !news.imageRes.isNullOrEmpty() -> news.imageRes
+                    else -> null
+                }
+                NewsCard(news = news, thumbnail = thumbnailUrl ?: "", onClick = {
                     navController.navigate("DetailPengajuan/${news.id}")
                 })
             }
@@ -131,7 +140,7 @@ fun NewsConfirmationScreen(navController: NavController, viewModel: NewsViewMode
 }
 
 @Composable
-fun NewsCard(news: NewsItem, onClick: ()->Unit) {
+fun NewsCard(news: NewsItem, thumbnail: String,onClick: ()->Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,10 +151,15 @@ fun NewsCard(news: NewsItem, onClick: ()->Unit) {
     ) {
         val isPreview = LocalInspectionMode.current
 
-        Box(
+        AsyncImage(
+            model = thumbnail,
+            contentDescription = "News Image",
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Gray)
+                .clip(RoundedCornerShape(20.dp)),
+            placeholder = painterResource(id = R.drawable.no_image_available), // Gambar default saat loading
+            error = painterResource(id = R.drawable.no_image_available) // Gambar default saat gagal/error atau imageUrl kosong
         )
 
         Box(

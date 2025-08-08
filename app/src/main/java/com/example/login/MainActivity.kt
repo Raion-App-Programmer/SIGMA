@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
             val laporanViewModel: LaporanViewModel = viewModel()
             val geoViewModel: GeocodingViewModel = viewModel()
 //            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
-            NavHost(navController = navController, startDestination = Routes.Profile) {
+            NavHost(navController = navController, startDestination = Routes.KonfirmasiBerita) {
                 composable(Routes.LandingPage1) {
                     landingPage1(navController) 
                 }
