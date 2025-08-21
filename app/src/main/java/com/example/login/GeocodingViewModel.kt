@@ -1,34 +1,59 @@
 package com.example.login
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import android.annotation.SuppressLint
+import android.app.Application
+import android.location.Location
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GeocodingViewModel : ViewModel() {
-    private val apiKey = "YOUR_API_KEY"
+class GeocodingViewModel(application: Application) : AndroidViewModel(application) {
+    private val apiKey = "ea46319fc11e3d9732a2d9485c339518" // API key kamu
+    private val fusedLocationClient: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(application)
+
+    var cityName by mutableStateOf("Loading...")
+        private set
+    var temperature by mutableStateOf("-")
+        private set
+    var weatherCondition by mutableStateOf("Loading...")
+        private set
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://maps.googleapis.com/")
+        .baseUrl("https://api.openweathermap.org/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val apiService = retrofit.create(GeocodingApiService::class.java)
+    private val weatherApi = retrofit.create(OpenWeatherApi::class.java)
 
-    fun getCityName(latitude: Double, longitude: Double) {
+    @SuppressLint("MissingPermission")
+    fun loadWeather() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                fetchWeather(it.latitude, it.longitude)
+            } ?: run {
+                cityName = "Lokasi tidak ditemukan"
+            }
+        }
+    }
+
+    private fun fetchWeather(lat: Double, lon: Double) {
         viewModelScope.launch {
             try {
-                val response = apiService.getLocationName("$latitude,$longitude", apiKey).execute()
-                if (response.isSuccessful) {
-                    val result = response.body()?.results?.firstOrNull()?.formatted_address
-                    Log.d("Geocoding", "Location: $result")
-                } else {
-                    Log.e("Geocoding", "Error: ${response.errorBody()?.string()}")
-                }
+                val response = weatherApi.getCurrentWeather(lat, lon, "metric", apiKey)
+                cityName = response.name
+                temperature = "${response.main.temp}°C"
+                weatherCondition = response.weather.firstOrNull()?.description ?: "-"
             } catch (e: Exception) {
-                Log.e("Geocoding", "Exception: ${e.message}")
+                cityName = "Error"
+                weatherCondition = e.message ?: "Unknown error"
             }
         }
     }

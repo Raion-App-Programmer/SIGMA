@@ -1,4 +1,10 @@
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Paint.Align
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,9 +19,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -30,24 +40,44 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.login.NewsViewModel
 import com.example.login.R
 import com.example.login.Routes
+import com.example.mytestsigma.ui.theme.getUserLocation
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 
 @Composable
 fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navController: NavController) {
     val newsItem by viewModel.newsItem.observeAsState()
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     LaunchedEffect(newsId) {
         viewModel.getNewsById(newsId)
@@ -56,112 +86,138 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
     if (newsItem != null) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0XFFF7EAEB)),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Content Column (scrollable)
             Column(
                 modifier = Modifier
-                    .weight(1f) // Takes up remaining space
-                    .padding(16.dp, top = 50.dp)
-                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start
             ) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Arrow back",
-                        modifier = Modifier.clickable { 
-                            navController.navigate("BeritaTerkini")
-                        })
+                Icon(Icons.Filled.ArrowBack, contentDescription = "Arrow back",
+                    modifier = Modifier.clickable {
+                        navController.popBackStack()
+                    })
 
-                    Text(
-                        text = newsItem!!.judul,
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        fontSize = 24.sp,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).offset(y = (-25).dp)
-                    )
+                Spacer(modifier = Modifier.height(12.dp))
 
+                Text(
+                    text = newsItem!!.judul,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                val imageUrls = newsItem?.buktiUrls ?: newsItem?.buktiUrl?.let { listOf(it) } ?: emptyList()
 
-                // tags
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        newsItem!!.nama,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0XFFb42c38)),
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        newsItem!!.tanggal,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0XFFb42c38)),
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // news image
-                if (newsItem!!.buktiUrl.isNotEmpty()) {
+                if (imageUrls.isNotEmpty()) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(imageUrls) { url ->
+                            AsyncImage(
+                                model = url,
+                                contentDescription = "Gambar Bukti",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(width = 250.dp, height = 200.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                } else {
                     AsyncImage(
-                        model = (newsItem!!.buktiUrl),
+                        model = newsItem!!.buktiUrl,
                         contentDescription = "News Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.9f)
-                            .height(200.dp)
+                            .fillMaxWidth()
+                            .height(220.dp)
                             .clip(RoundedCornerShape(12.dp))
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // news content
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.CenterHorizontally)
+
+                Log.d("List",newsItem!!.buktiUrl)
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column {
                         Text(
-                            text = newsItem!!.deskripsi,
-                            fontSize = 14.sp,
-                            color = Color.Black
+                            text = "${newsItem!!.tanggal} • ${newsItem!!.waktu}",
+                            color = Color.Gray,
+                            fontSize = 12.sp
+                        )
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = newsItem!!.nama,
+                            color = Color.Gray,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 12.sp
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Image(
+                            painter = painterResource(R.drawable.user_circle),
+                            contentDescription = "User",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(CircleShape)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                // CTA button
-                Box(
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = 300.dp)
-                ) {
+                Text(
+                    text = newsItem!!.deskripsi,
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    lineHeight = 20.sp
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Column(){
+                    Text(
+                        text = "Apakah Anda sedang dalam situasi seperti berita?",
+                        color = Color.Black,
+                        fontSize = 10.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
                     Button(
-                        onClick = {navController.navigate(Routes.LaporSigma1)},
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFD61C4E)),
-                        modifier = Modifier.fillMaxWidth(0.9f).align(Alignment.Center).clickable{
-                            navController.navigate(Routes.LaporSigma1)
-                        }
+                        onClick = { navController.navigate(Routes.LaporSigma1) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .align(Alignment.CenterHorizontally),
+                        shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Lapor disini!", color = Color.White, fontSize = 14.sp)
                     }
                 }
             }
 
-            // Bottom dashboard
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-            ) {
+                    .fillMaxWidth(),
+
+                ) {
                 // Bottom navigation bar background
                 Image(
                     painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
@@ -170,6 +226,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         .width(412.dp)
                         .height(100.dp)
                         .offset(y = 10.dp)
+                        .pointerInput(Unit) {}
                 )
 
                 // Row for navigation icons
@@ -178,7 +235,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         .fillMaxWidth()
                         .height(82.dp),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = CenterVertically
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -195,14 +252,10 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                                 .width(30.dp)
                                 .height(30.dp)
                                 .offset(x = 15.dp, y = 25.dp)
-                        )
-                        Text(
-                            "Beranda",
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
-                            modifier = Modifier
-                                .offset(x = 15.dp, y = 25.dp)
+                                .clickable {
+                                    navController.navigate("Dashboard") {
+                                    }
+                                }
                         )
                     }
 
@@ -220,17 +273,10 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                                 .height(30.dp)
                                 .offset(y = 38.dp, x = (-41).dp)
                                 .clickable {
-                                    navController.navigate(Routes.LaporSigma1)
+                                    navController.navigate("laporSigma1")
                                 }
                         )
-                        Text(
-                            "Lapor",
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
-                            fontSize = 13.sp,
-                            modifier = Modifier
-                                .offset(x = (-40).dp, y = 35.dp)
-                        )
+
                     }
 
                     // Floating button for calls
@@ -244,9 +290,17 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             .height(60.dp),
                             shape = CircleShape,
                             contentPadding = PaddingValues(8.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
                             onClick = {
-                                // taruh navigasi call disini
+                                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                    ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    // Permissions alsama ready granted, get the location
+                                    getUserLocation(context, navController)
+                                } else {
+                                    // Request both permissions
+                                    permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                                }
                             }
                         ) {
 
@@ -254,21 +308,12 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                                 painter = painterResource(id = R.drawable.phone_call_white),
                                 contentDescription = "Call SIGMA",
                                 modifier = Modifier
-                                    .width(34.dp)
-                                    .height(33.dp)
-                                    .offset(y = (-2).dp),
+                                    .width(40.dp)
+                                    .height(40.dp),
                                 Alignment.Center
                             )
                         }
-                        Text(
-                            text = "Darurat",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0XFF616161),
-                            modifier = Modifier
-                                .padding(top = 4.dp)
-                                .offset(x = 10.dp)
-                        )
+
                     }
 
                     Column(
@@ -278,26 +323,15 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             .offset(y = (-15).dp, x = (-10).dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.book_gray),
+                            painter = painterResource(id = R.drawable.book_red),
                             contentDescription = "Edit button",
                             modifier = Modifier
                                 .width(30.dp)
                                 .height(30.dp)
-                                .offset(y = 30.dp, x = 27.dp)
-                                .clickable {
-                                    navController.navigate("BeritaTerkini") {
-                                        launchSingleTop = true
-                                    }
-                                }
+                                .offset(y = 25.dp, x = 30.dp)
+
                         )
-                        Text(
-                            "Berita",
-                            fontSize = 13.sp,
-                            color = Color(0xFF616161),
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(y = 25.dp, x = 28.dp)
-                        )
+
                     }
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -308,30 +342,26 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             painter = painterResource(id = R.drawable.user_circle),
                             contentDescription = "Profile button",
                             modifier = Modifier
-                                .width(36.dp)
-                                .height(36.dp)
-                                .offset(x = (-20).dp, y = (30.dp))
+                                .width(30.dp)
+                                .height(30.dp)
+                                .offset(x = (-20).dp, y = (30).dp)
                                 .clickable {
                                     navController.navigate(Routes.Profile)
                                 }
                         )
-                        Text(
-                            text = "Profil",
-                            color = Color(0xFF616161),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(x = (-20).dp, y = 30.dp)
-                        )
+
                     }
 
 
                 }
             }
-            }
-        } else {
-        Text(text = "News not found", style = MaterialTheme.typography.headlineSmall)
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = "News not found", style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
+
 
 

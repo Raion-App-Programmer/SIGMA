@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.login.profile.ProfileItem
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,7 @@ class NewsViewModel : ViewModel() {
                         NewsItem(
                             id = doc.id,
                             buktiUrl = doc.getString("buktiUrl") ?: "",
+                            buktiUrls = (doc["buktiUrls"] as? List<String>)?.mapNotNull { it?.toString() } ?: emptyList(),
                             tanggal = doc.getString("tanggal") ?: "",
                             judul =  doc.getString("judul") ?: "",
                             nama =  doc.getString("nama") ?: "",
@@ -68,4 +70,32 @@ class NewsViewModel : ViewModel() {
                 _newsItem.value = null
             }
     }
+
+    fun getBuktiUrls(data: Map<String, Any?>): List<String> {
+        val single = data["buktiUrl"] as? String
+        val multiple = data["buktiUrls"] as? List<*>
+
+        return when {
+            multiple != null -> multiple.mapNotNull { it?.toString() }
+            single != null -> listOf(single)
+            else -> emptyList()
+        }
+    }
+
+    fun updateStatus(laporanId: String, statusBaru: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("laporan")
+            .document(laporanId)
+            .update("status", statusBaru)
+            .addOnSuccessListener {
+                Log.d("NewsViewModel", "Status berhasil diupdate ke: $statusBaru")
+            }
+            .addOnFailureListener {
+                Log.e("NewsViewModel", "Gagal update status", it)
+            }
+    }
+
+
+
+
 }

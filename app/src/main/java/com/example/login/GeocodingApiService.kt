@@ -19,3 +19,28 @@ data class GeocodingResponse(
 data class Result(
     val formatted_address: String
 )
+
+data class WeatherResponse(
+    val name: String,
+    val main: Main,
+    val weather: List<Weather>
+)
+
+data class Main(
+    val temp: Double
+)
+
+data class Weather(
+    val description: String
+)
+
+interface OpenWeatherApi {
+    @GET("data/2.5/weather")
+    suspend fun getCurrentWeather(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("units") units: String = "metric", // Celsius
+        @Query("appid") apiKey: String
+    ): WeatherResponse
+}
+

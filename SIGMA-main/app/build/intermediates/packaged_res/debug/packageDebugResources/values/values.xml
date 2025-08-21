@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_buttonPanggil">#90232d</color>
+    <color name="bg_panggilsigma">#f8eaeb</color>
+    <color name="black">#FF000000</color>
+    <color name="dark0_grey">#DADADA</color>
+    <color name="dark_grey">#9A9A9A</color>
+    <color name="font_grey">#B3B3B3</color>
+    <color name="font_hanyaUntuDarurat">#C41532</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">Login</string>
+    <string name="gcm_defaultSenderId" translatable="false">523816405296</string>
+    <string name="google_api_key" translatable="false">AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE</string>
+    <string name="google_app_id" translatable="false">1:523816405296:android:5c772acf80c638296ea0f5</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBy5vywq94WHzhEaQz2kiITmYu5ajV2tDE</string>
+    <string name="google_storage_bucket" translatable="false">sigma-19210.firebasestorage.app</string>
+    <string name="project_id" translatable="false">sigma-19210</string>
+    <style name="Theme.Login" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>

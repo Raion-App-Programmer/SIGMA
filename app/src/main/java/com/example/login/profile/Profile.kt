@@ -1,14 +1,22 @@
+import android.Manifest
+import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,240 +25,296 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.login.NewsViewModel
+import com.example.login.ProfileViewModel
 import com.example.login.R
 import com.example.login.Routes
+import com.example.mytestsigma.ui.theme.getUserLocation
 import com.google.firebase.auth.FirebaseAuth
+import org.jetbrains.annotations.Async
 
 @Composable
-fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel(), profileViewModel: ProfileViewModel = viewModel()) {
 
-    val newsList by viewModel.newsList.collectAsState()
-    Log.d("ProfileDebug", "newsList size: ${newsList.size}")
-    newsList.forEach { item ->
-        Log.d("ProfileDebug", "News UID: ${item.uid}, Judul: ${item.judul}")
+    val context = LocalContext.current
+    val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
+    // Ambil data dari StateFlow
+    val nama by profileViewModel.nama.collectAsState()
+    val email by profileViewModel.email.collectAsState()
+    val buktiUrl by profileViewModel.buktiUrl.collectAsState()
+
+    // Load data profil sekali saat pertama kali composable muncul
+    LaunchedEffect(Unit) {
+        profileViewModel.loadData()
     }
 
+    // --- DATA LAPORAN ---
+    val newsList by viewModel.newsList.collectAsState()
     val currentUid = FirebaseAuth.getInstance().currentUser?.uid
     val laporanSaya = newsList.filter { it.uid == currentUid }
-    Log.d("ProfileDebug", "Current UID: $currentUid")
-    Log.d("ProfileDebug", "lapporan: ${laporanSaya.size}")
 
-    var userName by remember { mutableStateOf("Loading...") }
-    var userEmail by remember { mutableStateOf("Loading...") }
-
-    // Ambil data user sekali ketika Composable dipasang
-    LaunchedEffect(Unit) {
-        FirebaseAuth.getInstance().currentUser?.let { user ->
-            userName = user.displayName ?: "Nama tidak tersedia"
-            userEmail = user.email ?: "Email tidak tersedia"
-        }
-    }
-
-    Box( // Use Box for overlapping effect
+    // --- UI STRUCTURE ---
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0XFFF7EAEB))
+            .background(Color(0xFFF0F0F0)) // A light grey background similar to the example
     ) {
-        // Head NavBar
-        Box(
+        // Main content area that is scrollable
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(244.dp)
-                .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        listOf(
-                            Color(0XFFC41532),
-                            Color(0XFF431B3B)
-                        )
-                    )
-                ),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 80.dp) // Add padding to avoid overlap with the bottom nav
         ) {
-            Text(
-                text = "Profil",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.offset(y = (-50).dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.gear_settings),
-                contentDescription = "Gear Settings",
-                modifier = Modifier
-                    .size(24.dp)
-                    .offset(y = (-50).dp, x = 140.dp)
-//                    .clickable(
-//                        navController.navigate(Routes)
-//                   )
-            )
-        }
-
-        // White box (Overlapping)
-        Column( // Use Column for vertical layout within the Box
-            modifier = Modifier
-                .align(Alignment.TopCenter) // Align to top center
-                .padding(top = 150.dp) // Adjust top padding to overlap
-        ) {
+            // --- HEADER SECTION ---
             Box(
                 modifier = Modifier
-                    .width(371.dp)
-                    .height(149.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color.White)
+                    .fillMaxWidth()
+                    .height(200.dp) // Adjusted height for the profile picture overlap
+                    .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)) // Added rounded corners
+                    .background(
+                        Color(0XFFC41532)
+                    ),
+                contentAlignment = Alignment.TopCenter
             ) {
-                // Profile image and text inside the white box
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 40.dp, start = 16.dp, end = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Spacer to help center the title, as there's no back button
+                    Spacer(modifier = Modifier.size(24.dp))
                     Text(
-                        text = "$userName",
-                        fontSize = 18.sp,
+                        text = "Profil",
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 8.dp)
+                        color = Color.White
                     )
-                    Text(
-                        text = "$userEmail",
-                        fontSize = 14.sp,
-                        color = Color.Gray
+                    Image(
+                        painter = painterResource(id = R.drawable.gear_settings),
+                        contentDescription = "Gear Settings",
+                        modifier = Modifier.size(24.dp)
+                        // .clickable { ... }
                     )
-                    Box (
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .background(Color(0XFF431B3B), shape = RoundedCornerShape(10.dp))
-                            .width(120.dp)
-                            .clickable {
-                                navController.navigate(Routes.UbahProfile)
-                            }
-                    ) {
-
-                        Text(
-                            text = "Ubah Profil",
-                            fontSize = 20.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight(700),
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp)
-                        )
-                    }
                 }
             }
-            // Profile picture container
-            Box (
-                modifier = Modifier
-                    .offset(y = (-215).dp, x = 140.dp)
-                    .border(5.dp, color = Color.White, RoundedCornerShape(50.dp)),
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_picture_image),
-                    contentDescription = "Profile Picture",
-                    Modifier.size(100.dp)
-                )
-            }
 
-            Box(
+            // --- PROFILE & REPORTS SECTION ---
+            Column(
                 modifier = Modifier
-                    .offset(y = (-80).dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White)
-                    .width(371.dp)
-                    .height(788.dp)
-
+                    .fillMaxWidth()
+                    .offset(y = (-100).dp), // Pulls this section up to overlap the header
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Box to contain the white card and the overlapping profile picture
+                Box(
+                    contentAlignment = Alignment.TopCenter,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                ) {
+                    // White Card for Profile Info, pushed down to make space for the image
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 50.dp) // Half of image size (100dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color.White)
+                            .padding(top = 66.dp, start = 16.dp, end = 16.dp, bottom = 16.dp), // Padding inside the card
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = nama,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = email,
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { navController.navigate(Routes.UbahProfile) },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFC41532)),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp)
+                        ) {
+                            Text(
+                                text = "Ubah Profil",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                    // Profile Picture, drawn on top of the Column
+                    AsyncImage(
+                        model = buktiUrl,
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .border(4.dp, Color.White, CircleShape),
+                        placeholder = painterResource(id = R.drawable.profil_icon), // Gambar default saat loading
+                        error = painterResource(id = R.drawable.profil_icon)
+                    )
+                    Log.d("Url Photo :", buktiUrl)
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // White Card for Reports
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color.White)
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
                 ) {
                     Text(
                         "Lacak Laporanmu!",
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .offset(x = 100.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
                     )
 
-                    Column(modifier = Modifier.padding(top = 8.dp)) {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        laporanSaya.forEach { laporan ->
-                            val title = laporan.judul
-                            val date = laporan.tanggal
-                            val time = laporan.waktu
-                            val status = laporan.status
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(70.dp)
-                                    .clip(RectangleShape)
-                                    .background(Color.White)
-                                    .border(0.5.dp, Color.LightGray)
-                                    .padding(12.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(date, fontSize = 12.sp, color = Color.Gray)
-                                            Spacer(modifier = Modifier.width(4.dp))
-                                            Text(
-                                                time,
-                                                fontSize = 12.sp,
-                                                color = Color.White,
-                                                modifier = Modifier
-                                                    .background(Color(0xFF8D2A2A), RoundedCornerShape(8.dp))
-                                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                                            )
-                                        }
-                                    }
-
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        val statusColor = when (status) {
-                                            "Menunggu persetujuan" -> Color(0xFFFFC107)
-                                            "Berhasil diunggah" -> Color(0xFF4CAF50)
-                                            "Ditolak" -> Color(0xFFD32F2F)
-                                            else -> Color.Gray
-                                        }
-                                        Text(status, fontSize = 14.sp, color = Color.Gray)
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Box(
-                                            modifier = Modifier
-                                                .size(10.dp)
-                                                .background(statusColor, shape = CircleShape)
-                                        )
-                                    }
-                                }
+                    // Reports List
+                    if (laporanSaya.isEmpty()) {
+                        Text(
+                            text = "Anda belum memiliki laporan.",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp),
+                            textAlign = TextAlign.Center,
+                            color = Color.Gray
+                        )
+                    } else {
+                        laporanSaya.forEachIndexed { index, laporan ->
+                            val (displayText, backgroundColor) = when (laporan.status) {
+                                "Menunggu persetujuan" -> "Menunggu" to Color(0xFFFDBF11)
+                                "Berhasil diunggah" -> "Disetujui" to Color(0xFF22C55E)
+                                "Ditolak" -> "Ditolak" to Color(0xFFEF4444)
+                                else -> laporan.status to Color.Gray
                             }
 
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = laporan.judul,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = "${laporan.tanggal}  ${laporan.waktu}",
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
+                                    )
+                                }
+
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(50))
+                                        .background(backgroundColor)
+                                ) {
+                                    Text(
+                                        text = displayText,
+                                        color = Color.White,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                    )
+                                }
+                            }
+                            if (index < laporanSaya.size - 1) {
+                                Divider(
+                                    color = Color.LightGray.copy(alpha = 0.5f),
+                                    thickness = 1.dp,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+                            }
                         }
                     }
                 }
 
+                Spacer(modifier = Modifier.height(24.dp))
 
+                // Logout Button
+                Button(
+                    onClick = {
+                        FirebaseAuth.getInstance().signOut()
+                        // Navigate to login screen, ensuring the back stack is cleared
+                        navController.navigate(Routes.Login) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC41532)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .height(48.dp)
+                ) {
+                    Text(
+                        text = "Log Out",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
-        // Bottom dashboard
+
+
+        // Bottom dashboard - Now correctly placed inside the root Box
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -264,6 +328,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     .width(412.dp)
                     .height(100.dp)
                     .offset(y = 10.dp)
+                    .pointerInput(Unit) {}
             )
 
             // Row for navigation icons
@@ -272,7 +337,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     .fillMaxWidth()
                     .height(82.dp),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = CenterVertically
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -289,15 +354,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                             .width(30.dp)
                             .height(30.dp)
                             .offset(x = 15.dp, y = 25.dp)
-                            .clickable { navController.navigate("Dashboard") }
-                    )
-                    androidx.compose.material3.Text(
-                        "Beranda",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        modifier = Modifier
-                            .offset(x = 15.dp, y = 25.dp)
+                            .clickable{navController.navigate("Dashboard")}
                     )
                 }
 
@@ -315,17 +372,10 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                             .height(30.dp)
                             .offset(y = 38.dp, x = (-41).dp)
                             .clickable {
-                                navController.navigate(Routes.LaporSigma1)
+                                navController.navigate("laporSigma1")
                             }
                     )
-                    androidx.compose.material3.Text(
-                        "Lapor",
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF616161),
-                        fontSize = 13.sp,
-                        modifier = Modifier
-                            .offset(x = (-40).dp, y = 35.dp)
-                    )
+
                 }
 
                 // Floating button for calls
@@ -339,9 +389,17 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                         .height(60.dp),
                         shape = CircleShape,
                         contentPadding = PaddingValues(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
                         onClick = {
-                            // taruh navigasi call disini
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // Permissions alsama ready granted, get the location
+                                getUserLocation(context, navController)
+                            } else {
+                                // Request both permissions
+                                permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                            }
                         }
                     ) {
 
@@ -349,21 +407,12 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                             painter = painterResource(id = R.drawable.phone_call_white),
                             contentDescription = "Call SIGMA",
                             modifier = Modifier
-                                .width(34.dp)
-                                .height(33.dp)
-                                .offset(y = (-2).dp),
+                                .width(40.dp)
+                                .height(40.dp),
                             Alignment.Center
                         )
                     }
-                    androidx.compose.material3.Text(
-                        text = "Darurat",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0XFF616161),
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .offset(x = 10.dp)
-                    )
+
                 }
 
                 Column(
@@ -378,21 +427,13 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                         modifier = Modifier
                             .width(30.dp)
                             .height(30.dp)
-                            .offset(y = 30.dp, x = 27.dp)
+                            .offset(y = 25.dp, x = 30.dp)
                             .clickable {
                                 navController.navigate("BeritaTerkini") {
-                                    launchSingleTop = true
                                 }
                             }
                     )
-                    androidx.compose.material3.Text(
-                        "Berita",
-                        fontSize = 13.sp,
-                        color = Color(0xFF616161),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(y = 25.dp, x = 28.dp)
-                    )
+
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -400,24 +441,17 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.user_circle_red),
+                        painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(36.dp)
-                            .height(36.dp)
-                            .offset(x = (-20).dp, y = (30.dp))
+                            .width(30.dp)
+                            .height(30.dp)
+                            .offset(x = (-20).dp, y = (30).dp)
                             .clickable {
                                 navController.navigate(Routes.Profile)
                             }
                     )
-                    androidx.compose.material3.Text(
-                        text = "Profil",
-                        color = Color(0xFFC35660),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .offset(x = (-20).dp, y = 30.dp)
-                    )
+
                 }
 
 
@@ -426,9 +460,3 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
     }
 }
 
-//@Preview (showBackground = true)
-//@Composable
-//fun ProfilePreview() {
-//    val navController = NavController
-//    Profile(navController)
-//}

@@ -1,6 +1,14 @@
 package com.example.login
 
+
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,43 +36,82 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.example.login.Routes.Profile
-import okhttp3.Route
+import com.example.mytestsigma.ui.theme.getUserLocation
+
 
 @Composable
-fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel()) {
+fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewModel(), profileViewModel: ProfileViewModel = viewModel()) {
     val newsList by viewModel.newsList.collectAsState()
+    val profileList by profileViewModel.profileList.collectAsState()
+
+
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true && permissions[Manifest.permission.CALL_PHONE] == true) {
+            Toast.makeText(context, "Izin lokasi dan panggilan diberikan", Toast.LENGTH_SHORT).show()
+            getUserLocation(context, navController)
+        } else if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            Toast.makeText(context, "Izin lokasi diberikan, izin panggilan ditolak", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val combinedList = newsList
+        .filter { it.status == "Berhasil diunggah" }
+        .map { news ->
+            val thumbnailUrl = when {
+                !news.buktiUrls.isNullOrEmpty() -> news.buktiUrls[0].toString()
+                !news.buktiUrl.isNullOrEmpty() -> news.buktiUrl
+                else -> null
+            }
+
+            val profile = profileList.find { it.id == news.uid }
+            Triple(
+                news.copy(buktiUrl = thumbnailUrl ?: "" ),
+                profile?.nama ?: news.nama,
+                profile?.buktiUrl // kalau tidak ada cocokannya otomatis null
+            )
+        }
+
+
 
     Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White),
+        .fillMaxSize(),
         Alignment.Center) {
-        Column (modifier = Modifier.fillMaxSize().align(Alignment.Center)) {
+        Column (modifier = Modifier
+            .fillMaxSize()
+            .align(Alignment.Center)) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
                     .width(412.dp)
-                    .height(119.dp)
+                    .height(130.dp)
                     .background(
-                        brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(0XFFC41532),
-                                Color(0XFF431B3B)
-                            )
-                        )
-                    )
+                        Color(0xFFBF002E),
+                    ),
             ) {
                 Text(
                     "Berita Hari Ini",
@@ -75,25 +123,31 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            LazyColumn (modifier = Modifier.weight(1f).align(Alignment.CenterHorizontally)){
-                items(newsList) { newsItem ->
-                    NewsCard(
-                        imageUrl = newsItem.buktiUrl,
-                        date = newsItem.tanggal,
-                        title = newsItem.judul,
-                        author = newsItem.nama,
-                        onClick = {
-                            navController.navigate("BeritaDetail/${newsItem.id}")
-                        }
-                    )
-                    Log.d("newsitem.imageurl", newsItem.buktiUrl)
+            // Gabungkan data
 
+
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(combinedList) { (news, authorName, profileUrl) ->
+                    NewsCard(
+                        imageUrl = news.buktiUrl, // ini gambar berita
+                        date = news.tanggal,
+                        title = news.judul,
+                        author = authorName,
+                        profileUrl = profileUrl
+                    ) {
+                        navController.navigate("BeritaDetail/${news.id}")
+                    }
                 }
             }
-            // Bottom dashboard
+
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+
             ) {
                 // Bottom navigation bar background
                 Image(
@@ -103,6 +157,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                         .width(412.dp)
                         .height(100.dp)
                         .offset(y = 10.dp)
+                        .pointerInput(Unit) {}
                 )
 
                 // Row for navigation icons
@@ -111,7 +166,7 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                         .fillMaxWidth()
                         .height(82.dp),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = CenterVertically
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -129,16 +184,9 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                                 .height(30.dp)
                                 .offset(x = 15.dp, y = 25.dp)
                                 .clickable {
-                                    navController.navigate(Routes.Dashboard)
+                                    navController.navigate("Dashboard") {
+                                    }
                                 }
-                        )
-                        Text(
-                            "Beranda",
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
-                            modifier = Modifier
-                                .offset(x = 15.dp, y = 25.dp)
                         )
                     }
 
@@ -156,17 +204,10 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                                 .height(30.dp)
                                 .offset(y = 38.dp, x = (-41).dp)
                                 .clickable {
-                                    navController.navigate(Routes.LaporSigma1)
+                                    navController.navigate("laporSigma1")
                                 }
                         )
-                        Text(
-                            "Lapor",
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF616161),
-                            fontSize = 13.sp,
-                            modifier = Modifier
-                                .offset(x = (-40).dp, y = 35.dp)
-                        )
+
                     }
 
                     // Floating button for calls
@@ -180,9 +221,17 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             .height(60.dp),
                             shape = CircleShape,
                             contentPadding = PaddingValues(8.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF431B3B)),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
                             onClick = {
-                                // taruh navigasi call disini
+                                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                    ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    // Permissions alsama ready granted, get the location
+                                    getUserLocation(context, navController)
+                                } else {
+                                    // Request both permissions
+                                    permissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE))
+                                }
                             }
                         ) {
 
@@ -190,21 +239,12 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                                 painter = painterResource(id = R.drawable.phone_call_white),
                                 contentDescription = "Call SIGMA",
                                 modifier = Modifier
-                                    .width(34.dp)
-                                    .height(33.dp)
-                                    .offset(y = (-2).dp),
+                                    .width(40.dp)
+                                    .height(40.dp),
                                 Alignment.Center
                             )
                         }
-                        Text(
-                            text = "Darurat",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0XFF616161),
-                            modifier = Modifier
-                                .padding(top = 4.dp)
-                                .offset(x = 10.dp)
-                        )
+
                     }
 
                     Column(
@@ -219,21 +259,10 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             modifier = Modifier
                                 .width(30.dp)
                                 .height(30.dp)
-                                .offset(y = 30.dp, x = 27.dp)
-                                .clickable {
-                                    navController.navigate("BeritaTerkini") {
-                                        launchSingleTop = true
-                                    }
-                                }
+                                .offset(y = 25.dp, x = 30.dp)
+
                         )
-                        Text(
-                            "Berita",
-                            fontSize = 13.sp,
-                            color = Color(0xFFC35660),
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(y = 25.dp, x = 28.dp)
-                        )
+
                     }
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -244,21 +273,14 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
                             painter = painterResource(id = R.drawable.user_circle),
                             contentDescription = "Profile button",
                             modifier = Modifier
-                                .width(36.dp)
-                                .height(36.dp)
-                                .offset(x = (-20).dp, y = (30.dp))
+                                .width(30.dp)
+                                .height(30.dp)
+                                .offset(x = (-20).dp, y = (30).dp)
                                 .clickable {
                                     navController.navigate(Profile)
                                 }
                         )
-                        Text(
-                            text = "Profil",
-                            color = Color(0xFF616161),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier
-                                .offset(x = (-20).dp, y = 30.dp)
-                        )
+
                     }
 
 
@@ -268,43 +290,50 @@ fun BeritaTerkini(navController: NavController, viewModel: NewsViewModel = viewM
     }
 }
 
+
 @Composable
 fun NewsCard(
-    imageUrl: String,
+    imageUrl: String?,
     date: String,
     title: String,
     author: String,
+    profileUrl: String?,
     onClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(40.dp))
+            .clip(RoundedCornerShape(20.dp))
             .width(372.dp)
             .height(180.dp)
             .padding(bottom = 16.dp)
             .clickable { onClick() },
-        contentAlignment = Alignment.Center// Makes it clickable
+        contentAlignment = Alignment.Center
     ) {
         // Background Image
         AsyncImage(
             model = imageUrl,
             contentDescription = "News Image",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(40.dp))
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(20.dp)),
+            placeholder = painterResource(id = R.drawable.no_image_available), // Gambar default saat loading
+            error = painterResource(id = R.drawable.no_image_available) // Gambar default saat gagal/error atau imageUrl kosong
         )
 
         // Semi-transparent Overlay
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(40.dp))
+                .clip(RoundedCornerShape(20.dp))
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(
-                    listOf(
-                        Color(0X99C41532),
-                        Color(0X99431B3B),
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Transparent,
+                            Color(0x99BF002E),
+                        )
                     )
-                ))
+                )
         )
 
         // Text & Button Overlay
@@ -319,26 +348,66 @@ fun NewsCard(
                 text = date,
                 color = Color.White,
                 fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .background(Color(0x88FFFFFF), RoundedCornerShape(8.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
 
             // Title & Author
-            Column (verticalArrangement = Arrangement.Bottom) {
-                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(text = author, color = Color.White, fontSize = 12.sp)
-            }
-
-            // button selengkapnya
-            Button(
-                onClick = onClick,
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.3f)),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text(text = "Selengkapnya", color = Color.White)
+            Column {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+                Row(horizontalArrangement = Arrangement.Start) {
+                    AsyncImage(
+                        model = profileUrl,
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape),
+                        placeholder = painterResource(id = R.drawable.person_profil),
+                        error = painterResource(id = R.drawable.person_profil),
+                        contentScale = ContentScale.Crop
+                    )
+//                    Box(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(50.dp))
+//                            .background(Color.Gray)
+//                            .padding(1.dp)
+//                    ) {
+//                        val painter = painterResource(id = R.drawable.person_profil) // Gambar default profil
+//                        Image(
+//                            painter = painter,
+//                            contentDescription = "Profile Image",
+//                            modifier = Modifier
+//                                .size(16.dp)
+//                                .clip(RoundedCornerShape(50.dp)),
+//                            contentScale = ContentScale.Crop
+//                        )
+//                    }
+                    Text(
+                        text = author,
+                        modifier = Modifier.padding(start = 5.dp),
+                        color = Color.White,
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
+    }
+}
+fun requestCallPermission(activity: Context) {
+    val REQUEST_CALL = 2
+
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(
+            activity as Activity,
+            arrayOf(Manifest.permission.CALL_PHONE),
+            REQUEST_CALL
+        )
     }
 }

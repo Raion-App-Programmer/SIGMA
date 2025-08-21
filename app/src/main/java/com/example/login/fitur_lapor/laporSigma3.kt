@@ -69,6 +69,7 @@ import android.os.Looper
 import java.io.IOException
 import android.database.Cursor
 import android.provider.OpenableColumns
+import androidx.compose.runtime.mutableStateListOf
 
 fun getFileName(context: Context, uri: Uri): String? {
     var result: String? = null
@@ -179,60 +180,73 @@ fun saveLaporanToFirestore(laporan: Map<String, Any>, onSuccess: () -> Unit, onF
         }
 }
 
+
 @Composable
 fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel) {
     var isChecked by remember { mutableStateOf(false) }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        selectedImageUri = uri
-    }
-
     fun uploadAndSendReport() {
         if (!isChecked) {
             Toast.makeText(context, "Validasi kebenarannya ya", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Jika ada gambar yang dipilih, upload dulu ke Firebase Storage
-        if (selectedImageUri != null) {
-//            uploadFileToFirebaseStorage(
-              uploadFileToCloudinary(
-                uri = selectedImageUri!!,
-                context = context,
-                onSuccess = { downloadUrl ->
-                    laporanViewModel.buktiUrl.value = downloadUrl // Simpan URL gambar
-
-                    // Setelah URL berhasil diperoleh, simpan ke Firestore
-                    saveLaporanToFirestore(laporanViewModel.toMap(),
-                        onSuccess = {
-                            laporanViewModel.resetLaporan()
-                            navController.navigate(Routes.LaporBerhasil)
-                        },
-                        onFailure = { exception ->
-                            Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
-                        }
-                    )
-                },
-                onFailure = { exception ->
-                    Log.e("FirestoreError", "Gagal upload file: ${exception.message}")
-                }
-            )
-        } else {
-            // Jika tidak ada gambar, langsung simpan laporan ke Firestore
-            saveLaporanToFirestore(laporanViewModel.toMap(),
-                onSuccess = {
-                    laporanViewModel.resetLaporan()
-                    navController.navigate(Routes.LaporBerhasil)
-                },
-                onFailure = { exception ->
-                    Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
-                }
-            )
+        // Cek apakah masih ada media yang belum selesai upload (cek berdasarkan totalMediaCount)
+        if (laporanViewModel.totalMediaCount > 0 && laporanViewModel.buktiUrls.size < laporanViewModel.totalMediaCount) {
+            Toast.makeText(context, "Media masih diunggah, tunggu sebentar", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // Kirim laporan ke Firestore, baik ada media maupun tidak
+        Log.d("BUKTI_URLS", "Isi buktiUrls: ${laporanViewModel.buktiUrls}")
+        saveLaporanToFirestore(
+            laporanViewModel.toMap(),
+            onSuccess = {
+                laporanViewModel.resetLaporan()
+                navController.navigate(Routes.LaporBerhasil)
+            },
+            onFailure = { exception ->
+                Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
+                Toast.makeText(context, "Gagal menyimpan laporan", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
+
+//        if (selectedImageUris != null) {
+////            uploadFileToFirebaseStorage(
+//              uploadFileToCloudinary(
+//                uri = selectedImageUris!!,
+//                context = context,
+//                onSuccess = { downloadUrl ->
+//                    laporanViewModel.buktiUrl.value = downloadUrl // Simpan URL gambar
+//
+//                    // Setelah URL berhasil diperoleh, simpan ke Firestore
+//                    saveLaporanToFirestore(laporanViewModel.toMap(),
+//                        onSuccess = {
+//                            laporanViewModel.resetLaporan()
+//                            navController.navigate(Routes.LaporBerhasil)
+//                        },
+//                        onFailure = { exception ->
+//                            Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
+//                        }
+//                    )
+//                },
+//                onFailure = { exception ->
+//                    Log.e("FirestoreError", "Gagal upload file: ${exception.message}")
+//                }
+//            )
+//        } else {
+//            // Jika tidak ada gambar, langsung simpan laporan ke Firestore
+//            saveLaporanToFirestore(laporanViewModel.toMap(),
+//                onSuccess = {
+//                    laporanViewModel.resetLaporan()
+//                    navController.navigate(Routes.LaporBerhasil)
+//                },
+//                onFailure = { exception ->
+//                    Log.e("FirestoreError", "Gagal menyimpan laporan: ${exception.message}")
+//                }
+//            )
+//        }
 
 
     Box(
@@ -250,16 +264,9 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
             Box(
                 modifier = Modifier
                     .width(412.dp)
-                    .height(119.dp)
+                    .height(130.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color(0xFFC41532),
-                                Color(0xFF431B3B)
-                            )
-                        )
-                    ),
+                    .background(Color(0xFFBF002E)),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -315,7 +322,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = "Pernyataan",
@@ -370,7 +377,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
                 Spacer(
                     modifier = Modifier
-                        .height(470.dp)
+                        .height(30.dp)
                 )
 
                 Button(
@@ -386,15 +393,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFFC41532),
-                                        Color(0xFF431B3B)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
+                            .background(Color(0xFFBF002E)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -405,11 +404,8 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                         )
                     }
                 }
-
-
             }
-
         }
-        buttomNavbarLapor(navController)
+        buttomNavbarLapor(navController, context)
     }
 }

@@ -1,37 +1,27 @@
-
-
 package com.example.login
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,9 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-
 @OptIn(ExperimentalMaterial3Api::class)
-
 @Composable
 fun login(navController: NavController, authViewModel: AuthViewModel) {
 
@@ -73,264 +61,159 @@ fun login(navController: NavController, authViewModel: AuthViewModel) {
         }
     }
 
-
-
     val dark_grey = colorResource(id = R.color.dark_grey)
-    val dark0_grey = colorResource(id = R.color.dark0_grey)
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
-            )
-    )
-    {
+            .background(Color(0xFFF5F5F5))
+    ) {
+        val maxWidth = this.maxWidth
+        val maxHeight = this.maxHeight
+
+        Image(
+            painter = painterResource(id = R.drawable.circle_daftar),
+            contentDescription = "Background decoration",
+            modifier = Modifier
+                .width(maxWidth * 0.8f)
+                .height(maxHeight * 0.3f)
+                .align(Alignment.TopEnd),
+        )
+
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = maxWidth * 0.07f),
         ) {
+            Spacer(modifier = Modifier.height(maxHeight * 0.27f))
 
-            Spacer(modifier = Modifier
-                .height(70.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.logo_sign_up),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(63.dp)
-                    .height(80.dp)
+            Text(
+                text = "Login",
+                fontSize = (maxWidth.value / 8).sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
 
-            Spacer(modifier = Modifier
-                .height(40.dp))
+            Text(
+                text = "Masuk ke Akun Anda",
+                fontSize = (maxWidth.value / 18.5).sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+            )
 
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+            Spacer(modifier = Modifier.height(maxHeight * 0.02f))
+
+            Image(
+                painter = painterResource(id = R.drawable.ilustrasi_daftar),
+                contentDescription = "Login illustration",
                 modifier = Modifier
-                    .width(347.dp)
-                    .height(441.dp),
-                shape = RoundedCornerShape(30.dp),
-                elevation = CardDefaults.cardElevation(100.dp)
+                    .fillMaxWidth(0.9f)
+                    .height(maxHeight * 0.22f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(maxHeight * 0.02f))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = { Text("Email", color = dark_grey) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.MailOutline,
+                        contentDescription = "Email",
+                        tint = dark_grey
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xFFEAEAEA),
+                    focusedContainerColor = Color(0xFFEAEAEA),
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color(0xFFC41532)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = kataSandi,
+                onValueChange = { kataSandi = it },
+                placeholder = { Text("Kata Sandi", color = dark_grey) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "Password",
+                        tint = dark_grey
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                visualTransformation = if (kataSandiVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
+                        Icon(
+                            imageVector = if (kataSandiVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = "Toggle Password Visibility",
+                            tint = dark_grey
+                        )
+                    }
+                },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xFFEAEAEA),
+                    focusedContainerColor = Color(0xFFEAEAEA),
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color(0xFFC41532)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(maxHeight * 0.025f))
+
+            Button(
+                onClick = { authViewModel.login(email, kataSandi) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(maxHeight * 0.06f),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC41532))
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Masuk",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(top = 20.dp).padding(bottom = 15.dp)
-                    )
-
-                    Spacer(modifier = Modifier
-                        .height(30.dp))
-
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        placeholder = { Text("Email", color = dark_grey) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.MailOutline,
-                                contentDescription = "Email",
-                                tint = dark_grey
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp)
-
-                            .padding(bottom = 7.dp)
-                            .border(
-                                width = 2.dp,
-                                color = dark0_grey,
-                                shape = RoundedCornerShape(18.dp)
-                            ),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = outlinedTextFieldColors(
-                            containerColor = dark0_grey
-                        )
-                    )
-
-                    OutlinedTextField(
-                        value = kataSandi,
-                        onValueChange = { kataSandi = it },
-                        placeholder = { Text("kata Sandi ", color = dark_grey) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = "Email",
-                                tint = dark_grey
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 1.dp)
-                            .border(
-                                width = 2.dp,
-                                color = dark0_grey,
-                                shape = RoundedCornerShape(18.dp)
-                            ),
-                        colors = outlinedTextFieldColors(
-                            containerColor = dark0_grey
-                        ),
-                        shape = RoundedCornerShape(18.dp),
-                        visualTransformation = if (kataSandiVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            IconButton(onClick = { kataSandiVisibility = !kataSandiVisibility }) {
-                                Icon(
-                                    imageVector = if (kataSandiVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                    contentDescription = "Toggle Password Visibility",
-                                    tint = dark_grey
-                                )
-                            }
-                        }
-                    )
-                    Text(
-                        text = "Lupa kata sandi?",
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Right,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .padding(top = 5.dp)
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier
-                        .height(20.dp))
-
-                    Button(
-                        onClick = {
-                            authViewModel.login(email, kataSandi)
-                             },
-                        modifier = Modifier
-                            .padding(top = 50.dp)
-                            .fillMaxWidth()
-                            .height(48.dp)
-                            .background(color = Color.Transparent),
-                        shape = RoundedCornerShape(16.dp),
-                        contentPadding = PaddingValues()
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            Color(0xFF431B3B),
-                                            Color(0xFFC41532)
-
-                                        )
-                                    ),
-                                    shape = RoundedCornerShape(16.dp)
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = "Masuk", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier
-                        .height(5.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.Center
-
-                    ) {
-                        Text(
-                            text = "Belum punya akun? ",
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp
-                        )
-
-                        ClickableText(
-                            text = AnnotatedString(" Daftar"),
-                            onClick = { navController.navigate(Routes.SignUp) },
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Normal,
-                                textDecoration = TextDecoration.Underline,
-                                color = Color.Black
-                            )
-                        )
-
-                    }
-                }
+                Text(
+                    text = "Masuk",
+                    fontSize = (maxWidth.value / 28).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 180.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+
+            Spacer(modifier = Modifier.height(maxHeight * 0.025f))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 38.dp),
-                    horizontalArrangement = Arrangement.Center
-
-                ) {
-                    Text(
-                        text = "Dengan membuat akun, Anda menyetujui",
-                        fontSize = 10.sp, color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = " Ketentuan",
-                        textDecoration = TextDecoration.Underline,
-                        textAlign = TextAlign.Center,
-                        fontSize = 10.sp, color = Color.White
-                    )
-                    Text(
-                        text = " kami dan telah",
-                        textAlign = TextAlign.Center,
-                        fontSize = 10.sp, color = Color.White
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 38.dp),
-                    horizontalArrangement = Arrangement.Center
-
-                ) {
-                    Text(
-                        text = " membaca serta mengakui",
-                        textAlign = TextAlign.Center,
-                        fontSize = 10.sp, color = Color.White
-                    )
-                    Text(
-                        text = " Pernyataan Privasi Global.",
-                        textDecoration = TextDecoration.Underline,
-                        textAlign = TextAlign.Center,
-                        fontSize = 10.sp, color = Color.White
-                    )
-                }
-
+                Text(
+                    text = "Belum memiliki akun? ",
+                    fontWeight = FontWeight.Normal,
+                    fontSize = (maxWidth.value / 32).sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "Daftar",
+                    fontSize = (maxWidth.value / 32).sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFFC41532),
+                    modifier = Modifier.clickable {
+                        navController.navigate(Routes.SignUp)
+                    }
+                )
             }
         }
     }
 }
 
-
-
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun loginPreview() {
     val navController = rememberNavController()

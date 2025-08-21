@@ -1,5 +1,6 @@
 package com.example.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,32 +26,58 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.tasks.await
 
 
 @Composable
+
 fun loginBerhasil(navController: NavController) {
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         delay(1500)
-        navController.navigate(Routes.Dashboard)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val db = FirebaseFirestore.getInstance()
+            val uid = user.uid
+
+            try {
+                val doc = db.collection("users").document(uid).get().await()
+                val role = doc.getString("roles")
+
+                when (role) {
+                    "admin" -> navController.navigate(Routes.KonfirmasiBerita)
+
+                    else -> {
+                        navController.navigate(Routes.Dashboard)
+                    }
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "User belum login", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFFC41532),
-                        Color(0xFF431B3B)
-                    )
-                )
+                Color(0xFFBF002E),
             )
     ) {
         Column(

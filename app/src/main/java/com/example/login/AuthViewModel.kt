@@ -40,7 +40,8 @@ class AuthViewModel : ViewModel() {
         name: String,
         email: String,
         password: String,
-        confirmPassword: String
+        confirmPassword: String,
+        roles: Any?
     ): Boolean {
         clearErrors()
         var isValid = true
@@ -97,7 +98,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun login(email: String, password: String, navController: NavController) {
+    fun login(email: String, password: String,roles:String, navController: NavController) {
         if (email.isEmpty() || password.isEmpty()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
@@ -130,7 +131,14 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    fun signUp(email: String, password: String, displayName: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+    fun signUp(
+        email: String,
+        password: String,
+        displayName: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit,
+        roles: String
+    ) {
         Log.d("SignUp", "signUp called with email: $email")
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
