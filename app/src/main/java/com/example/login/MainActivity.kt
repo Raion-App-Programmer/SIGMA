@@ -149,8 +149,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Routes.UbahProfile) {
                         ubahProfile(
-                            navController,
-                            ubahProfilViewModel = UbahProfilViewModel()
+                            navController
                         )
                     }
                     composable(Routes.LaporSigma1) {

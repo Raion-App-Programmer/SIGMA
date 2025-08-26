@@ -86,6 +86,7 @@ import org.json.JSONObject
 import java.io.File
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.login.lapor.getFileName
 import kotlinx.coroutines.tasks.await
 
@@ -173,11 +174,12 @@ fun saveUbahProfileToFirestore(userId: String, ubahProfile: Map<String, Any?>, o
 // --- Composable ubahProfile ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilViewModel) {
+fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilViewModel = viewModel()) {
 
     val context = LocalContext.current
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userId = currentUser?.uid
+
 
     var reauthEmailInput by remember { ubahProfilViewModel.reauthEmail }
     var reauthPasswordInput by remember { ubahProfilViewModel.reauthPassword }
@@ -193,6 +195,7 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
             }
             return@LaunchedEffect
         }
+        Log.d("CheckEffect", "LaunchedEffect dijalankan!")
         ubahProfilViewModel.loadProfileData(userId, context)
 
     }
@@ -366,6 +369,8 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
                     .offset(y = (-80).dp),
                 shape = RoundedCornerShape(30.dp)
             ) {
+                val nama by ubahProfilViewModel.nama
+                Log.d("UI_Data", "Data NAMA yang akan ditampilkan: '$nama'")
                 Column(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 24.dp, top = 80.dp, bottom = 24.dp)
@@ -379,7 +384,7 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
                     Text(text = "Nama", fontSize = 14.sp, fontWeight = FontWeight(700), color = Color.Black)
                     Spacer(modifier = Modifier.height(3.dp))
                     OutlinedTextField(
-                        value = ubahProfilViewModel.nama.value,
+                        value = nama,
                         onValueChange = { ubahProfilViewModel.nama.value = it },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text(text = "Nama", color = dark_grey) },

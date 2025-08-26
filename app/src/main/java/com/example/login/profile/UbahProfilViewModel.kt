@@ -44,6 +44,10 @@ class UbahProfilViewModel : ViewModel() {
         )
     }
 
+    init {
+        Log.d("ViewModelLifecycle", "UbahProfilViewModel DIBUAT!")
+    }
+
     /**
      * Mengambil data profil dari Firestore.
      */
