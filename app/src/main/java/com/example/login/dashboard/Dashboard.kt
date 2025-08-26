@@ -58,6 +58,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -146,12 +147,12 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             RoundedCornerShape(
                                 topStart = 0.dp,
                                 topEnd = 0.dp,
-                                bottomStart = 20.dp,
-                                bottomEnd = 20.dp
+                                bottomStart = 24.dp,
+                                bottomEnd = 24.dp
                             )
                         )
                         .fillMaxWidth()
-                        .height(130.dp)
+                        .height(128.dp)
                         .background(
                             Color(0xFFBF002E),
                         ),
@@ -163,14 +164,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         // profile - notification on top
                         Row(
                             modifier = Modifier.fillMaxWidth()
-                                .padding(top = 50.dp, start = 30.dp, end = 30.dp)
+                                .padding(top = 32.dp, start = 32.dp, end = 32.dp)
                                 .align(alignment = Alignment.CenterHorizontally),
                             Arrangement.SpaceBetween
                         ) {
 
                             Text(
                                 text = "Halo, $userName!",
-                                fontSize = 18.sp,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
                                 modifier = Modifier
@@ -180,8 +181,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 painter = painterResource(id = R.drawable.notifications),
                                 contentDescription = "Notifications",
                                 modifier = Modifier
-                                    .width(24.dp)
-                                    .height(24.dp)
+                                    .width(32.dp)
+                                    .height(32.dp)
                                     .align(alignment = Alignment.CenterVertically)
                                     .clickable {
                                         navController.navigate(Routes.notifikasipage)
@@ -192,7 +193,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         // weather - location
                         Row(
                             modifier = Modifier.fillMaxWidth()
-                                .padding(top = 8.dp,start = 30.dp,end = 30.dp)
+                                .padding(top = 8.dp,start = 32.dp,end = 32.dp)
                                 .align(alignment = Alignment.CenterHorizontally),
                             Arrangement.SpaceBetween
                         ) {
@@ -201,7 +202,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                     painter = painterResource(id = R.drawable.cloud),
                                     contentDescription = "Weather",
                                     modifier = Modifier
-                                        .size(30.dp)
+                                        .size(32.dp)
 
                                 )
                                 Column(
@@ -211,13 +212,13 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                 ) {
                                         Text(
                                             weatherCondition,
-                                            fontSize = 12.sp,
+                                            fontSize = 14.sp,
                                             color = Color.White,
                                             fontWeight = FontWeight.Bold,
                                             modifier = Modifier
                                         )
                                         Text(
-                                            temperature, fontSize = 12.sp, color = Color.White,
+                                            temperature, fontSize = 14.sp, color = Color.White,
                                             modifier = Modifier
                                         )
                                 }
@@ -229,7 +230,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             ) {
                                 Text(
                                     userLocation,
-                                    fontSize = 12.sp,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White,
                                     modifier = Modifier.align(alignment = Alignment.CenterVertically)
@@ -240,7 +241,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                                     painter = painterResource(id = R.drawable.location_white),
                                     contentDescription = "Location",
                                     modifier = Modifier
-                                        .size(12.dp)
+                                        .size(14.dp)
 
                                 )
                             }
@@ -256,14 +257,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
                 Text(
                     "Panduan Darurat",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(bottom = 15.dp)
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
 
                 // Icons for Panduan Darurat
@@ -281,15 +282,15 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         Image(painter = painterResource(R.drawable.banjir),
                             contentDescription = "Banjir darurat button", modifier = Modifier
                                 .clickable { navController.navigate(Routes.PanduanBanjir) }
-                                .width(60.dp)
-                                .height(60.dp)
+                                .width(64.dp)
+                                .height(64.dp)
                         )
                         Text(
                             "Banjir",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                     }
 
@@ -302,8 +303,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             painter = painterResource(R.drawable.kebakaran),
                             contentDescription = "Kebakaran darurat button", modifier = Modifier
                                 .clickable { navController.navigate("PanduanKebakaran") }
-                                .width(60.dp)
-                                .height(60.dp)
+                                .width(64.dp)
+                                .height(64.dp)
                         )
                         Text(
                             "Kebakaran",
@@ -311,7 +312,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
                             modifier = Modifier
-                                .padding(top = 6.dp)
+                                .padding(top = 8.dp)
                         )
                     }
 
@@ -322,8 +323,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     ) {
                         Image(painter = painterResource(id = R.drawable.gempa),
                             contentDescription = "Gempa darurat png", modifier = Modifier
-                                .width(60.dp)
-                                .height(60.dp)
+                                .width(64.dp)
+                                .height(64.dp)
                                 .clickable{
                                     navController.navigate("panduanGempa")
                                 })
@@ -332,7 +333,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                     }
 
@@ -345,8 +346,8 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             painter = painterResource(id = R.drawable.p3k),
                             contentDescription = "P3K darurat",
                             modifier = Modifier
-                                .width(60.dp)
-                                .height(60.dp)
+                                .width(64.dp)
+                                .height(64.dp)
                                 .clickable { navController.navigate("p3")
                                 }
                         )
@@ -355,7 +356,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier.padding(top = 8.dp)
                         )
                     }
                 }
@@ -365,7 +366,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( bottom = 100.dp), // Added bottom padding to avoid overlap with nav bar
+                    .padding( bottom = 104.dp), // Added bottom padding to avoid overlap with nav bar
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
@@ -380,14 +381,14 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        modifier = Modifier.padding(start = 20.dp)
+                        modifier = Modifier.padding(start = 24.dp)
                     )
 
                     TextButton(
                         onClick = {
                             navController.navigate("BeritaTerkini")
                         },
-                        modifier = Modifier.padding(end = 10.dp)
+                        modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
                             "Lihat Semua",
@@ -404,7 +405,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, top = 10.dp)
+                        .padding(start = 16.dp, top = 8.dp)
                 ) {
                     items(newsList.filter { it.status == "Berhasil diunggah" }) { newsItem ->
                         val imageUrls = newsItem?.buktiUrls ?: newsItem?.buktiUrl?.let { listOf(it) } ?: emptyList()
@@ -458,9 +459,9 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
-                    .width(412.dp)
-                    .height(100.dp)
-                    .offset(y = 10.dp)
+                    .fillMaxWidth()
+                    .height(88.dp)
+                    .offset(y = 8.dp)
                     .pointerInput(Unit) {}
             )
 
@@ -468,7 +469,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(82.dp),
+                    .height(80.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = CenterVertically
             ) {
@@ -477,16 +478,16 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .offset(
-                            y = (-15).dp, x = (-75).dp
+                            y = (-16).dp, x = (-72).dp
                         )
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.home),
                         contentDescription = "Home button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = 15.dp, y = 25.dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = 16.dp, y = 24.dp)
                     )
                 }
 
@@ -494,15 +495,15 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-25).dp, x = 10.dp)
+                        .offset(y = (-24).dp, x = 8.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.note_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 38.dp, x = (-41).dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 32.dp, x = (-32).dp)
                             .clickable {
                                 navController.navigate("laporSigma1")
                             }
@@ -513,7 +514,7 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 // Floating button for calls
                 Column(
                     modifier = Modifier
-                        .offset(y = (-5).dp),
+                        .offset(y = (-8).dp),
                     Arrangement.Center
                 ) {
                     Button(modifier = Modifier
@@ -551,15 +552,15 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-15).dp, x = (-10).dp)
+                        .offset(y = (-16).dp, x = (-8).dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.book_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 25.dp, x = 30.dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 24.dp, x = 32.dp)
                             .clickable {
                                 navController.navigate("BeritaTerkini") {
                                 }
@@ -570,15 +571,15 @@ fun Dashboard(navController: NavController , viewModel: NewsViewModel = viewMode
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                    modifier = Modifier.offset(y = (-24).dp, x = 72.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = (-20).dp, y = (30).dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = (-24).dp, y = (32).dp)
                             .clickable {
                                 navController.navigate(Profile)
                             }
@@ -693,10 +694,10 @@ fun NewsCard(
 ) {
     Box(
         modifier = Modifier
-            .width(170.dp)
-            .height(260.dp)
+            .width(168.dp)
+            .height(256.dp)
             .clip(RoundedCornerShape(20.dp))
-            .padding(start = 5.dp, bottom = 16.dp)
+            .padding(start = 8.dp, bottom = 16.dp)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -734,8 +735,8 @@ fun NewsCard(
 
 
             Column( modifier = Modifier
-                .padding(top = 100.dp), verticalArrangement = Arrangement.Bottom) {
-                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                .padding(top = 96.dp), verticalArrangement = Arrangement.Bottom) {
+                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp,maxLines = 3,overflow = TextOverflow.Ellipsis,)
                 Text(text = author, color = Color.White, fontSize = 12.sp)
             }
 

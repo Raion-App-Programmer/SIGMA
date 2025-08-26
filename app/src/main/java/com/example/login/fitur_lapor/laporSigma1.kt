@@ -58,8 +58,8 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
 
     Box(
         modifier = Modifier
-            .width(412.dp)
-            .height(917.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(color = Color(0xFFF7EAEB))
     ) {
         Column(
@@ -70,17 +70,9 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
         ) {
             Box(
                 modifier = Modifier
-                    .width(412.dp)
-                    .height(130.dp)
+                    .fillMaxWidth()
+                    .height(128.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-//                    .background(
-//                        brush = Brush.horizontalGradient(
-//                            colors = listOf(
-//                                Color(0xFFC41532),
-//                                Color(0xFF431B3B)
-//                            )
-//                        )
-//                    )
                     .background(Color(0xFFBF002E))
                 ,
                 contentAlignment = Alignment.Center
@@ -88,7 +80,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 20.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
@@ -106,27 +98,27 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
 
                     Spacer(
                         modifier = Modifier
-                            .width(30.dp)
+                            .width(32.dp)
                     )
 
                     Text(
                         modifier = Modifier
-                            .width(122.dp)
-                            .height(25.dp),
+                            .width(120.dp)
+                            .height(24.dp),
                         text = "Lapor Sigma",
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
 
                     Spacer(
                         modifier = Modifier
-                            .width(150.dp)
+                            .width(80.dp)
                     )
 
                     Text(
                         text = "1/3",
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -135,11 +127,11 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
 
             Spacer(
                 modifier = Modifier
-                    .height(30.dp)
+                    .height(32.dp)
             )
             Column(
                 modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
+                    .padding(start = 24.dp, end = 24.dp)
             ) {
                 Text(
                     text = "Nama Pelapor",
@@ -153,14 +145,14 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     placeholder = { Text("Nama", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
+                        .padding(top = 8.dp)
                         .border(
                             width = 2.dp,
                             color = Color.White,
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(16.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 65.dp),
+                        .clip(RoundedCornerShape(16.dp))
+                        .heightIn(max = 64.dp),
                             maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -170,7 +162,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
 
                 Spacer(
                     modifier = Modifier
-                        .height(20.dp)
+                        .height(16.dp)
                 )
 
                 Text(
@@ -185,14 +177,14 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     placeholder = { Text("Tanggal Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
+                        .padding(top = 8.dp)
                         .border(
                             width = 2.dp,
                             color = Color.White,
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(16.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 65.dp),
+                        .clip(RoundedCornerShape(16.dp))
+                        .heightIn(max = 64.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -201,7 +193,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                 )
                 Spacer(
                     modifier = Modifier
-                        .height(20.dp)
+                        .height(16.dp)
                 )
 
                 Text(
@@ -216,14 +208,14 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     placeholder = { Text("Waktu Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
+                        .padding(top = 8.dp)
                         .border(
                             width = 2.dp,
                             color = Color.White,
-                            shape = RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(16.dp),
                         )
-                        .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 65.dp),
+                        .clip(RoundedCornerShape(16.dp))
+                        .heightIn(max = 64.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -232,7 +224,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                 )
                 Spacer(
                     modifier = Modifier
-                        .height(20.dp)
+                        .height(16.dp)
                 )
 
                 Text(
@@ -247,15 +239,15 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     placeholder = { Text("Lokasi Kejadian", color = dark_grey) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
-                        .height(100.dp)
+                        .padding(top = 8.dp)
+                        .height(80.dp)
                         .border(
                             width = 2.dp,
                             color = Color.White,
                             shape = RoundedCornerShape(18.dp),
                         )
                         .clip(RoundedCornerShape(18.dp))
-                        .heightIn(max = 100.dp),
+                        .heightIn(max = 80.dp),
                     maxLines = Int.MAX_VALUE,
 
                     colors = TextFieldDefaults.textFieldColors(
@@ -314,7 +306,7 @@ fun laporSigma1(navController: NavController, laporanViewModel: LaporanViewModel
                     ) {
                         Text(
                             text = "Selanjutnya",
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )

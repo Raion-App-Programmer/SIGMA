@@ -321,7 +321,7 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(244.dp)
+                    .height(248.dp)
                     .clip(RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
                     .background(
                        Color(0xFFBF002E),
@@ -330,7 +330,7 @@ fun ubahProfile(navController: NavController, ubahProfilViewModel: UbahProfilVie
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 38.dp, vertical = 64.dp)
+                        .padding(horizontal = 40.dp, vertical = 64.dp)
                         .align(Alignment.TopCenter),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically

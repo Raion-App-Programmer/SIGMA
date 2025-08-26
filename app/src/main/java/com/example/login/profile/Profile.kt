@@ -134,7 +134,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-100).dp), // Pulls this section up to overlap the header
+                    .offset(y = (-96).dp), // Pulls this section up to overlap the header
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Box to contain the white card and the overlapping profile picture
@@ -145,7 +145,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     // White Card for Profile Info, pushed down to make space for the image
                     Column(
                         modifier = Modifier
-                            .padding(top = 50.dp) // Half of image size (100dp)
+                            .padding(top = 48.dp) // Half of image size (100dp)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(20.dp))
                             .background(Color.White)
@@ -205,7 +205,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                         .padding(horizontal = 24.dp)
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color.White)
-                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
                 ) {
                     Text(
                         "Lacak Laporanmu!",
@@ -325,9 +325,9 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                 painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
-                    .width(412.dp)
-                    .height(100.dp)
-                    .offset(y = 10.dp)
+                    .fillMaxWidth()
+                    .height(88.dp)
+                    .offset(y = 8.dp)
                     .pointerInput(Unit) {}
             )
 
@@ -335,7 +335,7 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(82.dp),
+                    .height(80.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = CenterVertically
             ) {
@@ -344,33 +344,34 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .offset(
-                            y = (-15).dp, x = (-75).dp
+                            y = (-16).dp, x = (-72).dp
                         )
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.home_gray_png),
                         contentDescription = "Home button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = 15.dp, y = 25.dp)
-                            .clickable{navController.navigate("Dashboard")}
-                    )
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = 16.dp, y = 24.dp)
+                            .clickable{
+                                navController.navigate("dashboard")
+                            }                    )
                 }
 
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-25).dp, x = 10.dp)
+                        .offset(y = (-24).dp, x = 8.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.note_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 38.dp, x = (-41).dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 32.dp, x = (-32).dp)
                             .clickable {
                                 navController.navigate("laporSigma1")
                             }
@@ -381,12 +382,12 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                 // Floating button for calls
                 Column(
                     modifier = Modifier
-                        .offset(y = (-5).dp),
+                        .offset(y = (-8).dp),
                     Arrangement.Center
                 ) {
                     Button(modifier = Modifier
-                        .width(60.dp)
-                        .height(60.dp),
+                        .width(64.dp)
+                        .height(64.dp),
                         shape = CircleShape,
                         contentPadding = PaddingValues(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFBF002E)),
@@ -419,15 +420,15 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-15).dp, x = (-10).dp)
+                        .offset(y = (-16).dp, x = (-8).dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.book_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 25.dp, x = 30.dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 24.dp, x = 32.dp)
                             .clickable {
                                 navController.navigate("BeritaTerkini") {
                                 }
@@ -438,18 +439,16 @@ fun Profile(navController: NavController, viewModel: NewsViewModel = viewModel()
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                    modifier = Modifier.offset(y = (-24).dp, x = 72.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.user_circle),
+                        painter = painterResource(id = R.drawable.user_circle_red),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = (-20).dp, y = (30).dp)
-                            .clickable {
-                                navController.navigate(Routes.Profile)
-                            }
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = (-24).dp, y = (32).dp)
+
                     )
 
                 }

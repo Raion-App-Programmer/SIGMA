@@ -69,6 +69,7 @@ import android.os.Looper
 import java.io.IOException
 import android.database.Cursor
 import android.provider.OpenableColumns
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.mutableStateListOf
 
 fun getFileName(context: Context, uri: Uri): String? {
@@ -251,8 +252,8 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
     Box(
         modifier = Modifier
-            .width(412.dp)
-            .height(917.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(color = Color(0xFFF7EAEB))
     ) {
         Column(
@@ -263,8 +264,8 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
         ) {
             Box(
                 modifier = Modifier
-                    .width(412.dp)
-                    .height(130.dp)
+                    .fillMaxWidth()
+                    .height(128.dp)
                     .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
                     .background(Color(0xFFBF002E)),
                 contentAlignment = Alignment.Center
@@ -272,7 +273,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 20.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
@@ -289,27 +290,27 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
                     Spacer(
                         modifier = Modifier
-                            .width(30.dp)
+                            .width(32.dp)
                     )
 
                     Text(
                         modifier = Modifier
-                            .width(122.dp)
-                            .height(25.dp),
+                            .width(120.dp)
+                            .height(24.dp),
                         text = "Lapor Sigma",
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
 
                     Spacer(
                         modifier = Modifier
-                            .width(145.dp)
+                            .width(80.dp)
                     )
 
                     Text(
                         text = "3/3",
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -318,7 +319,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
             Spacer(
                 modifier = Modifier
-                    .height(30.dp)
+                    .height(32.dp)
             )
             Column(
                 modifier = Modifier
@@ -330,14 +331,14 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     modifier = Modifier
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(start = 24.dp, end = 24.dp)
                 )
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     modifier = Modifier
-                        .width(390.dp)
-                        .height(110.dp)
-                        .padding(top = 10.dp, start = 20.dp, end = 20.dp),
+                        .width(400.dp)
+                        .height(120.dp)
+                        .padding(top = 8.dp, start = 24.dp, end = 24.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -349,14 +350,14 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                         Text(
                             text = "Laporan yang saya buat akurat dan dapat dipertanggungjawabkan.",
                             fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp,
+                            fontSize = 16.sp,
                             modifier = Modifier
                                 .padding(start = 40.dp)
                         )
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 28.dp),
+                                .padding(start = 32.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Checkbox(
@@ -377,7 +378,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
 
                 Spacer(
                     modifier = Modifier
-                        .height(30.dp)
+                        .height(32.dp)
                 )
 
                 Button(
@@ -386,7 +387,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                         .fillMaxWidth()
                         .height(48.dp)
                         .background(color = Color.Transparent)
-                        .padding(start = 20.dp, end = 20.dp),
+                        .padding(start = 24.dp, end = 24.dp),
                     shape = RoundedCornerShape(16.dp),
                     contentPadding = PaddingValues()
                 ) {
@@ -398,7 +399,7 @@ fun laporSigma3(navController: NavController, laporanViewModel: LaporanViewModel
                     ) {
                         Text(
                             text = "Kirim Laporan",
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )

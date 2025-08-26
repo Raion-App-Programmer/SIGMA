@@ -59,6 +59,7 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
     }
 
     Box(modifier = Modifier.fillMaxSize()){
+        // Bottom dashboard - Now correctly placed inside the root Box
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,9 +70,9 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
                 painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                 contentDescription = "Dashboard navigation bottom",
                 modifier = Modifier
-                    .width(412.dp)
-                    .height(100.dp)
-                    .offset(y = 10.dp)
+                    .fillMaxWidth()
+                    .height(88.dp)
+                    .offset(y = 8.dp)
                     .pointerInput(Unit) {}
             )
 
@@ -79,7 +80,7 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(82.dp),
+                    .height(80.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = CenterVertically
             ) {
@@ -88,37 +89,37 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .offset(
-                            y = (-15).dp, x = (-75).dp
+                            y = (-16).dp, x = (-72).dp
                         )
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.home_gray_png),
                         contentDescription = "Home button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = 15.dp, y = 25.dp)
-                            .clickable{navController.navigate("Dashboard")}
-                    )
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = 16.dp, y = 24.dp)
+                            .clickable{
+                                navController.navigate("dashboard")
+                            }                    )
                 }
 
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-25).dp, x = 10.dp)
+                        .offset(y = (-24).dp, x = 8.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.note_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 38.dp, x = (-41).dp)
-                            .clickable(){
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 32.dp, x = (-32).dp)
+                            .clickable {
                                 navController.navigate("laporSigma1")
                             }
-
                     )
 
                 }
@@ -126,7 +127,7 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
                 // Floating button for calls
                 Column(
                     modifier = Modifier
-                        .offset(y = (-5).dp),
+                        .offset(y = (-8).dp),
                     Arrangement.Center
                 ) {
                     Button(modifier = Modifier
@@ -164,15 +165,15 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .offset(y = (-15).dp, x = (-10).dp)
+                        .offset(y = (-16).dp, x = (-8).dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.book_gray),
                         contentDescription = "Edit button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(y = 25.dp, x = 30.dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(y = 24.dp, x = 32.dp)
                             .clickable {
                                 navController.navigate("BeritaTerkini") {
                                 }
@@ -183,15 +184,15 @@ fun buttomNavbarPanduan(navController: NavController, context: Context){
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                    modifier = Modifier.offset(y = (-24).dp, x = 72.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.user_circle),
                         contentDescription = "Profile button",
                         modifier = Modifier
-                            .width(30.dp)
-                            .height(30.dp)
-                            .offset(x = (-20).dp, y = (30).dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .offset(x = (-24).dp, y = (32).dp)
                             .clickable {
                                 navController.navigate(Profile)
                             }

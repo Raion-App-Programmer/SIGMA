@@ -44,12 +44,14 @@ fun NotifikasiPage(navController: NavController, viewModel: NewsViewModel = view
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.fillMaxWidth(),
                 title = {
                     Text(
                         "Notifikasi Laporan",
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         modifier = Modifier.fillMaxWidth()
+
                     )
                 },
                 navigationIcon = {
@@ -77,7 +79,7 @@ fun NotifikasiPage(navController: NavController, viewModel: NewsViewModel = view
                     TabRowDefaults.Indicator(
                         Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
                         color = Color.White,
-                        height = 3.dp
+                        height = 4.dp
                     )
                 }
             ) {
@@ -103,7 +105,7 @@ fun NotifikasiPage(navController: NavController, viewModel: NewsViewModel = view
             } else {
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     groupedNotifications.forEach { (date, notifications) ->
                         item {
@@ -138,7 +140,7 @@ fun NotificationItem(laporan: NewsItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
             .clickable { /* Handle click */ }
             .padding(16.dp),

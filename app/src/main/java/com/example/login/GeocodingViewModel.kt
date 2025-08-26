@@ -3,6 +3,7 @@ package com.example.login
 import android.annotation.SuppressLint
 import android.app.Application
 import android.location.Location
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -53,7 +54,8 @@ class GeocodingViewModel(application: Application) : AndroidViewModel(applicatio
                 weatherCondition = response.weather.firstOrNull()?.description ?: "-"
             } catch (e: Exception) {
                 cityName = "Error"
-                weatherCondition = e.message ?: "Unknown error"
+                weatherCondition = "Cuaca tidak diketahui"
+                Log.d(e.message,"Eror")
             }
         }
     }

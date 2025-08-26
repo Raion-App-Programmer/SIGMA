@@ -102,14 +102,14 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         navController.popBackStack()
                     })
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = newsItem!!.judul,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
 
                 val imageUrls = newsItem?.buktiUrls ?: newsItem?.buktiUrl?.let { listOf(it) } ?: emptyList()
@@ -125,12 +125,12 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                                 contentDescription = "Gambar Bukti",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .size(width = 250.dp, height = 200.dp)
-                                    .clip(RoundedCornerShape(12.dp))
+                                    .size(width = 240.dp, height = 200.dp)
+                                    .clip(RoundedCornerShape(16.dp))
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                 } else {
                     AsyncImage(
                         model = newsItem!!.buktiUrl,
@@ -138,15 +138,15 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(220.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .height(224.dp)
+                            .clip(RoundedCornerShape(16.dp))
                     )
                 }
 
 
                 Log.d("List",newsItem!!.buktiUrl)
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -157,7 +157,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         Text(
                             text = "${newsItem!!.tanggal} • ${newsItem!!.waktu}",
                             color = Color.Gray,
-                            fontSize = 12.sp
+                            fontSize = 16.sp
                         )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -165,7 +165,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             text = newsItem!!.nama,
                             color = Color.Gray,
                             fontWeight = FontWeight.Medium,
-                            fontSize = 12.sp
+                            fontSize = 16.sp
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
@@ -178,13 +178,13 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = newsItem!!.deskripsi,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color = Color.Black,
-                    lineHeight = 20.sp
+                    lineHeight = 24.sp
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -193,7 +193,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     Text(
                         text = "Apakah Anda sedang dalam situasi seperti berita?",
                         color = Color.Black,
-                        fontSize = 10.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
@@ -206,7 +206,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                             .fillMaxWidth()
                             .height(48.dp)
                             .align(Alignment.CenterHorizontally),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Text("Lapor disini!", color = Color.White, fontSize = 14.sp)
                     }
@@ -215,17 +215,16 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
-
-                ) {
+                    .fillMaxWidth()
+            ) {
                 // Bottom navigation bar background
                 Image(
                     painter = painterResource(id = R.drawable.rectangle_bottom_dashboard_colored),
                     contentDescription = "Dashboard navigation bottom",
                     modifier = Modifier
-                        .width(412.dp)
-                        .height(100.dp)
-                        .offset(y = 10.dp)
+                        .fillMaxWidth()
+                        .height(88.dp)
+                        .offset(y = 8.dp)
                         .pointerInput(Unit) {}
                 )
 
@@ -233,7 +232,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(82.dp),
+                        .height(80.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = CenterVertically
                 ) {
@@ -242,36 +241,34 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .offset(
-                                y = (-15).dp, x = (-75).dp
+                                y = (-16).dp, x = (-72).dp
                             )
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.home_gray_png),
                             contentDescription = "Home button",
                             modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(x = 15.dp, y = 25.dp)
-                                .clickable {
-                                    navController.navigate("Dashboard") {
-                                    }
-                                }
-                        )
+                                .width(32.dp)
+                                .height(32.dp)
+                                .offset(x = 16.dp, y = 24.dp)
+                                .clickable{
+                                    navController.navigate("dashboard")
+                                }                    )
                     }
 
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .offset(y = (-25).dp, x = 10.dp)
+                            .offset(y = (-24).dp, x = 8.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.note_gray),
                             contentDescription = "Edit button",
                             modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(y = 38.dp, x = (-41).dp)
+                                .width(32.dp)
+                                .height(32.dp)
+                                .offset(y = 32.dp, x = (-32).dp)
                                 .clickable {
                                     navController.navigate("laporSigma1")
                                 }
@@ -282,7 +279,7 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     // Floating button for calls
                     Column(
                         modifier = Modifier
-                            .offset(y = (-5).dp),
+                            .offset(y = (-8).dp),
                         Arrangement.Center
                     ) {
                         Button(modifier = Modifier
@@ -320,15 +317,15 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .offset(y = (-15).dp, x = (-10).dp)
+                            .offset(y = (-16).dp, x = (-8).dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.book_red),
                             contentDescription = "Edit button",
                             modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(y = 25.dp, x = 30.dp)
+                                .width(32.dp)
+                                .height(32.dp)
+                                .offset(y = 24.dp, x = 32.dp)
 
                         )
 
@@ -336,15 +333,15 @@ fun BeritaDetail(newsId: String, viewModel: NewsViewModel = viewModel(), navCont
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.offset(y = (-20).dp, x = 70.dp)
+                        modifier = Modifier.offset(y = (-24).dp, x = 72.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.user_circle),
                             contentDescription = "Profile button",
                             modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp)
-                                .offset(x = (-20).dp, y = (30).dp)
+                                .width(32.dp)
+                                .height(32.dp)
+                                .offset(x = (-24).dp, y = (32).dp)
                                 .clickable {
                                     navController.navigate(Routes.Profile)
                                 }

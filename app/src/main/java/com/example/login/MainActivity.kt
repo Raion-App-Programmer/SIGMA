@@ -38,6 +38,12 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.example.login.dashboard.NotifikasiPage
 import com.example.login.lapor.laporSigma2
@@ -55,145 +61,147 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize Firebase BEFORE using auth
+        // Init Firebase
         FirebaseApp.initializeApp(this)
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-
-        // Firebase Storage
-        val db = Firebase.firestore
         listenToStatusChange()
-
 
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             val laporanViewModel: LaporanViewModel = viewModel()
             val geoViewModel: GeocodingViewModel = viewModel()
-//            NavHost(navController = navController, startDestination = Routes.LandingPage1) {
-            NavHost(navController = navController, startDestination = Routes.KonfirmasiBerita) {
-                composable(Routes.LandingPage1) {
-                    landingPage1(navController) 
-                }
-                composable(Routes.LandingPage2) {
-                    landingPage2(navController)
-                }
-                composable(Routes.Login) {
-                    login(navController, authViewModel = viewModel())
-                }
-                composable(Routes.SignUp) {
-                    val authViewModel: AuthViewModel = viewModel()
-                    SignUp(navController, authViewModel)
-                }
-                composable(Routes.Verification) {
-                    verification(navController, authViewModel = AuthViewModel())
-                }
-                composable(Routes.VerificationFilled) {
-                    verificationTerisi(navController)
-                }
-                composable(Routes.LoginBerhasil) {
-                    loginBerhasil(navController)
-                }
-                composable(Routes.OnBoarding) {
-                    onBoarding(navController)
-                }
-                composable(Routes.Dashboard) {
-                    Dashboard(navController)
-                }
-                composable(Routes.SignUpBerhasil) {
-                    signUpBerhasil(navController)
-                }
-                composable(Routes.PanduanBanjir) {
-                    PanduanBanjir(navController)
-                }
-                composable(Routes.PanduanKebakaran) {
-                    PanduanKebakaran(navController)
-                }
-                composable(Routes.BeritaTerkini) {
-                    BeritaTerkini(navController)
-                }
-                composable(
-                    route = "BeritaDetail/{newsId}",
-                    arguments = listOf(navArgument("newsId") { type = NavType.StringType })
-                ) { backStackEntry ->
-                    val newsId = backStackEntry.arguments?.getString("newsId")
 
-                    // Ensure we don't pass null to Firebase
-                    if (!newsId.isNullOrBlank()) {
-                        BeritaDetail(newsId, NewsViewModel(), navController)  // Only pass a valid newsId
-                    } else {
-                        // Show an error screen or navigate back
-                        Text("Error: Invalid news ID")
-                    }
-                }
-                composable(
-                    "DetailPengajuan/{newsId}",
-                    arguments = listOf(navArgument("newsId") { type = NavType.StringType })
-                ) { backStackEntry ->
-                    val newsId = backStackEntry.arguments?.getString("newsId")
-                    if (!newsId.isNullOrBlank()) {
-                        DetailPengajuanScreen(newsId = newsId, navController = navController)
-                    }
-                }
-
-
-                composable(Routes.Profile) {
-                    Profile(navController)
-                }
-                composable(Routes.UbahProfile) {
-                    ubahProfile(
-                        navController,
-                        ubahProfilViewModel = UbahProfilViewModel()
-                    )
-                }
-                composable(Routes.LaporSigma1) {
-                    laporSigma1(navController, laporanViewModel)
-                }
-                composable(Routes.LaporSigma2) {
-                    laporSigma2(navController, laporanViewModel)
-                }
-                composable(Routes.LaporSigma3) {
-                    laporSigma3(navController, laporanViewModel)
-                }
-                composable(Routes.LaporBerhasil) {
-                    laporBerhasil(navController)
-                }
-                composable(Routes.P3) {
-                    P3(navController)
-                }
-                composable(Routes.PanduanGempa) {
-                    PanduanGempa(navController)
-                }
-                composable(Routes.KonfirmasiBerita) {
-                    NewsConfirmationScreen(navController, NewsViewModel())
-                }
-                composable(Routes.notifikasipage) {
-                    NotifikasiPage(navController)
-                }
-                composable(
-                    "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",
-                    arguments = listOf(
-                        navArgument("latitude") { type = NavType.FloatType },
-                        navArgument("longitude") { type = NavType.FloatType },
-                        navArgument("cityName") { type = NavType.StringType },
-                        navArgument("isUrban") { type = NavType.BoolType }
-                    )
+            Scaffold(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()      // aman dari status bar
+                    .navigationBarsPadding()  // aman dari nav bar bawah
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.Profile,
+                    modifier = Modifier.padding(innerPadding)
                 ) {
-                    backStackEntry ->
-                    val latitude = backStackEntry.arguments?.getFloat("latitude")
-                    val longitude = backStackEntry.arguments?.getFloat("longitude")
-                    val cityName = backStackEntry.arguments?.getString("cityName")
-                    val isUrban = backStackEntry.arguments?.getBoolean("isUrban") ?: false
+                    composable(Routes.LandingPage1) {
+                        landingPage1(navController)
+                    }
+                    composable(Routes.LandingPage2) {
+                        landingPage2(navController)
+                    }
+                    composable(Routes.Login) {
+                        login(navController, authViewModel = viewModel())
+                    }
+                    composable(Routes.SignUp) {
+                        val authViewModel: AuthViewModel = viewModel()
+                        SignUp(navController, authViewModel)
+                    }
+                    composable(Routes.Verification) {
+                        verification(navController, authViewModel = AuthViewModel())
+                    }
+                    composable(Routes.VerificationFilled) {
+                        verificationTerisi(navController)
+                    }
+                    composable(Routes.LoginBerhasil) {
+                        loginBerhasil(navController)
+                    }
+                    composable(Routes.OnBoarding) {
+                        onBoarding(navController)
+                    }
+                    composable(Routes.Dashboard) {
+                        Dashboard(navController)
+                    }
+                    composable(Routes.SignUpBerhasil) {
+                        signUpBerhasil(navController)
+                    }
+                    composable(Routes.PanduanBanjir) {
+                        PanduanBanjir(navController)
+                    }
+                    composable(Routes.PanduanKebakaran) {
+                        PanduanKebakaran(navController)
+                    }
+                    composable(Routes.BeritaTerkini) {
+                        BeritaTerkini(navController)
+                    }
+                    composable(
+                        route = "BeritaDetail/{newsId}",
+                        arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val newsId = backStackEntry.arguments?.getString("newsId")
+                        if (!newsId.isNullOrBlank()) {
+                            BeritaDetail(newsId, NewsViewModel(), navController)
+                        } else {
+                            Text("Error: Invalid news ID")
+                        }
+                    }
+                    composable(
+                        "DetailPengajuan/{newsId}",
+                        arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val newsId = backStackEntry.arguments?.getString("newsId")
+                        if (!newsId.isNullOrBlank()) {
+                            DetailPengajuanScreen(newsId = newsId, navController = navController)
+                        }
+                    }
+                    composable(Routes.Profile) {
+                        Profile(navController)
+                    }
+                    composable(Routes.UbahProfile) {
+                        ubahProfile(
+                            navController,
+                            ubahProfilViewModel = UbahProfilViewModel()
+                        )
+                    }
+                    composable(Routes.LaporSigma1) {
+                        laporSigma1(navController, laporanViewModel)
+                    }
+                    composable(Routes.LaporSigma2) {
+                        laporSigma2(navController, laporanViewModel)
+                    }
+                    composable(Routes.LaporSigma3) {
+                        laporSigma3(navController, laporanViewModel)
+                    }
+                    composable(Routes.LaporBerhasil) {
+                        laporBerhasil(navController)
+                    }
+                    composable(Routes.P3) {
+                        P3(navController)
+                    }
+                    composable(Routes.PanduanGempa) {
+                        PanduanGempa(navController)
+                    }
+                    composable(Routes.KonfirmasiBerita) {
+                        NewsConfirmationScreen(navController, NewsViewModel())
+                    }
+                    composable(Routes.notifikasipage) {
+                        NotifikasiPage(navController)
+                    }
+                    composable(
+                        "emergency_services_screen/{latitude}/{longitude}/{cityName}/{isUrban}",
+                        arguments = listOf(
+                            navArgument("latitude") { type = NavType.FloatType },
+                            navArgument("longitude") { type = NavType.FloatType },
+                            navArgument("cityName") { type = NavType.StringType },
+                            navArgument("isUrban") { type = NavType.BoolType }
+                        )
+                    ) { backStackEntry ->
+                        val latitude = backStackEntry.arguments?.getFloat("latitude")
+                        val longitude = backStackEntry.arguments?.getFloat("longitude")
+                        val cityName = backStackEntry.arguments?.getString("cityName")
+                        val isUrban = backStackEntry.arguments?.getBoolean("isUrban") ?: false
 
-                    if (isUrban) {
-                        panggilSigma1(navController, latitude, longitude, cityName)
-                    } else {
-                        panggilSigma2(navController, geoViewModel)
+                        if (isUrban) {
+                            panggilSigma1(navController, latitude, longitude, cityName)
+                        } else {
+                            panggilSigma2(navController, geoViewModel)
+                        }
                     }
                 }
             }
         }
     }
+
 
     private fun listenToStatusChange() {
         val uid = auth.currentUser?.uid
